@@ -1,0 +1,12 @@
+--mode=c
+--style=allman
+--indent-after-parens
+--indent=tab
+--indent-col1-comments
+--pad-oper
+--pad-comma
+--pad-header
+--delete-empty-lines
+--align-pointer=name
+--break-closing-braces
+--break-one-line-headers

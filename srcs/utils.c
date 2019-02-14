@@ -1,23 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/13 17:12:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/14 14:41:58 by llelievr         ###   ########.fr       */
+/*   Created: 2019/02/13 23:40:27 by llelievr          #+#    #+#             */
+/*   Updated: 2019/02/13 23:40:35 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-int		main(int argc, char **argv)
+double	ticks_to_ms(clock_t ticks)
 {
-	t_wolf	wolf;
-
-	sdl_init(&wolf);
-	game_loop(&wolf);
-	sdl_quit(&wolf);
-	return (0);
+	return (ticks / (double)CLOCKS_PER_SEC) * 1000.0;
 }

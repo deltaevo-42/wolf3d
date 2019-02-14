@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "fcntl.h": "c",
+        "wolf.h": "c",
+        "math.h": "c",
+        "sdl_image.h": "c",
+        "sdl.h": "c",
+        "libft.h": "c",
+        "stdlib.h": "c"
+    },
+    "astyle.astylerc": "${workspaceRoot}/astylerc",
+    "astyle.executable": "/Users/llelievr/Documents/astyle/build/mac/bin/AStyle"
+}
