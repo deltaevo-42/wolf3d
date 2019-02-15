@@ -37,13 +37,9 @@ void			render_main(t_wolf *wolf)
 	int		x;
 	t_ray	ray;
 
-	wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
 	
-	for(unsigned int i = 0; i < S_WIDTH * 4 * S_HEIGHT; i++ )
-	{
-		wolf->pixels[i] = 0;
-	}
 	
+	ft_memset(wolf->pixels, 0, S_WIDTH * 4 * S_HEIGHT);
 	//cast_ray(wolf, &ray, 15);
 	//printf("RAY\n\tdir (%f, %f)\n\tdist (%f)\n\thit (%d)\n\thit_pos (%d, %d)\n\tside (%d)\n", ray.dir.x, ray.dir.y, ray.dist, ray.hit, ray.hit_pos.x, ray.hit_pos.y, ray.side);
 
@@ -64,11 +60,59 @@ void			render_main(t_wolf *wolf)
 		color = ft_color_gradient(color, (t_color) {color.r + 20, color.g + 20, color.b + 20, 0}, ray.dist / 24);
 		for (int h = S_HEIGHT / 2 - height; h < S_HEIGHT / 2 + height; h++)
 		{
-			const unsigned int offset = (h * (int)S_WIDTH * 4) + x * 4;
-			wolf->pixels[offset] = color.b;
-			wolf->pixels[offset + 1] = color.g;
-			wolf->pixels[offset + 2] = color.r;
-			wolf->pixels[offset + 3] = SDL_ALPHA_OPAQUE;
+			if (h > S_HEIGHT || h < 0)
+				continue ;
+			const unsigned int offset = ((h * (int)S_WIDTH) + x);
+			((unsigned int *)wolf->pixels)[offset] = ft_color_i(color);
+		}
+
+		double wallX;	//where exactly the wall was hit
+		if (ray.side == 0)
+			wallX = wolf->player.pos.y + ray.dist * ray.dir.y;
+		else
+			wallX = wolf->player.pos.x + ray.dist * ray.dir.x;
+		wallX -= floor((wallX));
+		t_vec2 floorWall;
+		if (ray.side == 0 && ray.dir.x > 0)
+			floorWall = (t_vec2) {ray.hit_pos.x, ray.hit_pos.y + wallX};
+		else if (ray.side == 0 && ray.dir.x < 0)
+			floorWall = (t_vec2) {ray.hit_pos.x + 1.0, ray.hit_pos.y + wallX};
+		else if (ray.side == 1 && ray.dir.y > 0)
+			floorWall = (t_vec2) {ray.hit_pos.x + wallX, ray.hit_pos.y};
+		else
+			floorWall = (t_vec2) {ray.hit_pos.x + wallX, ray.hit_pos.y + 1.0};
+		int texWidth = 64;
+		double distWall, distPlayer, currentDist;
+		int drawEnd = (S_HEIGHT / 2 + height);
+		distWall = ray.dist;
+		distPlayer = 0.0;
+		for (int y = drawEnd + 1; y < S_HEIGHT; y++)
+		{
+			if (y > S_HEIGHT || y < 0)
+				continue ;
+			currentDist = S_HEIGHT / (2 * y - S_HEIGHT);
+			double weight = (currentDist - distPlayer) / (distWall - distPlayer);
+			t_vec2 curr_floor = (t_vec2)
+			{
+				weight * floorWall.x + (1.0 - weight) * wolf->player.pos.x,
+				weight * floorWall.y + (1.0 - weight) * wolf->player.pos.y
+			};
+			int floorTexX, floorTexY;
+			floorTexX = (int)(curr_floor.x * texWidth) % texWidth;
+			floorTexY = (int)(curr_floor.y * 64) % 64;
+			((unsigned int *)wolf->pixels)[(y * (int)S_WIDTH) + x] = getpixel(wolf->texture, floorTexX, floorTexY);
+			if (S_HEIGHT - y < 0 || S_HEIGHT - y > S_HEIGHT)
+				continue;
+			((unsigned int *)wolf->pixels)[(((int)S_HEIGHT - y) * (int)S_WIDTH) + x] = getpixel(wolf->texture, floorTexX + 256, floorTexY + 128);
+			//SDL_BlitSurface(image, &srcrect, screen, &dstrect);
+			/*dstrect = (SDL_Rect){i, S_HEIGHT - y, 1, 1};
+			srcrect = (SDL_Rect){floorTexX + 64 * 5, floorTexY + 64 * 3, 1, 1};*/
+			//SDL_BlitSurface(image, &srcrect, screen, &dstrect);
+			//SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+			/*	SDL_SetRenderDrawColor(renderer, 255 / currentDist, 255,
+				255, 255);
+				SDL_RenderDrawPoint(renderer, i, y);
+				SDL_RenderDrawPoint(renderer, i, HEIGHT - y);*/
 		}
 	}
 }

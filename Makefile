@@ -14,10 +14,11 @@ NAME=wolf3d
 SDL=${HOME}/.brew/Cellar/sdl2/2.0.9
 SDL_IMG=${HOME}/.brew/Cellar/sdl2_image/2.0.4
 SDL_TTF=${HOME}/.brew/Cellar/sdl2_ttf/2.0.14
-CFLAGS=-Wall -flto -O2 -ffast-math -Wextra -Iinclude -I$(SDL_IMG)/include/SDL2 -I$(SDL_TTF)/include/SDL2 -I$(SDL)/include/SDL2
-CC=gcc
+CFLAGS= -Wall -flto -O2 -ffast-math -Wextra
+LIBS=-lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2
+CC=clang
 
-include src.mk
+-include src.mk
 
 OBJS=$(addprefix $(OBJDIR),$(SRC:.c=.o))
 
@@ -32,19 +33,27 @@ SRCDIR	=./srcs/
 INCDIR	=./includes/
 OBJDIR	=./objs/
 
+UNAME :=$(shell uname)
+
+ifeq ($(UNAME), Linux)
+	INCLUDE += $(shell pkg-config --cflags sdl2 SDL2_image SDL2_mixer SDL2_ttf)
+else
+	INCLUDE += -Iinclude -I$(SDL_IMG)/include/SDL2 -I$(SDL_TTF)/include/SDL2 -I$(SDL)/include/SDL2 -L$(SDL)/lib -lSDL2 -L$(SDL_IMG)/lib -lSDL2_image -L$(SDL_TTF)/lib -lSDL2_ttf
+endif
+
 all: $(FT_LIB) $(NAME)
 
 $(OBJS): Makefile src.mk
 
 $(OBJDIR)%.o: $(SRCDIR)%.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(FT_INC) -I $(INCDIR) -o $@ -c $<
+	$(CC) $(CFLAGS) $(INCLUDE) $(FT_INC) -I $(INCDIR) -o $@ -c $<
 
 $(FT_LIB):
 	make -j4 -C $(FT)
 
 $(NAME): $(OBJS) $(FT_LIB)
-	$(CC) $(CFLAGS) -o $(NAME) $(FT_LNK) -L$(SDL)/lib -lSDL2 -L$(SDL_IMG)/lib -lSDL2_image -L$(SDL_TTF)/lib -lSDL2_ttf -lm $(OBJS) $(FT_LIB)
+	$(CC) $(CFLAGS) -o $(NAME) $(FT_LNK) $(INCLUDE) $(LIBS) -lm $(OBJS) $(FT_LIB)
 
 clean:
 	make -C $(FT) clean

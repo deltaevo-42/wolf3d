@@ -21,8 +21,8 @@
 # include "libft.h"
 # include <stdlib.h>
 
-# define S_WIDTH (800.0)
-# define S_HEIGHT (800.0)
+# define S_WIDTH (1000.0)
+# define S_HEIGHT (1000.0)
 
 typedef enum e_bool		t_bool;
 typedef enum e_face		t_face;
@@ -51,7 +51,7 @@ struct		s_stats
 {
 	int		fps;
 	double	avg_ms;
-	clock_t	delta;
+	double	delta;
 };
 
 struct		s_fonts
@@ -83,6 +83,7 @@ struct		s_wolf
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
 	SDL_Texture		*screen;
+	SDL_Surface		*texture;
 	SDL_Event		event;
 	unsigned char	*pixels;
 	t_bool			running;
@@ -111,5 +112,6 @@ void		game_loop(t_wolf *wolf);
 
 /* Utils */
 double		ticks_to_ms(clock_t ticks);
+Uint32 		getpixel(SDL_Surface *surface, int x, int y);
 
 #endif
