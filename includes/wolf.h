@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/14 16:41:26 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/16 00:27:06 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@
 # include "libft.h"
 # include <stdlib.h>
 
-# define S_WIDTH (1000.0)
-# define S_HEIGHT (1000.0)
+# define S_WIDTH (800.0)
+# define S_HEIGHT (800.0)
+# define S_WIDTH_2 (S_WIDTH / 2)
+# define S_HEIGHT_2 (S_HEIGHT / 2)
+# define IMG_MAX_I (S_WIDTH * S_HEIGHT)
 
 typedef enum e_bool		t_bool;
 typedef enum e_face		t_face;
@@ -102,6 +105,7 @@ void		hook_events(t_wolf *wolf);
 
 /* Render */
 void		render_debug(t_wolf *wolf);
+void		render_minimap(t_wolf *wolf);
 void		render_main(t_wolf *wolf);
 
 /* Ray */
@@ -113,5 +117,8 @@ void		game_loop(t_wolf *wolf);
 /* Utils */
 double		ticks_to_ms(clock_t ticks);
 Uint32 		getpixel(SDL_Surface *surface, int x, int y);
+void		draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1);
+
+extern int worldMap[24][24];
 
 #endif

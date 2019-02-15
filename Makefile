@@ -6,7 +6,7 @@
 #    By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/07 14:49:27 by llelievr          #+#    #+#              #
-#    Updated: 2019/02/14 16:45:19 by llelievr         ###   ########.fr        #
+#    Updated: 2019/02/16 00:18:37 by llelievr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ SDL=${HOME}/.brew/Cellar/sdl2/2.0.9
 SDL_IMG=${HOME}/.brew/Cellar/sdl2_image/2.0.4
 SDL_TTF=${HOME}/.brew/Cellar/sdl2_ttf/2.0.14
 CFLAGS= -Wall -flto -O2 -ffast-math -Wextra
-LIBS=-lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2
+LIBS=-lSDL2_image -lSDL2_ttf -lSDL2
 CC=clang
 
 -include src.mk
@@ -38,7 +38,8 @@ UNAME :=$(shell uname)
 ifeq ($(UNAME), Linux)
 	INCLUDE += $(shell pkg-config --cflags sdl2 SDL2_image SDL2_mixer SDL2_ttf)
 else
-	INCLUDE += -Iinclude -I$(SDL_IMG)/include/SDL2 -I$(SDL_TTF)/include/SDL2 -I$(SDL)/include/SDL2 -L$(SDL)/lib -lSDL2 -L$(SDL_IMG)/lib -lSDL2_image -L$(SDL_TTF)/lib -lSDL2_ttf
+	INCLUDE += -Iinclude -I$(SDL_IMG)/include/SDL2 -I$(SDL_TTF)/include/SDL2 -I$(SDL)/include/SDL2
+	LIBS+=-L$(SDL)/lib -lSDL2 -L$(SDL_IMG)/lib -lSDL2_image -L$(SDL_TTF)/lib -lSDL2_ttf
 endif
 
 all: $(FT_LIB) $(NAME)

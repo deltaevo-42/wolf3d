@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:27:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/14 18:00:54 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/15 18:28:04 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,8 +210,8 @@ int	main(int argc, char **argv)
 			/*SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, 255);
 			SDL_RenderDrawLine(renderer, i, HEIGHT_DIV - height, i, HEIGHT_DIV + height);*/
 
-			SDL_Rect dst = {i, HEIGHT_DIV - height, 1, height * 2 + 1};
 			SDL_Rect src = {texX + ((hit + (side == 1)) % 6) * 64, ((hit + (side == 1)) / 6) * 64, 1, 64};
+			SDL_Rect dst = {i, HEIGHT_DIV - height, 1, height * 2 + 1};
 			SDL_BlitScaled(image, &src, screen, &dst);
 
 			t_vec2 floorWall;

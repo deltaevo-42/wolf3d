@@ -6,7 +6,7 @@
 #    By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/07 14:49:27 by llelievr          #+#    #+#              #
-#    Updated: 2019/02/12 17:44:17 by llelievr         ###   ########.fr        #
+#    Updated: 2019/02/16 00:14:00 by llelievr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME=wolf3d
 SDL=${HOME}/.brew/Cellar/sdl2/2.0.9
 SDL_IMG=${HOME}/.brew/Cellar/sdl2_image/2.0.4
 SDL_TTF=${HOME}/.brew/Cellar/sdl2_ttf/2.0.14
-CFLAGS=-Wall -flto -O3 -ffast-math -Wextra -Iinclude -I$(SDL_IMG)/include/SDL2 -I$(SDL_TTF)/include/SDL2 -I$(SDL)/include/SDL2
+CFLAGS=-g -Wall -flto -O3 -ffast-math -Wextra -Iinclude -I$(SDL_IMG)/include/SDL2 -I$(SDL_TTF)/include/SDL2 -I$(SDL)/include/SDL2
 CC=gcc
 
 include src.mk

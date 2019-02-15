@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:51:33 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/14 17:27:22 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/15 23:31:49 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void			game_loop(t_wolf *wolf)
 		SDL_RenderClear(wolf->renderer);
 		SDL_SetRenderTarget(wolf->renderer, wolf->screen);
 		render_main(wolf);
+		render_minimap(wolf);
 		update_fps(wolf);
 		SDL_UpdateTexture(wolf->screen, NULL, wolf->pixels, S_WIDTH * 4);
 		SDL_SetRenderTarget(wolf->renderer, NULL);

@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/14 16:44:02 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/15 23:41:49 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ t_bool			cast_ray(t_wolf *wolf, t_ray *ray, int x)
 		ray->dist = (ray->hit_pos.x - wolf->player.pos.x + (1 - step.x) / 2.0) / ray->dir.x;
 	else
 		ray->dist = (ray->hit_pos.y - wolf->player.pos.y + (1 - step.y) / 2.0) / ray->dir.y;
+	if (ray->dist <= 0)
+		ray->dist = 0.00001;
 	compute_face(ray);
 	return (TRUE);
 }
