@@ -6,16 +6,11 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 23:40:27 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/16 00:30:55 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/16 21:20:14 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
-
-double	ticks_to_ms(clock_t ticks)
-{
-	return (ticks / (double)CLOCKS_PER_SEC) * 1000.0;
-}
 
 Uint32 getpixel(SDL_Surface *surface, int x, int y)
 {
@@ -25,6 +20,28 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
 	index = y * surface->pitch + x * bpp;
 	Uint8 *p = (Uint8 *)surface->pixels + index;
 	return ((p[0] << 16) | (p[1] << 8) | p[2]);
+}
+
+void	apply_surface(unsigned char **dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
+{
+	int i;
+	int j;
+	const float		s_w = src.w / (float)dst.w;
+	const float		s_h = src.h / (float)dst.h;
+	unsigned int index;
+
+	i = -1;
+	while (++i < dst.h)
+	{
+		j = -1;
+		while (++j < dst.w)
+		{
+			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
+			if (index >= IMG_MAX_I)
+				continue;
+			((unsigned int *)*dest)[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
+		}
+	}
 }
 
 void	draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1)

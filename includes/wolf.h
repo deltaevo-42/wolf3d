@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/16 00:27:06 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/18 03:22:00 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,28 @@
 # include <SDL_image.h>
 # include <SDL_ttf.h>
 # include <math.h>
-# include <time.h>
 # include "libft.h"
 # include <stdlib.h>
 
-# define S_WIDTH (800.0)
-# define S_HEIGHT (800.0)
+# define S_WIDTH (1000.0)
+# define S_HEIGHT (1000.0)
 # define S_WIDTH_2 (S_WIDTH / 2)
 # define S_HEIGHT_2 (S_HEIGHT / 2)
 # define IMG_MAX_I (S_WIDTH * S_HEIGHT)
 
-typedef enum e_bool		t_bool;
-typedef enum e_face		t_face;
+typedef enum e_face				t_face;
+typedef enum e_texture_type		t_texture_type;
 
-typedef struct s_wolf	t_wolf;
-typedef struct s_stats	t_stats;
-typedef struct s_fonts	t_fonts;
-typedef struct s_ray	t_ray;
-typedef struct s_player	t_player;
+typedef struct s_world			t_world;
 
-enum		e_bool
-{
-	TRUE = 1,
-	FALSE = 0
-};
+typedef struct s_wolf			t_wolf;
+typedef struct s_stats			t_stats;
+typedef struct s_fonts			t_fonts;
+typedef struct s_ray			t_ray;
+typedef struct s_player			t_player;
+
+typedef struct s_texture		t_texture;
+typedef struct s_texture_normal	t_texture_normal;
 
 enum		e_face
 {
@@ -48,6 +46,12 @@ enum		e_face
 	SOUTH,
 	EAST,
 	WEST
+};
+
+enum		e_texture_type
+{
+	NORMAL,
+	NONE
 };
 
 struct		s_stats
@@ -81,6 +85,22 @@ struct		s_player
 	t_mat2	matrix;
 };
 
+struct		s_world
+{
+	int		textures_count;
+};
+
+struct		s_texture
+{
+	t_texture_type	type;
+};
+
+struct		s_texture_normal
+{
+	t_texture	super;
+	SDL_Surface	*surface;
+};
+
 struct		s_wolf
 {
 	SDL_Window		*win;
@@ -89,12 +109,19 @@ struct		s_wolf
 	SDL_Surface		*texture;
 	SDL_Event		event;
 	unsigned char	*pixels;
+	t_ray			last_rays[(int)S_WIDTH];
 	t_bool			running;
 	t_stats			stats;
 	t_fonts			fonts;
 	t_player		player;
 
 };
+
+/* World */
+void		load_world(char *file);
+
+/* Textures */
+t_texture	*load_json_texture(t_json_object *texture_obj);
 
 /* SDL */
 void		sdl_init(t_wolf *wolf);
@@ -115,9 +142,9 @@ t_bool		cast_ray(t_wolf *wolf, t_ray *ray, int x);
 void		game_loop(t_wolf *wolf);
 
 /* Utils */
-double		ticks_to_ms(clock_t ticks);
 Uint32 		getpixel(SDL_Surface *surface, int x, int y);
 void		draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1);
+void		apply_surface(unsigned char **dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
 
 extern int worldMap[24][24];
 

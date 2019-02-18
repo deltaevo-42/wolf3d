@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/16 00:51:40 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/17 22:42:24 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,35 +49,18 @@ void				render_minimap(t_wolf *wolf)
 		{
 			map = (t_vec2){j * s_w, i * s_h};
 			Uint32 color = worldMap[(int)map.x][(int)map.y] > 0 ? 0 : 0x666666;
-			if (map.x <= wolf->player.pos.x + 0.2 && map.x >= wolf->player.pos.x - 0.2 && map.y <= wolf->player.pos.y + 0.2 && map.y >= wolf->player.pos.y - 0.2)
+			if (map.x <= wolf->player.pos.x + 0.2 && map.x >= wolf->player.pos.x - 0.2
+			&& map.y <= wolf->player.pos.y + 0.2 && map.y >= wolf->player.pos.y - 0.2)
 				color = 0xFF0000;
 			((unsigned int *)wolf->pixels)[(i * (int)S_WIDTH) + j + (int)S_WIDTH - 200 ] = color;
 		}
 	}
 	pos = (t_vec2){wolf->player.pos.x * (200. / 24.) + S_WIDTH - 200, wolf->player.pos.y * (200. / 24.)};
-	draw_line(wolf, (t_pixel){pos.x, pos.y, 0xFFFFFF}, (t_pixel){(pos.x + (cosf(wolf->player.rotation) * 8)), (pos.y + (sinf(wolf->player.rotation) * 8)), 0xFFFFFF});
-}
-
-void			apply_surface(unsigned char **dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
-{
-	int i;
-	int j;
-	const float		s_w = src.w / (float)dst.w;
-	const float		s_h = src.h / (float)dst.h;
-	unsigned int index;
-
 	i = -1;
-	while (++i < dst.h)
-	{
-		j = -1;
-		while (++j < dst.w)
-		{
-			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
-			if (index >= IMG_MAX_I)
-				continue;
-			((unsigned int *)*dest)[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
-		}
-	}
+	while (++i < S_WIDTH)
+		draw_line(wolf, (t_pixel){pos.x, pos.y, 0xFF00FF}, (t_pixel){
+			pos.x + (wolf->last_rays[i].dir.x * wolf->last_rays[i].dist * (200. / 24.)), 
+			pos.y + (wolf->last_rays[i].dir.y * wolf->last_rays[i].dist * (200. / 24.)) , 0});
 }
 
 void			render_main(t_wolf *wolf)
@@ -91,6 +74,7 @@ void			render_main(t_wolf *wolf)
 	while (++x < S_WIDTH)
 	{
 		cast_ray(wolf, &ray, x);
+		wolf->last_rays[x] = ray;
 		int height_f = S_HEIGHT / ray.dist;
 		int height = height_f / 2.0;
 		double wallX;
