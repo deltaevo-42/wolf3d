@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/15 23:41:49 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/18 15:32:51 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ static int		dda(t_wolf *wolf, t_ray *ray, t_pixel *step)
 static t_face	compute_face(t_ray *ray)
 {
 	if (ray->side == 0 && ray->dir.x < 0)
-		ray->face = NORTH;
+		ray->face = F_NORTH;
 	if (ray->side == 0 && ray->dir.x > 0)
-		ray->face = SOUTH;
+		ray->face = F_SOUTH;
 	if (ray->side == 1 && ray->dir.y > 0)
-		ray->face = WEST;
+		ray->face = F_WEST;
 	if (ray->side == 1 && ray->dir.y < 0)
-		ray->face = EAST;
+		ray->face = F_EAST;
 }
 
 t_bool			cast_ray(t_wolf *wolf, t_ray *ray, int x)

@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 03:22:00 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/18 15:50:15 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # define S_HEIGHT_2 (S_HEIGHT / 2)
 # define IMG_MAX_I (S_WIDTH * S_HEIGHT)
 
-typedef enum e_face				t_face;
-typedef enum e_texture_type		t_texture_type;
+# include "block.h"
+# include "texture.h"
 
 typedef struct s_world			t_world;
 
@@ -37,22 +37,7 @@ typedef struct s_fonts			t_fonts;
 typedef struct s_ray			t_ray;
 typedef struct s_player			t_player;
 
-typedef struct s_texture		t_texture;
-typedef struct s_texture_normal	t_texture_normal;
 
-enum		e_face
-{
-	NORTH,
-	SOUTH,
-	EAST,
-	WEST
-};
-
-enum		e_texture_type
-{
-	NORMAL,
-	NONE
-};
 
 struct		s_stats
 {
@@ -87,18 +72,10 @@ struct		s_player
 
 struct		s_world
 {
-	int		textures_count;
-};
-
-struct		s_texture
-{
-	t_texture_type	type;
-};
-
-struct		s_texture_normal
-{
-	t_texture	super;
-	SDL_Surface	*surface;
+	int			textures_count;
+	t_texture	**textures;
+	int			blocks_count;
+	t_texture	**blocks;
 };
 
 struct		s_wolf
@@ -119,9 +96,6 @@ struct		s_wolf
 
 /* World */
 void		load_world(char *file);
-
-/* Textures */
-t_texture	*load_json_texture(t_json_object *texture_obj);
 
 /* SDL */
 void		sdl_init(t_wolf *wolf);

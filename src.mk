@@ -1,9 +1,10 @@
-SRC+=render.c
-SRC+=sdl.c
-SRC+=ray.c
+SRC+=events.c
 SRC+=game.c
 SRC+=main.c
-SRC+=map/texture.c
+SRC+=map/block.c
 SRC+=map/reader.c
-SRC+=events.c
+SRC+=map/texture.c
+SRC+=ray.c
+SRC+=render.c
+SRC+=sdl.c
 SRC+=utils.c

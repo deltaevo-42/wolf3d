@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 03:32:00 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/18 15:57:27 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,39 @@ static t_texture	**load_textures(t_world *world, t_json_object *obj)
 	return (textures);
 }
 
+static t_block		**load_blocks(t_world *world, t_json_object *obj)
+{
+	t_json_value	*val;
+	t_json_array	*arr;
+	t_json_element	*elem;
+	t_block			**blocks;
+	int				i;
+	
+	val = json_object_get(obj, "blocks");
+	if (!val || val->type != JSON_ARRAY)
+		return (NULL);
+	arr = (t_json_array *)val;
+	if (!(blocks = (t_block **)malloc(sizeof(t_block *) * (arr->elems_count))))
+		return (NULL);
+	
+	elem = arr->elements;
+	i = 0;
+	while (elem)
+	{
+		if (elem->value->type != JSON_OBJECT 
+			|| !(blocks[i++] = load_json_block((t_json_object *)elem->value)))
+		{
+			printf("MEH\n");
+			//TODO: clean previous loaded blocks
+			free(blocks);
+			return (NULL);
+		}
+		elem = elem->next;
+	}
+	world->blocks_count = arr->elems_count;
+	return (blocks);
+}
+
 void		load_world(char *file)
 {
 	t_json_state	state;
@@ -89,5 +122,6 @@ void		load_world(char *file)
 	}
 	free((void *)content);
 	load_textures(&world, (t_json_object *)val);
+	load_blocks(&world, (t_json_object *)val);
 	json_free_value(val);
 }

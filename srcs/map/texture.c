@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 01:49:10 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 03:27:14 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/18 15:03:56 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static t_texture_type	get_texture_type(char *string)
 {
 	if (ft_strncmp(string, "NORMAL", 6) == 0)
-		return (NORMAL);
-	return (NONE);
+		return (T_NORMAL);
+	return (T_NONE);
 }
 
 static t_texture		*load_normal_texture(t_json_object *j_obj)
@@ -28,7 +28,7 @@ static t_texture		*load_normal_texture(t_json_object *j_obj)
 	if ((!val || val->type != JSON_STRING)
 		|| !(texture = (t_texture_normal*)malloc(sizeof(t_texture_normal))))
 		return (NULL);
-	texture->super.type = NORMAL;
+	texture->super.type = T_NORMAL;
 	if (!(texture->surface = IMG_Load(((t_json_string *)val)->value)))
 	{
 		ft_putstr("Unnable to load texture: ");
@@ -50,13 +50,13 @@ t_texture				*load_json_texture(t_json_object *texture_obj)
 		return (NULL);
 	j_string = ((t_json_string *)val);
 	texture_type = get_texture_type(j_string->value);
-	if (texture_type == NONE)
+	if (texture_type == T_NONE)
 	{
 		ft_putstr("Unknown texture type: ");
 		ft_putendl(j_string->value);
 		return (NULL);
 	}
-	if (texture_type == NORMAL)
+	if (texture_type == T_NORMAL)
 		return (load_normal_texture(texture_obj));
 	return (NULL);
 }

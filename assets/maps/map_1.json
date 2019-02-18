@@ -1,22 +1,23 @@
 {
 	"textures": [
 		{
-			"name": "cobblestone_material",
+			"_name": "cobblestone_material",
 			"type": "NORMAL",
 			"path": "assets/textures/cobblestone.png"
+			
 		},
 		{
-			"name": "adolf_dickpick",
+			"_name": "adolf",
 			"type": "NORMAL",
-			"path": "assets/textures/dodolf_dick.png"
+			"path": "assets/textures/adolf.png"
 		}
 	],
 	"blocks": [
 		{
 			"_name": "cobblestone",
 			"type": "NORMAL",
-			"minimap_color": [ 255, 0, 0 ],
-			"faces": {
+			"minimap_color": [ 255, 253, 0 ],
+			"sides": {
 				"NORTH": {
 					"color": [ 255, 255, 255 ],
 					"texture": 0
@@ -29,7 +30,7 @@
 		}
 	],
 	"map": {
-		"size": [ 24, 24 ],
+		"size": [255],
 		"data": [
 			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 			[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
