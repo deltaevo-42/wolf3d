@@ -6,7 +6,7 @@
 #    By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/07 14:49:27 by llelievr          #+#    #+#              #
-#    Updated: 2019/02/16 00:18:37 by llelievr         ###   ########.fr        #
+#    Updated: 2019/02/19 00:43:54 by llelievr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME=wolf3d
 SDL=${HOME}/.brew/Cellar/sdl2/2.0.9
 SDL_IMG=${HOME}/.brew/Cellar/sdl2_image/2.0.4
 SDL_TTF=${HOME}/.brew/Cellar/sdl2_ttf/2.0.14
-CFLAGS= -Wall -flto -O2 -ffast-math -Wextra
+CFLAGS=-Wall -flto -O2 -ffast-math -Wextra
 LIBS=-lSDL2_image -lSDL2_ttf -lSDL2
 CC=clang
 
@@ -44,6 +44,11 @@ endif
 
 all: $(FT_LIB) $(NAME)
 
+
+dev: CFLAGS +=-g
+dev: FT_TASK = dev 
+dev: re
+
 $(OBJS): Makefile src.mk
 
 $(OBJDIR)%.o: $(SRCDIR)%.c
@@ -65,6 +70,7 @@ fclean: clean
 	make -C $(FT) fclean
 
 re: fclean $(NAME)
+
 
 get_files:
 	$(shell find srcs -type f | sed 's/srcs\///g' | sed 's/^/SRC+=/' > src.mk)

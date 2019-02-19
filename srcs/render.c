@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 15:36:50 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/19 00:48:21 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void				render_minimap(t_wolf *wolf)
 	while (++i < S_WIDTH)
 		draw_line(wolf, (t_pixel){pos.x, pos.y, 0xFF00FF}, (t_pixel){
 			pos.x + (wolf->last_rays[i].dir.x * wolf->last_rays[i].dist * (200. / 24.)), 
-			pos.y + (wolf->last_rays[i].dir.y * wolf->last_rays[i].dist * (200. / 24.)) , 0});
+			pos.y + (wolf->last_rays[i].dir.y * wolf->last_rays[i].dist * (200. / 24.)) , 0x666666});
 }
 
 void			render_main(t_wolf *wolf)

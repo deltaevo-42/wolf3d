@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:32:51 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 18:31:05 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/19 01:34:03 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,53 +14,77 @@
 
 static t_block_type	get_block_type(char *string)
 {
-	if (ft_strncmp(string, "NORMAL", 6) == 0)
+	const int	len = ft_strlen(string);	
+
+	if (len == 6 && ft_strncmp(string, "NORMAL", 6) == 0)
 		return (B_NORMAL);
 	return (B_NONE);
 }
 
 static t_face get_face_type(char *string)
 {
-	if (ft_strncmp(string, "NORTH", 5) == 0)
+	const int	len = ft_strlen(string);	
+
+	if (len == 5 && ft_strncmp(string, "NORTH", 5) == 0)
 		return (F_NORTH);
-	if (ft_strncmp(string, "SOUTH", 5) == 0)
+	if (len == 5 && ft_strncmp(string, "SOUTH", 5) == 0)
 		return (F_SOUTH);
-	if (ft_strncmp(string, "WEST", 4) == 0)
+	if (len == 4 && ft_strncmp(string, "WEST", 4) == 0)
 		return (F_WEST);
-	if (ft_strncmp(string, "EAST", 4) == 0)
+	if (len == 4 && ft_strncmp(string, "EAST", 4) == 0)
 		return (F_EAST);
-	if (ft_strncmp(string, "TOP", 3) == 0)
+	if (len == 3 && ft_strncmp(string, "TOP", 3) == 0)
 		return (F_TOP);
-	if (ft_strncmp(string, "BOTTOM", 6) == 0)
+	if (len == 6 && ft_strncmp(string, "BOTTOM", 6) == 0)
 		return (F_BOTTOM);
+	if (len == 3 && ft_strncmp(string, "ALL", 3) == 0)
+		return (F_ALL);
 	return (F_NONE);
 }
 
-static t_bool load_block_sides(t_world *w, t_json_object *obj, t_block *block)
+static t_bool load_block_side(t_world *w, t_json_object *o, t_block_side *side)
 {
 	t_json_value	*val;
-	t_json_element	*elem;
-	t_face			face;
-	t_block_side	*side;
-
-	if (!obj || obj->type != JSON_OBJECT)
+	int				texture_i;
+	
+	if (!ft_json_color(json_object_get(o, "color"), &side->color))
 		return (FALSE);
+	if (!(val = json_object_get(o, "texture")) || val->type != JSON_NUMBER)
+		return (FALSE);
+	if (!!(texture_i = (int)((t_json_number *)val)->value) 
+		&& texture_i >= w->textures_count)
+		return (FALSE);
+	side->texture = w->textures[texture_i];
+	return (TRUE);
+}
+
+static t_bool load_block_sides(t_world *w, t_json_value *v, t_block_side *faces)
+{
+	t_json_object	*obj;
+	t_json_member	*elem;
+	t_face			face;
+	int				i;
+
+	if (!v || v->type != JSON_OBJECT)
+		return (FALSE);
+	obj = (t_json_object *)v;
 	elem = obj->elements;
-	ft_memset(block->faces, F_NONE, 6);
-	while (elem)
+	ft_memset(faces, 0, sizeof(t_block_side) * 6);
+	while (elem && !!(obj = (t_json_object *)elem->value))
 	{
-		face = get_face_type(((t_json_object *)elem->value)->string->value);
-		if (elem->type != JSON_OBJECT || face == F_NONE)
+		if ((face = get_face_type(elem->string->value)) == F_NONE)
 			return (FALSE);
-		side = &block->faces[face];
-		if (!ft_json_color(json_object_get(obj, "color"), &side->color))
-			return (FALSE);
-		val = json_object_get("texture")
-		if (!val || val->type != JSON_NUMBER)
-			return (FALSE);
-		side->texture = w->textures[((t_json_number)val)->value];
+		i = (face == F_ALL ? 0 : face);
+		while (i < (int)face || i == 0)
+			if(!load_block_side(w, obj, &faces[i++]))
+				return (FALSE);
 		elem = elem->next;
 	}
+	i = -1;
+	while (++i < 6)
+		if (!faces[i].texture)
+			return (FALSE);
+	return (TRUE);
 }
 
 static t_block		*load_normal_block(t_world *w, t_json_object *obj)
@@ -72,7 +96,7 @@ static t_block		*load_normal_block(t_world *w, t_json_object *obj)
 	block->super.type = B_NORMAL;
 	if (!ft_json_color(json_object_get(obj, "minimap_color"), &block->minimap_color))
 		return (json_free_ret(block));
-	if (!load_block_sides(w, json_object_get(obj, "sides"), block))
+	if (!load_block_sides(w, json_object_get(obj, "sides"), block->faces))
 		return (json_free_ret(block));
 	return ((t_block *)block);
 }

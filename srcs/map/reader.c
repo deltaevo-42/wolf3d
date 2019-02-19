@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 15:57:27 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/19 01:35:04 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ static t_texture	**load_textures(t_world *world, t_json_object *obj)
 			|| !(textures[i++] = load_json_texture((t_json_object *)elem->value)))
 		{
 			//TODO: clean previous loaded textures
+			ft_putstr("Invalid texture at index: ");
+			ft_putnbr(i);
+			ft_putchar('\n');
 			free(textures);
 			return (NULL);
 		}
@@ -91,10 +94,12 @@ static t_block		**load_blocks(t_world *world, t_json_object *obj)
 	while (elem)
 	{
 		if (elem->value->type != JSON_OBJECT 
-			|| !(blocks[i++] = load_json_block((t_json_object *)elem->value)))
+			|| !(blocks[i++] = load_json_block(world, (t_json_object *)elem->value)))
 		{
-			printf("MEH\n");
 			//TODO: clean previous loaded blocks
+			ft_putstr("Invalid block at index: ");
+			ft_putnbr(i - 1);
+			ft_putchar('\n');
 			free(blocks);
 			return (NULL);
 		}
@@ -121,7 +126,10 @@ void		load_world(char *file)
 		return ;
 	}
 	free((void *)content);
-	load_textures(&world, (t_json_object *)val);
-	load_blocks(&world, (t_json_object *)val);
+	if(!(world.textures = load_textures(&world, (t_json_object *)val)))
+		return ;
+	if(!(world.blocks = load_blocks(&world, (t_json_object *)val)))
+		return ;
+	printf("world %d\n", world.blocks_count);
 	json_free_value(val);
 }

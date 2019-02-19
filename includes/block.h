@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:46:04 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 17:25:52 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/18 23:59:10 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ enum							e_face
 	F_WEST,
 	F_TOP,
 	F_BOTTOM,
+	F_ALL,
 	F_NONE
 };
 
@@ -50,16 +51,13 @@ struct							s_block
 	t_block_type	type;
 };
 
-
-
 struct 							s_block_normal
 {
 	t_block			super;
 	t_color			minimap_color;
 	t_block_side	faces[6];
-
 };
 
-t_block				*load_json_block(t_json_object *obj);
+t_block				*load_json_block(t_world *world, t_json_object *obj);
 
 #endif

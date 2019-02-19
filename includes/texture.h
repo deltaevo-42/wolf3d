@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:48:06 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 14:52:26 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/19 01:30:04 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 
 # include "wolf.h"
 
-typedef enum e_texture_type		t_texture_type;
-typedef struct s_texture		t_texture;
-typedef struct s_texture_normal	t_texture_normal;
 
 enum							e_texture_type
 {

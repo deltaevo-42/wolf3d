@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 15:50:15 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/18 23:35:11 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@
 # define S_HEIGHT_2 (S_HEIGHT / 2)
 # define IMG_MAX_I (S_WIDTH * S_HEIGHT)
 
-# include "block.h"
-# include "texture.h"
+
+typedef enum e_texture_type		t_texture_type;
+typedef struct s_texture		t_texture;
+typedef struct s_texture_normal	t_texture_normal;
 
 typedef struct s_world			t_world;
 
@@ -37,6 +39,16 @@ typedef struct s_fonts			t_fonts;
 typedef struct s_ray			t_ray;
 typedef struct s_player			t_player;
 
+# include "texture.h"
+# include "block.h"
+
+struct		s_world
+{
+	int			textures_count;
+	t_texture	**textures;
+	int			blocks_count;
+	t_block	**blocks;
+};
 
 
 struct		s_stats
@@ -70,13 +82,7 @@ struct		s_player
 	t_mat2	matrix;
 };
 
-struct		s_world
-{
-	int			textures_count;
-	t_texture	**textures;
-	int			blocks_count;
-	t_texture	**blocks;
-};
+
 
 struct		s_wolf
 {

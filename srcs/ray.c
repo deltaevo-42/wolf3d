@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 15:32:51 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/18 23:21:45 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ t_bool			cast_ray(t_wolf *wolf, t_ray *ray, int x)
 
 	ray->dir = ft_mat2_mulv(wolf->player.matrix, ft_vec2_add(
 		(t_vec2){0, 1},
-		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f), 0}));
+		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f) * (S_WIDTH / S_HEIGHT), 0}));
 	ray->side_dist = (t_vec2){0, 0};
 	ray->delta_dist = (t_vec2){ft_absf(1.0f / ray->dir.x), ft_absf(1.0f / ray->dir.y)};
 	ray->hit_pos = (t_pixel){.x = wolf->player.pos.x, .y = wolf->player.pos.y};

@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 01:49:10 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 15:03:56 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/19 01:28:38 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 static t_texture_type	get_texture_type(char *string)
 {
-	if (ft_strncmp(string, "NORMAL", 6) == 0)
+	const int	len = ft_strlen(string);	
+
+	if (len == 6 && ft_strncmp(string, "NORMAL", 6) == 0)
 		return (T_NORMAL);
 	return (T_NONE);
 }
