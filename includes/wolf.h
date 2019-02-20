@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/18 23:35:11 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/19 22:49:29 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,12 @@ typedef struct s_player			t_player;
 
 struct		s_world
 {
-	int			textures_count;
-	t_texture	**textures;
-	int			blocks_count;
-	t_block	**blocks;
+	int				textures_count;
+	t_texture		**textures;
+	int				blocks_count;
+	t_block			**blocks;
+	t_size			size;
+	t_block_state	***data;
 };
 
 
@@ -65,14 +67,14 @@ struct		s_fonts
 
 struct		s_ray
 {
-	t_vec2	dir;
-	t_vec2	side_dist;
-	t_vec2	delta_dist;
-	t_pixel	hit_pos;
-	t_face	face;
-	float	dist;
-	int		side;
-	int		hit;
+	t_vec2			dir;
+	t_vec2			side_dist;
+	t_vec2			delta_dist;
+	t_pixel			hit_pos;
+	t_face			face;
+	float			dist;
+	int				side;
+	t_block_state	*hit;
 };
 
 struct		s_player
@@ -89,7 +91,6 @@ struct		s_wolf
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
 	SDL_Texture		*screen;
-	SDL_Surface		*texture;
 	SDL_Event		event;
 	unsigned char	*pixels;
 	t_ray			last_rays[(int)S_WIDTH];
@@ -97,11 +98,11 @@ struct		s_wolf
 	t_stats			stats;
 	t_fonts			fonts;
 	t_player		player;
-
+	t_world			world;
 };
 
 /* World */
-void		load_world(char *file);
+void		load_world(t_world *world, char *file);
 
 /* SDL */
 void		sdl_init(t_wolf *wolf);
@@ -125,7 +126,5 @@ void		game_loop(t_wolf *wolf);
 Uint32 		getpixel(SDL_Surface *surface, int x, int y);
 void		draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1);
 void		apply_surface(unsigned char **dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
-
-extern int worldMap[24][24];
 
 #endif

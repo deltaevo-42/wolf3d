@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/14 17:27:05 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/19 19:22:17 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void		hook_events(t_wolf *wolf)
 	SDL_Event event;
 
 	event = wolf->event;
-	if (event.type == SDL_QUIT || (SDL_KEYDOWN == event.type && SDL_SCANCODE_ESCAPE == event.key.keysym.scancode))
+	if (event.type == SDL_QUIT || state[SDL_SCANCODE_ESCAPE])
 		wolf->running = FALSE;
 	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_L])
 	{

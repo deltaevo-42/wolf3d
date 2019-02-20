@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 01:35:04 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/19 16:31:20 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,28 @@ static t_block		**load_blocks(t_world *world, t_json_object *obj)
 	return (blocks);
 }
 
-void		load_world(char *file)
+static t_bool		load_map(t_world *world, t_json_object *obj)
+{
+	t_json_value	*val;
+	
+
+	val = json_object_get(obj, "map");
+	if (!val || val->type != JSON_OBJECT)
+		return (FALSE);
+	if(!ft_json_size(json_object_get(val, "size"), &world->size))
+		return (FALSE);
+	printf("Size %zu %zu\n", world->size.width, world->size.height);
+	val = json_object_get(val, "data");
+	world->data = load_map_data(world, val);
+	return (TRUE);
+}
+
+void			load_world(t_world *world, char *file)
 {
 	t_json_state	state;
 	t_json_value	*val;
 	int				content_len;
 	const char		*content = get_file_content(file, &content_len);
-	t_world			world;
 
 	state = (t_json_state){(char *)content, 0, content_len};
 	if (!content || !(val = parse_value(&state)))
@@ -126,10 +141,10 @@ void		load_world(char *file)
 		return ;
 	}
 	free((void *)content);
-	if(!(world.textures = load_textures(&world, (t_json_object *)val)))
+	if(!(world->textures = load_textures(world, (t_json_object *)val)))
 		return ;
-	if(!(world.blocks = load_blocks(&world, (t_json_object *)val)))
+	if(!(world->blocks = load_blocks(world, (t_json_object *)val)))
 		return ;
-	printf("world %d\n", world.blocks_count);
+	load_map(world, (t_json_object *)val);
 	json_free_value(val);
 }

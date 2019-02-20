@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:48:06 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 01:30:04 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/19 17:46:38 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,7 @@ struct		s_texture_normal
 
 /* Textures */
 t_texture	*load_json_texture(t_json_object *texture_obj);
+
+t_texture		*load_normal_texture(t_json_object *j_obj);
 
 #endif
