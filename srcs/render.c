@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 22:50:55 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/20 18:42:29 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@ void			render_debug(t_wolf *wolf)
 	SDL_FreeSurface(fps_text);
 }
 
+t_bool		render_wall(t_wolf *wolf, t_ray *ray)
+{
+	if (ray->hit->block->type == B_NORMAL)
+		return (render_block_normal_wall(wolf, ray));
+	return (TRUE);
+}
+
 void			render_main(t_wolf *wolf)
 {
 	int		x;
@@ -42,13 +49,21 @@ void			render_main(t_wolf *wolf)
 	x = -1;
 	while (++x < S_WIDTH)
 	{
-		cast_ray(wolf, &ray, x);
-		
-	
-		t_texture_normal *texture = ((t_texture_normal *)((t_block_normal *)((t_block_state *)ray.hit)->block)->faces[ray.face].texture);
+		ray = create_ray(wolf, x);
 		wolf->last_rays[x] = ray;
-		int height_f = S_HEIGHT / ray.dist;
-		int height = height_f / 2.0;
+		while (ray.hit_pos.x >= 0 && ray.hit_pos.y >= 0 && ray.hit_pos.x < (int)wolf->world.size.width && ray.hit_pos.y < (int)wolf->world.size.height)
+		{
+			next_ray(wolf, &ray);
+			t_ray r2 = ray;
+			if (!ray.hit || !render_wall(wolf, &r2))
+				break;
+			//printf("looooolll\n");
+			//	break;
+		}
+		
+		//render_wall(wolf, &ray);
+		/*t_texture_normal *texture = ((t_texture_normal *)((t_block_normal *)((t_block_state *)ray.hit)->block)->faces[ray.face].texture);
+		
 		double wallX;
 		if (ray.side == 0)
 			wallX = wolf->player.pos.y + ray.dist * ray.dir.y;
@@ -63,10 +78,12 @@ void			render_main(t_wolf *wolf)
 			texX = texWidth - texX - 1;
 		SDL_Rect a = { texX, 0, 1, texture->surface->h };
 		SDL_Rect b = { x, S_HEIGHT_2 - height, 1, height_f };
-		apply_surface(&wolf->pixels, texture->surface, a, b);
+		apply_surface(&wolf->pixels, texture->surface, a, b);*/
 
-
-		t_vec2 floorWall;
+		float height_f = S_HEIGHT / ray.dist;
+		float height = height_f / 2.0;
+		double wallX = 0;
+		 t_vec2 floorWall;
 		if (ray.side == 0 && ray.dir.x > 0)
 			floorWall = (t_vec2) {ray.hit_pos.x, ray.hit_pos.y + wallX};
 		else if (ray.side == 0 && ray.dir.x < 0)
@@ -76,7 +93,7 @@ void			render_main(t_wolf *wolf)
 		else
 			floorWall = (t_vec2) {ray.hit_pos.x + wallX, ray.hit_pos.y + 1.0};
 		double distWall, distPlayer, currentDist;
-		int drawEnd = (S_HEIGHT_2 + height);
+		float drawEnd = (S_HEIGHT / 2) - (height * 2. * wolf->player.pos.z) + height * 2.;
 		distWall = ray.dist;
 		distPlayer = 0.0;
 		for (int y = drawEnd + 1; y < S_HEIGHT; y++)
@@ -90,13 +107,13 @@ void			render_main(t_wolf *wolf)
 				weight * floorWall.x + (1.0 - weight) * wolf->player.pos.x,
 				weight * floorWall.y + (1.0 - weight) * wolf->player.pos.y
 			};
-			int floorTexX, floorTexY;
+		/*	int floorTexX, floorTexY;
 			floorTexX = (int)(curr_floor.x * texWidth) % texWidth;
-			floorTexY = (int)(curr_floor.y * 64) % 64;
+			floorTexY = (int)(curr_floor.y * 64) % 64;*/
 			((unsigned int *)wolf->pixels)[(y * (int)S_WIDTH) + x] = /*getpixel(wolf->texture, floorTexX, floorTexY)*/0x00FF00;
 			if (S_HEIGHT - y < 0 || S_HEIGHT - y > IMG_MAX_I)
 				continue;
-			((unsigned int *)wolf->pixels)[(((int)S_HEIGHT - y) * (int)S_WIDTH) + x] =/* getpixel(wolf->texture, floorTexX + 256, floorTexY + 128)*/0x0000FF;
+		//	((unsigned int *)wolf->pixels)[(((int)S_HEIGHT - y) * (int)S_WIDTH) + x] =/* getpixel(wolf->texture, floorTexX + 256, floorTexY + 128)*/0x0000FF;
 		}
 	}
 }

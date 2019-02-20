@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:51:33 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 22:47:21 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/20 18:37:39 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void		update_fps(t_wolf *wolf)
 
 void			game_loop(t_wolf *wolf)
 {
-	wolf->player.pos = (t_vec2){ 6, 7 };
+	wolf->player.pos = (t_vec3){ 6, 7, 0.5 };
 	wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
 	//wolf->texture = IMG_Load("assets/textures/walls.png");
 	// printf("SDL_Init failed: %s\n", SDL_GetError());

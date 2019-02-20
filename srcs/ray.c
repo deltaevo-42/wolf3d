@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 19:52:16 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/20 18:45:02 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ static t_block_state	*dda(t_wolf *wolf, t_ray *ray, t_pixel *step)
 {
 	t_block_state		*hit;
 
-	hit = 0;
-	while (!hit)
+	hit = ray->hit;
+	while (!hit && ray->hit_pos.x >= 0 && ray->hit_pos.x < wolf->world.size.width && ray->hit_pos.y >= 0 && ray->hit_pos.y < wolf->world.size.height)
 	{
 		if (ray->side_dist.x < ray->side_dist.y)
 		{
@@ -58,6 +58,7 @@ static t_block_state	*dda(t_wolf *wolf, t_ray *ray, t_pixel *step)
 			ray->side = 1;
 		}
 		hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
+		
 	}
 	return (hit);
 }
@@ -74,16 +75,24 @@ static void	compute_face(t_ray *ray)
 		ray->face = F_EAST;
 }
 
-t_bool			cast_ray(t_wolf *wolf, t_ray *ray, int x)
+t_ray			create_ray(t_wolf *wolf, int x)
 {
-	t_pixel		step;
+	t_ray	ray;
 
-	ray->dir = ft_mat2_mulv(wolf->player.matrix, ft_vec2_add(
+	ray.x = x;
+	ray.dir = ft_mat2_mulv(wolf->player.matrix, ft_vec2_add(
 		(t_vec2){0, 1},
 		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f) * (S_WIDTH / S_HEIGHT), 0}));
-	ray->side_dist = (t_vec2){0, 0};
-	ray->delta_dist = (t_vec2){ft_absf(1.0f / ray->dir.x), ft_absf(1.0f / ray->dir.y)};
-	ray->hit_pos = (t_pixel){.x = wolf->player.pos.x, .y = wolf->player.pos.y};
+	ray.side_dist = (t_vec2){0, 0};
+	ray.delta_dist = (t_vec2){ft_absf(1.0f / ray.dir.x), ft_absf(1.0f / ray.dir.y)};
+	ray.hit_pos = (t_pixel){.x = wolf->player.pos.x, .y = wolf->player.pos.y};
+	ray.hit = 0;
+	return (ray);
+}
+
+void			next_ray(t_wolf *wolf, t_ray *ray)
+{
+	t_pixel		step;
 	compute_dir(wolf, ray, &step);
 	ray->hit = dda(wolf, ray, &step);
 	if (ray->side == 0)
@@ -93,5 +102,4 @@ t_bool			cast_ray(t_wolf *wolf, t_ray *ray, int x)
 	if (ray->dist <= 0)
 		ray->dist = 0.00001;
 	compute_face(ray);
-	return (TRUE);
 }

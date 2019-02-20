@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 19:22:17 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/20 16:51:34 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ void		hook_events(t_wolf *wolf)
 	{
 		wolf->player.pos.y += -cosf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ? 1 : -1)  * move_speed;
 		wolf->player.pos.x += sinf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ?  1 : -1)  * move_speed;
+	}
+	if (state[SDL_SCANCODE_SPACE] || state[SDL_SCANCODE_LSHIFT])
+	{
+		wolf->player.pos.z += (state[SDL_SCANCODE_LSHIFT] ? 1 : -1) * move_speed;
+		printf("Z %f\n", wolf->player.pos.z);
 	}
 	SDL_PollEvent(&wolf->event);
 }

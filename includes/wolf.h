@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 22:49:29 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/20 17:29:34 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ struct		s_fonts
 
 struct		s_ray
 {
+	int				x;
 	t_vec2			dir;
 	t_vec2			side_dist;
 	t_vec2			delta_dist;
@@ -79,7 +80,7 @@ struct		s_ray
 
 struct		s_player
 {
-	t_vec2	pos;
+	t_vec3	pos;
 	float	rotation;
 	t_mat2	matrix;
 };
@@ -117,7 +118,8 @@ void		render_minimap(t_wolf *wolf);
 void		render_main(t_wolf *wolf);
 
 /* Ray */
-t_bool		cast_ray(t_wolf *wolf, t_ray *ray, int x);
+void		next_ray(t_wolf *wolf, t_ray *ray);
+t_ray		create_ray(t_wolf *wolf, int x);
 
 /* Game */
 void		game_loop(t_wolf *wolf);
