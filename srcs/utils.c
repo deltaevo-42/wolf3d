@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 23:40:27 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/20 21:03:13 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/21 14:17:10 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,12 @@ void	draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1)
 			p0.y += s.y;
 		}
 	}
+}
+
+t_bool	between(t_pixel p, SDL_Rect bounds)
+{
+	if (p.x < bounds.x || p.x >= bounds.x + bounds.w
+		|| p.y < bounds.y || p.y >= bounds.y + bounds.h)
+		return (FALSE);
+	return (TRUE);
 }

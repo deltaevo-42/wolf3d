@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/21 00:34:40 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/21 17:58:57 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include "libft.h"
 # include <stdlib.h>
 
-# define S_WIDTH (1000.0)
-# define S_HEIGHT (1000.0)
+# define S_WIDTH (600.0)
+# define S_HEIGHT (600.0)
 # define S_WIDTH_2 (S_WIDTH / 2)
 # define S_HEIGHT_2 (S_HEIGHT / 2)
 # define IMG_MAX_I (S_WIDTH * S_HEIGHT)

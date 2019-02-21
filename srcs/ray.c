@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/21 00:12:59 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/21 14:17:12 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,6 @@ static void		compute_dir(t_wolf *wolf, t_ray *ray, t_pixel *step)
 		step->y = 1;
 		ray->side_dist.y = ((float)ray->hit_pos.y + 1.0 - wolf->player.pos.y) * ray->delta_dist.y;
 	}
-}
-
-static t_block_state	*dda(t_wolf *wolf, t_ray *ray, t_pixel *step)
-{
-	t_block_state		*hit;
-
-	hit = ray->hit;
-	while (!hit)
-	{
-		if (ray->side_dist.x < ray->side_dist.y)
-		{
-			ray->side_dist.x += ray->delta_dist.x;
-			ray->hit_pos.x += step->x;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->side_dist.y += ray->delta_dist.y;
-			ray->hit_pos.y += step->y;
-			ray->side = 1;
-		}
-		hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
-		
-	}
-	return (hit);
 }
 
 static void	compute_face(t_ray *ray)
