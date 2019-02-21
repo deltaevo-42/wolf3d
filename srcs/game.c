@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:51:33 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/20 18:37:39 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/21 01:01:56 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ static void		update_fps(t_wolf *wolf)
 
 void			game_loop(t_wolf *wolf)
 {
-	wolf->player.pos = (t_vec3){ 6, 7, 0.5 };
+	wolf->player.pos = (t_vec3){ 6, 7, 0 };
 	wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
-	//wolf->texture = IMG_Load("assets/textures/walls.png");
+	wolf->tmp_texture = IMG_Load("assets/textures/test.png");
 	// printf("SDL_Init failed: %s\n", SDL_GetError());
 	while (wolf->running)
 	{
@@ -42,7 +42,7 @@ void			game_loop(t_wolf *wolf)
 		SDL_RenderClear(wolf->renderer);
 		SDL_SetRenderTarget(wolf->renderer, wolf->screen);
 		render_main(wolf);
-	//	render_minimap(wolf);
+		//render_minimap(wolf);
 		update_fps(wolf);
 		SDL_UpdateTexture(wolf->screen, NULL, wolf->pixels, S_WIDTH * 4);
 		SDL_SetRenderTarget(wolf->renderer, NULL);

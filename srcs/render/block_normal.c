@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 13:33:02 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/20 18:28:43 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/21 00:27:15 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_bool	render_block_normal_wall(t_wolf *wolf, t_ray *ray)
 {
 	t_block_normal		*block;
 	t_texture_normal	*texture;
-	int					height;
+	float				height;
 	double				wallX;
 	int					texX;
 
@@ -33,6 +33,6 @@ t_bool	render_block_normal_wall(t_wolf *wolf, t_ray *ray)
 		texX = texture->surface->w - texX - 1;
 	apply_surface(&wolf->pixels, texture->surface, 
 		(SDL_Rect){ texX, 0, 1, texture->surface->h }, 
-		(SDL_Rect){ ray->x, (S_HEIGHT / 2) - (height * wolf->player.pos.z), 1, height});
-	return (wolf->player.pos.z < 0);
+		(SDL_Rect){ ray->x, S_HEIGHT_2 + height * (wolf->player.pos.z + 1) / 2. - height, 1, height});
+	return (FALSE);
 }

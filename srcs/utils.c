@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 23:40:27 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 22:40:41 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/20 21:03:13 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	apply_surface(unsigned char **dest, SDL_Surface *s, SDL_Rect src, SDL_Rect 
 		while (++j < dst.w)
 		{
 			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
-			if (index >= IMG_MAX_I)
+			if (index >= IMG_MAX_I || ((unsigned int *)*dest)[index] != 0)
 				continue;
 			((unsigned int *)*dest)[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
 		}

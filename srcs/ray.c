@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/20 18:45:02 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/21 00:12:59 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static t_block_state	*dda(t_wolf *wolf, t_ray *ray, t_pixel *step)
 	t_block_state		*hit;
 
 	hit = ray->hit;
-	while (!hit && ray->hit_pos.x >= 0 && ray->hit_pos.x < wolf->world.size.width && ray->hit_pos.y >= 0 && ray->hit_pos.y < wolf->world.size.height)
+	while (!hit)
 	{
 		if (ray->side_dist.x < ray->side_dist.y)
 		{
@@ -90,11 +90,26 @@ t_ray			create_ray(t_wolf *wolf, int x)
 	return (ray);
 }
 
-void			next_ray(t_wolf *wolf, t_ray *ray)
+t_bool			next_ray(t_wolf *wolf, t_ray *ray)
 {
 	t_pixel		step;
+	
 	compute_dir(wolf, ray, &step);
-	ray->hit = dda(wolf, ray, &step);
+	if (ray->side_dist.x < ray->side_dist.y)
+	{
+		ray->side_dist.x += ray->delta_dist.x;
+		ray->hit_pos.x += step.x;
+		ray->side = 0;
+	}
+	else
+	{
+		ray->side_dist.y += ray->delta_dist.y;
+		ray->hit_pos.y += step.y;
+		ray->side = 1;
+	}
+	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.width || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.height)
+		return (FALSE);
+	ray->hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
 	if (ray->side == 0)
 		ray->dist = (ray->hit_pos.x - wolf->player.pos.x + (1 - step.x) / 2.0) / ray->dir.x;
 	else
@@ -102,4 +117,36 @@ void			next_ray(t_wolf *wolf, t_ray *ray)
 	if (ray->dist <= 0)
 		ray->dist = 0.00001;
 	compute_face(ray);
+	return (TRUE);
+}
+
+
+t_bool			prev_ray(t_wolf *wolf, t_ray *ray)
+{
+	t_pixel		step;
+	
+	compute_dir(wolf, ray, &step);
+	if (ray->side == 0)
+	{
+		ray->side_dist.x -= ray->delta_dist.x;
+		ray->hit_pos.x -= step.x;
+		ray->side = 1;
+	}
+	else
+	{
+		ray->side_dist.y -= ray->delta_dist.y;
+		ray->hit_pos.y -= step.y;
+		ray->side = 0;
+	}
+	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.width || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.height)
+		return (FALSE);
+	ray->hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
+	if (ray->side == 0)
+		ray->dist = (ray->hit_pos.x - wolf->player.pos.x + (1 - step.x) / 2.0) / ray->dir.x;
+	else
+		ray->dist = (ray->hit_pos.y - wolf->player.pos.y + (1 - step.y) / 2.0) / ray->dir.y;
+	if (ray->dist <= 0)
+		ray->dist = 0.00001;
+	compute_face(ray);
+	return (TRUE);
 }

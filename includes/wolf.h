@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/20 17:29:34 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/21 00:34:40 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ struct		s_ray
 {
 	int				x;
 	t_vec2			dir;
+	t_vec2			step;
 	t_vec2			side_dist;
 	t_vec2			delta_dist;
 	t_pixel			hit_pos;
@@ -100,6 +101,7 @@ struct		s_wolf
 	t_fonts			fonts;
 	t_player		player;
 	t_world			world;
+	SDL_Surface		*tmp_texture;
 };
 
 /* World */
@@ -118,7 +120,8 @@ void		render_minimap(t_wolf *wolf);
 void		render_main(t_wolf *wolf);
 
 /* Ray */
-void		next_ray(t_wolf *wolf, t_ray *ray);
+t_bool		next_ray(t_wolf *wolf, t_ray *ray);
+t_bool		prev_ray(t_wolf *wolf, t_ray *ray);
 t_ray		create_ray(t_wolf *wolf, int x);
 
 /* Game */

@@ -44,7 +44,7 @@
 				},
 				"EAST": {
 					"color": [ 255, 0, 0 ],
-					"texture": 2
+					"texture": 1
 				}
 			}
 		},
