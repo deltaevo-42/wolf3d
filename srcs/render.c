@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/21 01:19:09 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/21 02:44:43 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,19 +123,15 @@ void			render_main(t_wolf *wolf)
 			floorWall = (t_vec2) {ray.hit_pos.x + wallX, ray.hit_pos.y};
 		else
 			floorWall = (t_vec2) {ray.hit_pos.x + wallX, ray.hit_pos.y + 1.0};
-		float distWall, distPlayer, currentDist;
+		float distWall;
 		float drawEnd = S_HEIGHT_2 + height * (wolf->player.pos.z + 1) / 2. - height;
 		distWall = ray.dist / (wolf->player.pos.z + 1);
-		distPlayer = wolf->player.pos.z;
-		if (drawEnd < S_HEIGHT_2)
-			drawEnd = S_HEIGHT_2;
 		float d = S_HEIGHT + 2 * wolf->player.pos.z;
 		for (int y = drawEnd + 1; y < S_HEIGHT; y++)
 		{
 			if (y > S_HEIGHT || y < 0 || ((unsigned int *)wolf->pixels)[(y * (int)S_WIDTH) + x] != 0)
 				continue ;
-			currentDist = S_HEIGHT / ((2 * y - d) * distWall);
-			float weight = currentDist;
+			float weight = S_HEIGHT / ((2 * y - d) * distWall);
 			t_vec2 curr_floor = (t_vec2)
 			{
 				weight * floorWall.x + (1.0 - weight) * wolf->player.pos.x,
