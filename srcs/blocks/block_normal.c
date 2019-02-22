@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 17:41:56 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 22:41:33 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/22 15:12:50 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,15 @@ static t_bool load_block_sides(t_world *w, t_json_value *v, t_block_side *faces)
 t_block		*load_normal_block(t_world *w, t_json_object *obj)
 {
 	t_block_normal	*block;
+	t_json_value	*val;
 
 	if (!(block = (t_block_normal *)malloc(sizeof(t_block_normal))))
 		return (NULL);
 	block->super.type = B_NORMAL;
 	if (!ft_json_color(json_object_get(obj, "minimap_color"), &block->minimap_color))
 		return (json_free_ret(block));
+	val = json_object_get(obj, "height");
+	block->super.height = (!val || val->type != JSON_NUMBER ? 1 : ((t_json_number *)val)->value);
 	if (!load_block_sides(w, json_object_get(obj, "sides"), block->faces))
 		return (json_free_ret(block));
 	return ((t_block *)block);

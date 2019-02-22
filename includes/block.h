@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:46:04 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 19:46:40 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/22 14:41:24 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ struct							s_block_side
 struct							s_block
 {
 	t_block_type	type;
+	float			height;
 };
 
 struct 							s_block_normal
