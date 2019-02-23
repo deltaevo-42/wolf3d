@@ -62,7 +62,7 @@ void				render_minimap(t_wolf *wolf)
 			if (map.x <= wolf->player.pos.x + 0.2 && map.x >= wolf->player.pos.x - 0.2
 			&& map.y <= wolf->player.pos.y + 0.2 && map.y >= wolf->player.pos.y - 0.2)
 				color = 0xFF0000;
-			((unsigned int *)wolf->pixels)[(i * (int)S_WIDTH) + j + (int)S_WIDTH - 200 ] = color;
+			wolf->pixels[(i * (int)S_WIDTH) + j + (int)S_WIDTH - 200 ] = color;
 		}
 	}
 	render_fov(wolf);

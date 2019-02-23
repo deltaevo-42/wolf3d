@@ -112,15 +112,21 @@ static t_block		**load_blocks(t_world *world, t_json_object *obj)
 static t_bool		load_map(t_world *world, t_json_object *obj)
 {
 	t_json_value	*val;
-	
 
 	val = json_object_get(obj, "map");
 	if (!val || val->type != JSON_OBJECT)
 		return (FALSE);
-	if(!ft_json_size(json_object_get(val, "size"), &world->size))
+	obj = (t_json_object *)val;
+	if(!ft_json_size(json_object_get(obj, "size"), &world->size))
+		return (FALSE);
+	if((val = json_object_get(obj, "height"), &world->size)
+		&& val->type == JSON_NUMBER
+		&& (uint32_t)((t_json_number *)val)->value > 0)
+		world->height = ((t_json_number *)val)->value;
+	else
 		return (FALSE);
 	printf("Size %zu %zu\n", world->size.width, world->size.height);
-	val = json_object_get(val, "data");
+	val = json_object_get(obj, "data");
 	world->data = load_map_data(world, val);
 	return (TRUE);
 }

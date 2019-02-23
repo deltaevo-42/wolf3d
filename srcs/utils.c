@@ -22,7 +22,7 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
 	return ((p[0] << 16) | (p[1] << 8) | p[2]);
 }
 
-void	apply_surface(unsigned char **dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
+void	apply_surface(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 {
 	int i;
 	int j;
@@ -37,9 +37,9 @@ void	apply_surface(unsigned char **dest, SDL_Surface *s, SDL_Rect src, SDL_Rect 
 		while (++j < dst.w)
 		{
 			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
-			if (index >= IMG_MAX_I || ((unsigned int *)*dest)[index] != 0)
+			if (index >= IMG_MAX_I || dest[index] != 0)
 				continue;
-			((unsigned int *)*dest)[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
+			dest[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
 		}
 	}
 }
@@ -59,7 +59,7 @@ void	draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1)
 		index = p0.y * (int)S_WIDTH + p0.x;
 		if (index > IMG_MAX_I)
 			continue ;
-		((unsigned int *)wolf->pixels)[index] = p0.color;
+		wolf->pixels[index] = p0.color;
 		e[1] = e[0];
 		if (e[1] > -d.x)
 		{

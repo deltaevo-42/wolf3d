@@ -52,14 +52,16 @@ void			render_main(t_wolf *wolf)
 	{
 		ray = create_ray(wolf, x);
 		t_bool skip = FALSE;
+		float max_height = 0;
 
 		while (skip || next_ray(wolf, &ray))
 		{
 			skip = FALSE;
-			if (ray.hit)
+			if (ray.hit && ray.hit->block->height >= max_height)
 			{
+				max_height = ray.hit->block->height;
 				render_wall(wolf, &ray);
-				if (ray.hit->block->height == 1)
+				if (ray.hit->block->height == wolf->world.height)
 					break ;
 				float hit_h = ray.hit->block->height;
 				float h1 = S_HEIGHT / ray.dist;
@@ -67,7 +69,10 @@ void			render_main(t_wolf *wolf)
 				t_block *last_hit = ray.hit->block;
 				while (next_ray(wolf, &ray))
 					if (!ray.hit || ray.hit->block != last_hit)
+					{
+						skip = TRUE;
 						break ;
+					}
 				float h0 = S_HEIGHT / ray.dist;
 				int p0 = S_HEIGHT_2 + h0 * (wolf->player.pos.z + 1) / 2. - h0 * hit_h;
 				for (int y = p0; p0 < p1 && y < p1; y++)
@@ -77,11 +82,10 @@ void			render_main(t_wolf *wolf)
 						continue ;
 					wolf->pixels[i] = 255;
 				}
-				skip = TRUE;
 			}
 		}
 		wolf->last_rays[x] = ray;
-		if (ray.dist > 1)
+		if (ray.dist > 1 && ray.hit && ray.hit->block->height == wolf->world.height)
 			render_floor(wolf, x, &ray);
 	}
 }
@@ -121,9 +125,9 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 		int floorTexX, floorTexY;
 		floorTexX = ft_abs((int)(curr_floor.x * texWidth)) % texWidth;
 		floorTexY = ft_abs((int)(curr_floor.y * wolf->tmp_texture->h)) % wolf->tmp_texture->h;
-		if (y < S_HEIGHT && y >= 0 && ((unsigned int *)wolf->pixels)[(y * (int)S_WIDTH) + x] == 0)
-			((unsigned int *)wolf->pixels)[(y * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY);
-		if (y < S_HEIGHT && y >= 0 && ((unsigned int *)wolf->pixels)[(((int)S_HEIGHT - y - 1) * (int)S_WIDTH) + x] == 0)
-			((unsigned int *)wolf->pixels)[(((int)S_HEIGHT - y - 1) * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY);
+		if (wolf->pixels[(y * (int)S_WIDTH) + x] == 0)
+			wolf->pixels[(y * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY);
+		if (wolf->pixels[(((int)S_HEIGHT - y - 1) * (int)S_WIDTH) + x] == 0)
+			wolf->pixels[(((int)S_HEIGHT - y - 1) * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY);
 	}
 }

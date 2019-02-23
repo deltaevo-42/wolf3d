@@ -47,6 +47,7 @@ struct		s_world
 	int				textures_count;
 	t_texture		**textures;
 	int				blocks_count;
+	uint32_t		height;
 	t_block			**blocks;
 	t_size			size;
 	t_block_state	***data;
@@ -130,6 +131,6 @@ void		game_loop(t_wolf *wolf);
 /* Utils */
 Uint32 		getpixel(SDL_Surface *surface, int x, int y);
 void		draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1);
-void		apply_surface(unsigned char **dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
+void		apply_surface(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
 
 #endif

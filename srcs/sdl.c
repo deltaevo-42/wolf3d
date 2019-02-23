@@ -22,7 +22,7 @@ void		sdl_init(t_wolf *wolf)
 	SDL_RenderSetLogicalSize(wolf->renderer, S_WIDTH, S_HEIGHT);
 	//SDL_Set
 	wolf->screen = SDL_CreateTexture(wolf->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, S_WIDTH, S_HEIGHT);
-	if (!(wolf->pixels = (unsigned char *)malloc(S_WIDTH * S_HEIGHT * 4)))
+	if (!(wolf->pixels = malloc(S_WIDTH * S_HEIGHT * 4)))
 		return ; //TODO malloc fail;
 	wolf->fonts.helvetica = TTF_OpenFont("assets/fonts/helvetica.ttf", 22);
 	wolf->running = TRUE;

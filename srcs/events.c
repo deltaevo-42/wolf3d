@@ -28,7 +28,6 @@ void		hook_events(t_wolf *wolf)
 	}
 	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_S])
 	{
-		
 		wolf->player.pos.y += sinf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1) * move_speed;
 		wolf->player.pos.x += cosf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1) * move_speed;
 	}
@@ -40,7 +39,10 @@ void		hook_events(t_wolf *wolf)
 	if (state[SDL_SCANCODE_SPACE] || state[SDL_SCANCODE_LSHIFT])
 	{
 		wolf->player.pos.z += (state[SDL_SCANCODE_LSHIFT] ? -1 : 1) * move_speed;
-		printf("Z %f\n", wolf->player.pos.z);
+		if (wolf->player.pos.z > wolf->world.height - 0.5)
+			wolf->player.pos.z = wolf->world.height - 0.5;
+		if (wolf->player.pos.z < 0)
+			wolf->player.pos.z = 0;
 	}
 	SDL_PollEvent(&wolf->event);
 }

@@ -31,7 +31,7 @@ t_bool	render_block_normal_wall(t_wolf *wolf, t_ray *ray)
 	texX = wallX * texture->surface->w;
 	if ((ray->side == 0 && ray->dir.x > 0) || (ray->side == 1 && ray->dir.y < 0))
 		texX = texture->surface->w - texX - 1;
-	apply_surface(&wolf->pixels, texture->surface, 
+	apply_surface(wolf->pixels, texture->surface,
 		(SDL_Rect){ texX, 0, 1, texture->surface->h }, 
 		(SDL_Rect){ ray->x, S_HEIGHT_2 + height * (wolf->player.pos.z + 1) / 2. - height * block->super.height, 1, height * block->super.height});
 	return (FALSE);
