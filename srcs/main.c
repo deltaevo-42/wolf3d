@@ -16,7 +16,10 @@ int		main(int argc, char **argv)
 {
 	t_wolf	wolf;
 
-	ft_bzero(&wolf, sizeof(t_wolf));
+	wolf = (t_wolf) {
+		.minimap_size = 100,
+		.minimap_padding = 10
+	};
 	load_world(&wolf.world, "assets/maps/map_1.json");
 	sdl_init(&wolf);
 	game_loop(&wolf);

@@ -44,7 +44,7 @@ void	apply_surface(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 	}
 }
 
-void	draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1)
+void	draw_line(uint32_t *pixels, uint32_t width, t_pixel p0, t_pixel p1)
 {
 	t_pixel			d;
 	t_pixel			s;
@@ -56,10 +56,8 @@ void	draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1)
 	e[0] = (d.x > d.y ? d.x : -d.y) / 2;
 	while (p0.x != p1.x || p0.y != p1.y)
 	{
-		index = p0.y * (int)S_WIDTH + p0.x;
-		if (index > IMG_MAX_I)
-			continue ;
-		wolf->pixels[index] = p0.color;
+		index = p0.y * width + p0.x;
+		pixels[index] = p0.color;
 		e[1] = e[0];
 		if (e[1] > -d.x)
 		{
@@ -72,6 +70,22 @@ void	draw_line(t_wolf *wolf, t_pixel p0, t_pixel p1)
 			p0.y += s.y;
 		}
 	}
+}
+
+void	stroke_rect(uint32_t *pixels, uint32_t width, uint32_t color, SDL_Rect rect)
+{
+	draw_line(pixels, width,
+		(t_pixel) {rect.x, rect.y, color},
+		(t_pixel) {rect.x + rect.w, rect.y, color});
+	draw_line(pixels, width,
+		(t_pixel) {rect.x + rect.w, rect.y, color},
+		(t_pixel) {rect.x + rect.w, rect.y + rect.h, color});
+	draw_line(pixels, width,
+		(t_pixel) {rect.x + rect.w, rect.y + rect.h, color},
+		(t_pixel) {rect.x, rect.y + rect.h, color});
+	draw_line(pixels, width,
+		(t_pixel) {rect.x, rect.y + rect.h, color},
+		(t_pixel) {rect.x, rect.y, color});
 }
 
 t_bool	between(t_pixel p, SDL_Rect bounds)

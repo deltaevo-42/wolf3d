@@ -44,5 +44,15 @@ void		hook_events(t_wolf *wolf)
 		if (wolf->player.pos.z < 0)
 			wolf->player.pos.z = 0;
 	}
+	if (state[SDL_SCANCODE_M])
+	{
+		wolf->minimap_size = S_WIDTH * 0.8;
+		wolf->minimap_padding = S_WIDTH / 2 - wolf->minimap_size / 2;
+	}
+	else
+	{
+		wolf->minimap_size = 100;
+		wolf->minimap_padding = 10;
+	}
 	SDL_PollEvent(&wolf->event);
 }
