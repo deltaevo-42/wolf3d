@@ -47,73 +47,42 @@ void			render_main(t_wolf *wolf)
 	t_ray	ray;
 
 	ft_memset(wolf->pixels, 0, S_WIDTH * 4 * S_HEIGHT);
-	ft_memset(wolf->last_rays, 0, S_WIDTH * sizeof(t_ray));
-	//printf("RAY\n\tdir (%f, %f)\n\tdist (%f)\n\thit (%d)\n\thit_pos (%d, %d)\n\tside (%d)\n", ray.dir.x, ray.dir.y, ray.dist, ray.hit, ray.hit_pos.x, ray.hit_pos.y, ray.side);
 	x = -1;
 	while (++x < S_WIDTH)
 	{
 		ray = create_ray(wolf, x);
-		t_ray r2 = ray;
-		t_ray r3;
-	/*	next_ray(wolf, &ray);
-		render_wall(wolf, &ray);*/
-		
-		while (next_ray(wolf, &r2))
+		t_bool skip = FALSE;
+
+		while (skip || next_ray(wolf, &ray))
 		{
-			if (r2.hit)
+			skip = FALSE;
+			if (ray.hit)
 			{
-				wolf->last_rays[x] = r2;
-				render_wall(wolf, &r2);
-				float hit_h = r2.hit->block->height;
-				float h1 = S_HEIGHT / r2.dist;
+				render_wall(wolf, &ray);
+				if (ray.hit->block->height == 1)
+					break ;
+				float hit_h = ray.hit->block->height;
+				float h1 = S_HEIGHT / ray.dist;
 				int p1 = S_HEIGHT_2 + h1 * (wolf->player.pos.z + 1) * 0.5 - h1 * hit_h;
-				r3 = r2;
-				if (p1 < S_WIDTH_2)
-					break;
-				while (next_ray(wolf, &r2))
-				{
-					if (!r2.hit || (r2.hit && r2.hit->block->height != hit_h))
-					{
-						if (r2.hit && r2.hit->block->height != hit_h)
-							render_wall(wolf, &r2);
-						break;
-					}
-						
-					r3 = r2;
-				}
-				float h0 = S_HEIGHT / r2.dist;
+				t_block *last_hit = ray.hit->block;
+				while (next_ray(wolf, &ray))
+					if (!ray.hit || ray.hit->block != last_hit)
+						break ;
+				float h0 = S_HEIGHT / ray.dist;
 				int p0 = S_HEIGHT_2 + h0 * (wolf->player.pos.z + 1) / 2. - h0 * hit_h;
 				for (int y = p0; p0 < p1 && y < p1; y++)
 				{
-					int i = (y * (int)S_WIDTH) + x;
+					int i = y * S_WIDTH + x;
 					if (i >= IMG_MAX_I || i < 0)
 						continue ;
-					((unsigned int *)wolf->pixels)[i] = 255;
+					wolf->pixels[i] = 255;
 				}
+				skip = TRUE;
 			}
-		
 		}
-		//render_floor(wolf, x, &r3);
-		//printf("%d %d, %d\n", !!ray.hit, ray.hit_pos.x, ray.hit_pos.y);
-		//render_wall(wolf, &ray);
-		/*t_texture_normal *texture = ((t_texture_normal *)((t_block_normal *)((t_block_state *)ray.hit)->block)->faces[ray.face].texture);
-		
-		double wallX;
-		if (ray.side == 0)
-			wallX = wolf->player.pos.y + ray.dist * ray.dir.y;
-		else
-			wallX = wolf->player.pos.x + ray.dist * ray.dir.x;
-		wallX -= floor((wallX));
-		int texWidth = texture->surface->w;
-		int texX = wallX * texWidth;
-		if (ray.side == 0 && ray.dir.x > 0)
-			texX = texWidth - texX - 1;
-		if (ray.side == 1 && ray.dir.y < 0)
-			texX = texWidth - texX - 1;
-		SDL_Rect a = { texX, 0, 1, texture->surface->h };
-		SDL_Rect b = { x, S_HEIGHT_2 - height, 1, height_f };
-		apply_surface(&wolf->pixels, texture->surface, a, b);*/
-
+		wolf->last_rays[x] = ray;
+		if (ray.dist > 1)
+			render_floor(wolf, x, &ray);
 	}
 }
 
@@ -140,11 +109,10 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 	float drawEnd = S_HEIGHT_2 + height * (wolf->player.pos.z + 1) / 2. - height;
 	distWall = ray->dist / (wolf->player.pos.z + 1);
 	float d = S_HEIGHT + 2 * wolf->player.pos.z;
+	float weightd = S_HEIGHT / distWall;
 	for (int y = drawEnd ; y < S_HEIGHT; y++)
 	{
-		if (y >= S_HEIGHT || y < 0 || ((unsigned int *)wolf->pixels)[(y * (int)S_WIDTH) + x] != 0)
-			continue ;
-		float weight = S_HEIGHT / ((2 * y - d) * distWall);
+		float weight = 1/(2 * y - d) * weightd;
 		t_vec2 curr_floor = (t_vec2)
 		{
 			weight * floorWall.x + (1.0 - weight) * wolf->player.pos.x,
@@ -153,10 +121,9 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 		int floorTexX, floorTexY;
 		floorTexX = ft_abs((int)(curr_floor.x * texWidth)) % texWidth;
 		floorTexY = ft_abs((int)(curr_floor.y * wolf->tmp_texture->h)) % wolf->tmp_texture->h;
-	
-		((unsigned int *)wolf->pixels)[(y * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY)/*0x00FF00*/;
-		if (S_HEIGHT - y < 0 || S_HEIGHT - y > IMG_MAX_I)
-			continue;
-		((unsigned int *)wolf->pixels)[(((int)S_HEIGHT - y) * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY)/*0x0000FF*/;
+		if (y < S_HEIGHT && y >= 0 && ((unsigned int *)wolf->pixels)[(y * (int)S_WIDTH) + x] == 0)
+			((unsigned int *)wolf->pixels)[(y * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY);
+		if (y < S_HEIGHT && y >= 0 && ((unsigned int *)wolf->pixels)[(((int)S_HEIGHT - y - 1) * (int)S_WIDTH) + x] == 0)
+			((unsigned int *)wolf->pixels)[(((int)S_HEIGHT - y - 1) * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY);
 	}
 }

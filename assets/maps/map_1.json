@@ -51,7 +51,7 @@
 		{
 			"type": "NORMAL",
 			"minimap_color": [ 255, 25, 255 ],
-			"height": 0.5,
+			"height": 0.2,
 			"sides": {
 				"ALL": {
 					"color": [ 255, 255, 0 ],

@@ -89,8 +89,8 @@ t_bool			next_ray(t_wolf *wolf, t_ray *ray)
 		ray->dist = (ray->hit_pos.x - wolf->player.pos.x + (1 - step.x) / 2.0) / ray->dir.x;
 	else
 		ray->dist = (ray->hit_pos.y - wolf->player.pos.y + (1 - step.y) / 2.0) / ray->dir.y;
-	if (ray->dist <= 0)
-		ray->dist = 0.00001;
+	if (ray->dist <= 0.1)
+		ray->dist = 0.1;
 	compute_face(ray);
 	return (TRUE);
 }
@@ -100,7 +100,6 @@ t_bool			prev_ray(t_wolf *wolf, t_ray *ray)
 {
 	t_pixel		step;
 	
-	compute_dir(wolf, ray, &step);
 	if (ray->side == 0)
 	{
 		ray->side_dist.x -= ray->delta_dist.x;
@@ -120,8 +119,8 @@ t_bool			prev_ray(t_wolf *wolf, t_ray *ray)
 		ray->dist = (ray->hit_pos.x - wolf->player.pos.x + (1 - step.x) / 2.0) / ray->dir.x;
 	else
 		ray->dist = (ray->hit_pos.y - wolf->player.pos.y + (1 - step.y) / 2.0) / ray->dir.y;
-	if (ray->dist <= 0)
-		ray->dist = 0.00001;
+	if (ray->dist <= 0.1)
+		ray->dist = 0.1;
 	compute_face(ray);
 	return (TRUE);
 }

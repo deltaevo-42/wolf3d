@@ -94,7 +94,7 @@ struct		s_wolf
 	SDL_Renderer	*renderer;
 	SDL_Texture		*screen;
 	SDL_Event		event;
-	unsigned char	*pixels;
+	uint32_t		*pixels;
 	t_ray			last_rays[(int)S_WIDTH];
 	t_bool			running;
 	t_stats			stats;
