@@ -1,0 +1,12 @@
+Wolf:
+- Portals
+- Binary Search
+- Voxels
+- Entity
+- HUD (Crosshair, FPS, ....)
+- "Events" (Rigth/Left click) on blocks 
+- Colisions
+- FPS counting (using apply_surface)
+- Fix ceiling
+- Jump
+- Sprites
