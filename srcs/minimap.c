@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 18:33:21 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 16:42:20 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 23:58:10 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void			render_fov(t_wolf *wolf)
 		wolf->player.pos.y * s.y};
 	i = -1;
 	while (++i < S_WIDTH)
-		draw_line(wolf->pixels, S_WIDTH, (t_pixel){
+		draw_line(wolf->img, (t_pixel){
 			S_WIDTH - wolf->minimap_size - wolf->minimap_padding + pos.x,
 			pos.y + wolf->minimap_padding, BACKGROUND_COLOR_FOV},
 			(t_pixel){
@@ -68,13 +68,13 @@ void				render_minimap(t_wolf *wolf)
 			map = (t_vec2){j * s.x, i * s.y};
 			int index = ((i + wolf->minimap_padding) * (int)S_WIDTH) + j + (int)S_WIDTH - wolf->minimap_size - wolf->minimap_padding;
 			if ((color = compute_block_minimap(wolf, map)) == -1)
-				color = wolf->pixels[index] == BACKGROUND_COLOR_FOV ? BACKGROUND_COLOR_FOV : BACKGROUND_COLOR;
+				color = wolf->img->pixels[index] == BACKGROUND_COLOR_FOV ? BACKGROUND_COLOR_FOV : BACKGROUND_COLOR;
 			if (map.x <= wolf->player.pos.x + 0.2 && map.x >= wolf->player.pos.x - 0.2
 			&& map.y <= wolf->player.pos.y + 0.2 && map.y >= wolf->player.pos.y - 0.2)
 				color = 0xFF0000;
-			wolf->pixels[index] = color;
+			wolf->img->pixels[index] = color;
 		}
 	}
-	stroke_rect(wolf->pixels, S_WIDTH, 0, (SDL_Rect) { S_WIDTH - wolf->minimap_size - wolf->minimap_padding, wolf->minimap_padding, wolf->minimap_size, wolf->minimap_size });
-	stroke_rect(wolf->pixels, S_WIDTH, 0, (SDL_Rect) { S_WIDTH - wolf->minimap_size - wolf->minimap_padding + 1, wolf->minimap_padding + 1, wolf->minimap_size - 2, wolf->minimap_size - 2 });
+	stroke_rect(wolf->img, 0, (SDL_Rect) { S_WIDTH - wolf->minimap_size - wolf->minimap_padding, wolf->minimap_padding, wolf->minimap_size, wolf->minimap_size });
+	stroke_rect(wolf->img, 0, (SDL_Rect) { S_WIDTH - wolf->minimap_size - wolf->minimap_padding + 1, wolf->minimap_padding + 1, wolf->minimap_size - 2, wolf->minimap_size - 2 });
 }

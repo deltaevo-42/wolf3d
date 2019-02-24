@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 23:40:27 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 21:52:05 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/25 00:13:50 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
     }
 }
 
-void	apply_surface_blended(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
+void	apply_surface_blended(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 {
 	int 			i;
 	int 			j;
@@ -53,7 +53,7 @@ void	apply_surface_blended(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rec
 		while (++j < dst.w)
 		{
 			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
-			if (index >= IMG_MAX_I)
+			if (index >= img->size)
 				continue;
 
 			unsigned int value = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
@@ -61,13 +61,13 @@ void	apply_surface_blended(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rec
 			int b1 = (value >> 8) & 0xFF;
 			int r1 = (value >> 16) & 0xFF;
 			float a1 = ((value >> 24) & 0xFF) / 255.0;
-			int g2 = (dest[index] >> 0) & 0xFF;
-			int b2 = (dest[index] >> 8) & 0xFF;
-			int r2 = (dest[index] >> 16) & 0xFF;
-			float a2 = ((dest[index] >> 24) & 0xFF) / 255.0;
+			int g2 = (img->pixels[index] >> 0) & 0xFF;
+			int b2 = (img->pixels[index] >> 8) & 0xFF;
+			int r2 = (img->pixels[index] >> 16) & 0xFF;
+			float a2 = ((img->pixels[index] >> 24) & 0xFF) / 255.0;
 
 			float a = a2 * (1 - a1);
-			dest[index] = (((int)((a1 + a) * 0xFF) << 24)
+			img->pixels[index] = (((int)((a1 + a) * 0xFF) << 24)
 						| ((int)(r1 * a1 + r2 * a) & 0xFF) << 16
 						| ((int)(b1 * a1 + b2 * a) & 0xFF) << 8
 						| ((int)(g1 * a1 + g2 * a) & 0xFF)) / a2;
@@ -75,7 +75,7 @@ void	apply_surface_blended(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rec
 	}
 }
 
-void	apply_surface(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
+void	apply_surface(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 {
 	int 			i;
 	int 			j;
@@ -90,14 +90,14 @@ void	apply_surface(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 		while (++j < dst.w)
 		{
 			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
-			if (index >= IMG_MAX_I || dest[index] != 0)
+			if (index >= img->size || img->pixels[index] != 0)
 				continue;
-			dest[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
+			img->pixels[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
 		}
 	}
 }
 
-void	draw_line(uint32_t *pixels, uint32_t width, t_pixel p0, t_pixel p1)
+void	draw_line(t_img *img, t_pixel p0, t_pixel p1)
 {
 	t_pixel			d;
 	t_pixel			s;
@@ -109,8 +109,8 @@ void	draw_line(uint32_t *pixels, uint32_t width, t_pixel p0, t_pixel p1)
 	e[0] = (d.x > d.y ? d.x : -d.y) / 2;
 	while (p0.x != p1.x || p0.y != p1.y)
 	{
-		index = p0.y * width + p0.x;
-		pixels[index] = p0.color;
+		index = p0.y * img->width + p0.x;
+		img->pixels[index] = p0.color;
 		e[1] = e[0];
 		if (e[1] > -d.x)
 		{
@@ -125,18 +125,18 @@ void	draw_line(uint32_t *pixels, uint32_t width, t_pixel p0, t_pixel p1)
 	}
 }
 
-void	stroke_rect(uint32_t *pixels, uint32_t width, uint32_t color, SDL_Rect rect)
+void	stroke_rect(t_img *img, uint32_t color, SDL_Rect rect)
 {
-	draw_line(pixels, width,
+	draw_line(img,
 		(t_pixel) {rect.x, rect.y, color},
 		(t_pixel) {rect.x + rect.w, rect.y, color});
-	draw_line(pixels, width,
+	draw_line(img,
 		(t_pixel) {rect.x + rect.w, rect.y, color},
 		(t_pixel) {rect.x + rect.w, rect.y + rect.h, color});
-	draw_line(pixels, width,
+	draw_line(img,
 		(t_pixel) {rect.x + rect.w, rect.y + rect.h, color},
 		(t_pixel) {rect.x, rect.y + rect.h, color});
-	draw_line(pixels, width,
+	draw_line(img,
 		(t_pixel) {rect.x, rect.y + rect.h, color},
 		(t_pixel) {rect.x, rect.y, color});
 }

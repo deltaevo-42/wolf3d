@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 21:52:27 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 23:57:25 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@
 # include "libft.h"
 # include <stdlib.h>
 
-# define S_WIDTH (800.0)
-# define S_HEIGHT (800.0)
+
+# define BAR_H (100.0)
+# define S_WIDTH (1000.0)
+# define S_HEIGHT (1000.0)
 # define S_WIDTH_2 (S_WIDTH / 2)
 # define S_HEIGHT_2 (S_HEIGHT / 2)
 # define S_RATIO (S_WIDTH / S_HEIGHT)
@@ -35,6 +37,7 @@ typedef struct s_texture		t_texture;
 typedef struct s_texture_normal	t_texture_normal;
 
 typedef struct s_world			t_world;
+typedef struct s_img			t_img;
 
 typedef struct s_wolf			t_wolf;
 typedef struct s_stats			t_stats;
@@ -89,7 +92,12 @@ struct		s_player
 	t_mat2	matrix;
 };
 
-
+struct		s_img
+{
+	uint32_t	size;
+	uint32_t	width;
+	uint32_t	*pixels;
+};
 
 struct		s_wolf
 {
@@ -97,7 +105,7 @@ struct		s_wolf
 	SDL_Renderer	*renderer;
 	SDL_Texture		*screen;
 	SDL_Event		event;
-	uint32_t		*pixels;
+	t_img			*img;
 	t_ray			last_rays[(int)S_WIDTH];
 	t_bool			running;
 	t_stats			stats;
@@ -135,9 +143,9 @@ void		game_loop(t_wolf *wolf);
 
 /* Utils */
 Uint32 		getpixel(SDL_Surface *surface, int x, int y);
-void		draw_line(uint32_t *pixels, uint32_t width, t_pixel p0, t_pixel p1);
-void		stroke_rect(uint32_t *pixels, uint32_t width, uint32_t color, SDL_Rect rect);
-void		apply_surface(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
-void		apply_surface_blended(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
+void		draw_line(t_img *img, t_pixel p0, t_pixel p1);
+void		stroke_rect(t_img *img, uint32_t color, SDL_Rect rect);
+void		apply_surface(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
+void		apply_surface_blended(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
 
 #endif
