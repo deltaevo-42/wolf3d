@@ -20,12 +20,14 @@
 # include "libft.h"
 # include <stdlib.h>
 
-# define S_WIDTH (1000.0)
-# define S_HEIGHT (1000.0)
+# define S_WIDTH (800.0)
+# define S_HEIGHT (800.0)
 # define S_WIDTH_2 (S_WIDTH / 2)
 # define S_HEIGHT_2 (S_HEIGHT / 2)
 # define S_RATIO (S_WIDTH / S_HEIGHT)
 # define IMG_MAX_I (S_WIDTH * S_HEIGHT)
+# define DIST_TO_PLANE 1.0
+# define PLANE ((S_WIDTH / 2) / S_WIDTH)
 
 
 typedef enum e_texture_type		t_texture_type;
