@@ -7,6 +7,5 @@ Wolf:
 - "Events" (Rigth/Left click) on blocks 
 - Colisions
 - FPS counting (using apply_surface)
-- Fix ceiling
 - Jump
 - Sprites

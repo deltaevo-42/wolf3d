@@ -14,7 +14,7 @@ NAME=wolf3d
 SDL=${HOME}/.brew/Cellar/sdl2/2.0.9
 SDL_IMG=${HOME}/.brew/Cellar/sdl2_image/2.0.4
 SDL_TTF=${HOME}/.brew/Cellar/sdl2_ttf/2.0.14
-CFLAGS= -g -flto -Wall -ffast-math -Wextra
+CFLAGS=-Wall -ffast-math -Wextra
 LIBS=-lSDL2_image -lSDL2_ttf -lSDL2
 CC=clang
 

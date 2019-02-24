@@ -12,8 +12,6 @@
 
 #include "wolf.h"
 
-#define PLANE ((S_WIDTH / 2) / S_WIDTH)
-
 static void		compute_dir(t_wolf *wolf, t_ray *ray)
 {
 	if (ray->dir.x < 0)
@@ -44,7 +42,7 @@ t_ray			create_ray(t_wolf *wolf, int x)
 
 	ray.x = x;
 	ray.dir = ft_mat2_mulv(wolf->player.matrix, ft_vec2_add(
-		(t_vec2){0, 1},
+		(t_vec2){ 0,  DIST_TO_PLANE },
 		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f) * (S_WIDTH / S_HEIGHT), 0}));
 	ray.step = (t_pixel) { ray.dir.x > 0 ? 1 : -1 , ray.dir.y > 0 ? 1 : -1 };
 	ray.side_dist = (t_vec2){0, 0};
