@@ -66,22 +66,24 @@
 		},
 		{
 			"type": "ROUND",
-			"minimap_color": [ 255, 0, 0 ]
+			"minimap_color": [ 255, 0, 0 ],
+			"texture": 1
 		},
 		{
 			"type": "ROUND",
 			"minimap_color": [ 255, 0, 0 ],
-			"radius": 0.2
+			"radius": 0.2,
+			"texture": 2
 		},
 		{
 			"type": "ROUND",
 			"minimap_color": [ 255, 0, 0 ],
-			"radius": 0.02
+			"radius": 0.02,
+			"texture": 3
 		}
 	],
 	"map": {
-		"size": [ 24, 24 ],
-		"height": 2,
+		"size": [ 24, 24, 2 ],
 		"data": [
 			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 			[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],

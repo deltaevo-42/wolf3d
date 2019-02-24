@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 16:31:20 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 16:53:06 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,13 @@ static char	*get_file_content(char *file, int *content_len)
 
 static t_texture	**load_textures(t_world *world, t_json_object *obj)
 {
-	t_json_value	*val;
 	t_json_array	*arr;
 	t_json_element	*elem;
 	t_texture		**textures;
 	int				i;
 	
-	val = json_object_get(obj, "textures");
-	if (!val || val->type != JSON_ARRAY)
+	if(!(arr = json_get_array(obj, "textures")))
 		return (NULL);
-	arr = (t_json_array *)val;
 	if (!(textures = (t_texture **)malloc(sizeof(t_texture *) * (arr->elems_count))))
 		return (NULL);
 	elem = arr->elements;
@@ -76,19 +73,15 @@ static t_texture	**load_textures(t_world *world, t_json_object *obj)
 
 static t_block		**load_blocks(t_world *world, t_json_object *obj)
 {
-	t_json_value	*val;
 	t_json_array	*arr;
 	t_json_element	*elem;
 	t_block			**blocks;
 	int				i;
 	
-	val = json_object_get(obj, "blocks");
-	if (!val || val->type != JSON_ARRAY)
+	if(!(arr = json_get_array(obj, "blocks")))
 		return (NULL);
-	arr = (t_json_array *)val;
 	if (!(blocks = (t_block **)malloc(sizeof(t_block *) * (arr->elems_count))))
 		return (NULL);
-	
 	elem = arr->elements;
 	i = 0;
 	while (elem)
@@ -111,23 +104,12 @@ static t_block		**load_blocks(t_world *world, t_json_object *obj)
 
 static t_bool		load_map(t_world *world, t_json_object *obj)
 {
-	t_json_value	*val;
-
-	val = json_object_get(obj, "map");
-	if (!val || val->type != JSON_OBJECT)
+	if(!(obj = json_get_object(obj, "map")))
 		return (FALSE);
-	obj = (t_json_object *)val;
-	if(!ft_json_size(json_object_get(obj, "size"), &world->size))
+	if(!ft_json_vec3(json_object_get(obj, "size"), &world->size))
 		return (FALSE);
-	if((val = json_object_get(obj, "height"), &world->size)
-		&& val->type == JSON_NUMBER
-		&& (uint32_t)((t_json_number *)val)->value > 0)
-		world->height = ((t_json_number *)val)->value;
-	else
-		return (FALSE);
-	printf("Size %zu %zu\n", world->size.width, world->size.height);
-	val = json_object_get(obj, "data");
-	world->data = load_map_data(world, val);
+	printf("Size %f %f\n", world->size.x, world->size.y);
+	world->data = load_map_data(world,  json_object_get(obj, "data"));
 	return (TRUE);
 }
 

@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:29:48 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 21:59:04 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 16:56:07 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,18 @@ t_block_state		***load_map_data(t_world *w, t_json_value *val)
 	int				i;
 	int				j;
 	
-	if (!val || val->type != JSON_ARRAY)
+	if (!(arr = json_to_array(val)) || arr->elems_count != w->size.y)
 		return (NULL);
-	arr = (t_json_array *)val;
-	if (arr->elems_count != w->size.height)
-		return (NULL);
-	if (!(states = (t_block_state ***)malloc(sizeof(t_block_state **) * w->size.height)))
+	if (!(states = (t_block_state ***)malloc(sizeof(t_block_state **) * w->size.y)))
 		return (NULL);
 	row_elem = arr->elements;
 	i = 0;
 	while (row_elem)
 	{
-		if (row_elem->value->type != JSON_ARRAY 
-			|| ((t_json_array *)row_elem->value)->elems_count != w->size.width)
+		if (row_elem->value->type != JSON_ARRAY || ((t_json_array *)row_elem->value)->elems_count != w->size.x)
 			return (NULL);
 		col_elem = ((t_json_array *)row_elem->value)->elements;
-		if (!(states[i] = (t_block_state **)malloc(sizeof(t_block_side *) * w->size.width)))
+		if (!(states[i] = (t_block_state **)malloc(sizeof(t_block_side *) * w->size.x)))
 			return (NULL);
 		j = 0;
 		while (col_elem)

@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 18:33:21 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 19:04:20 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 16:42:20 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static int			compute_block_minimap(t_wolf *wolf, t_vec2 map)
 
 static void			render_fov(t_wolf *wolf)
 {
-	const t_vec2	s = { (float)wolf->minimap_size / wolf->world.size.width,
-		 (float)wolf->minimap_size / wolf->world.size.height};
+	const t_vec2	s = { (float)wolf->minimap_size / wolf->world.size.x,
+		 (float)wolf->minimap_size / wolf->world.size.y};
 	static uint32_t		pixels[(int)S_WIDTH * (int)S_WIDTH];
 	int 	i;
 	t_vec2	pos;
@@ -60,8 +60,8 @@ void				render_minimap(t_wolf *wolf)
 {
 	int i;
 	int j;
-	const t_vec2	s = { wolf->world.size.width / (float)wolf->minimap_size,
-		wolf->world.size.height / (float)wolf->minimap_size };
+	const t_vec2	s = { wolf->world.size.x / (float)wolf->minimap_size,
+		wolf->world.size.y / (float)wolf->minimap_size };
 	t_vec2 map;
 	int color;
 

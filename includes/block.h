@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:46:04 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/22 14:41:24 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 17:04:42 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ struct							s_block_round
 	t_block			super;
 	t_color			minimap_color;
 	float			radius;
+	t_texture		*texture;
 };
 
 t_block				*load_json_block(t_world *world, t_json_object *obj);

@@ -4,6 +4,7 @@ t_block		*load_round_block(t_world *w, t_json_object *obj)
 {
 	t_block_round	*block;
 	t_json_value	*val;
+	double			*texture_i;
 
 	if (!(block = (t_block_round *)malloc(sizeof(t_block_round))))
 		return (NULL);
@@ -14,6 +15,9 @@ t_block		*load_round_block(t_world *w, t_json_object *obj)
 	block->super.height = (!val || val->type != JSON_NUMBER ? 1 : ((t_json_number *)val)->value);
 	val = json_object_get(obj, "radius");
 	block->radius = (!val || val->type != JSON_NUMBER ? 0.5 : ((t_json_number *)val)->value);
+	if (!(texture_i = json_get_number(obj, "texture")))
+		return (NULL);
+	block->texture = w->textures[(int)*texture_i];
 	return ((t_block *)block);
 }
 

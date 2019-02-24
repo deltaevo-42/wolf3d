@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:32:51 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 19:46:14 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 16:03:31 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,11 @@ t_face get_face_type(char *string)
 
 t_block				*load_json_block(t_world *world, t_json_object *obj)
 {
-	t_json_value	*val;
 	t_json_string	*j_string;
 	t_block_type	block_type;
 
-	val = json_object_get(obj, "type");
-	if (!val || val->type != JSON_STRING)
+	if(!(j_string = json_get_string(obj, "type")))
 		return (NULL);
-	j_string = (t_json_string *)val;
 	block_type = get_block_type(j_string->value);
 	if (block_type == B_NONE)
 	{

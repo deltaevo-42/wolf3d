@@ -9,7 +9,7 @@ t_bool	render_block_round_wall(t_wolf *wolf, t_ray *ray)
 	int			texX;
 
 	block = (t_block_round *)ray->hit->block;
-	surface = wolf->tmp_texture;
+	surface = ((t_texture_normal *)block->texture)->surface;
 	height = (S_HEIGHT / ray->dist);
 	if (ray->side == 0)
 		wallX = wolf->player.pos.y + ray->dist * ray->dir.y;

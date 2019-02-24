@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/22 18:56:58 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 16:54:13 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void			render_main(t_wolf *wolf)
 			{
 				max_height = ray.hit->block->height;
 				render_wall(wolf, &ray);
-				if (ray.hit->block->height == wolf->world.height)
+				if (ray.hit->block->height == wolf->world.size.z)
 					break ;
 				float hit_h = ray.hit->block->height;
 				float h1 = S_HEIGHT / ray.dist;
@@ -87,7 +87,7 @@ void			render_main(t_wolf *wolf)
 			}
 		}
 		wolf->last_rays[x] = ray;
-		if (ray.dist > 1 && ray.hit && ray.hit->block->height == wolf->world.height)
+		if (ray.dist > 1 && ray.hit && ray.hit->block->height == wolf->world.size.z)
 			render_floor(wolf, x, &ray);
 	}
 }

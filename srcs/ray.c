@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/21 14:17:12 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 16:42:52 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ t_bool			next_ray(t_wolf *wolf, t_ray *ray)
 		ray->hit_pos.y += ray->step.y;
 		ray->side = 1;
 	}
-	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.width || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.height)
+	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.x || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.y)
 		return (FALSE);
 	ray->hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
 	compute_face(ray);
@@ -155,7 +155,7 @@ t_bool			prev_ray(t_wolf *wolf, t_ray *ray)
 		ray->hit_pos.y -= ray->step.y;
 		ray->side = 0;
 	}
-	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.width || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.height)
+	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.x || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.y)
 		return (FALSE);
 	ray->hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
 	compute_face(ray);

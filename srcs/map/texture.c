@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 01:49:10 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 17:43:56 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 16:04:57 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,11 @@ static t_texture_type	get_texture_type(char *string)
 
 t_texture				*load_json_texture(t_json_object *texture_obj)
 {
-	t_json_value	*val;
 	t_json_string	*j_string;
 	t_texture_type	texture_type;
 
-	val = json_object_get(texture_obj, "type");
-	if (!val || val->type != JSON_STRING)
+	if(!(j_string = json_get_string(texture_obj, "type")))
 		return (NULL);
-	j_string = ((t_json_string *)val);
 	texture_type = get_texture_type(j_string->value);
 	if (texture_type == T_NONE)
 	{

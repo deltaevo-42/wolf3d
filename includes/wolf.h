@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/22 14:16:40 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 17:04:55 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ struct		s_world
 	int				textures_count;
 	t_texture		**textures;
 	int				blocks_count;
-	uint32_t		height;
 	t_block			**blocks;
-	t_size			size;
+	t_vec3			size;
 	t_block_state	***data;
 };
 
