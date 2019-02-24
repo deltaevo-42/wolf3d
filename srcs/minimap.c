@@ -68,11 +68,7 @@ void				render_minimap(t_wolf *wolf)
 			map = (t_vec2){j * s.x, i * s.y};
 			int index = ((i + wolf->minimap_padding) * (int)S_WIDTH) + j + (int)S_WIDTH - wolf->minimap_size - wolf->minimap_padding;
 			if ((color = compute_block_minimap(wolf, map)) == -1)
-			{
-				if (wolf->pixels[index] == BACKGROUND_COLOR_FOV)
-					continue ;
-				color = BACKGROUND_COLOR;
-			}
+				color = wolf->pixels[index] == BACKGROUND_COLOR_FOV ? BACKGROUND_COLOR_FOV : BACKGROUND_COLOR;
 			if (map.x <= wolf->player.pos.x + 0.2 && map.x >= wolf->player.pos.x - 0.2
 			&& map.y <= wolf->player.pos.y + 0.2 && map.y >= wolf->player.pos.y - 0.2)
 				color = 0xFF0000;
