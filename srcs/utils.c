@@ -70,7 +70,7 @@ void	apply_surface_blended(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect ds
 			img->pixels[index] = (((int)((a1 + a) * 0xFF) << 24)
 						| ((int)(r1 * a1 + r2 * a) & 0xFF) << 16
 						| ((int)(b1 * a1 + b2 * a) & 0xFF) << 8
-						| ((int)(g1 * a1 + g2 * a) & 0xFF)) / a2;
+						| ((int)(g1 * a1 + g2 * a) & 0xFF));
 		}
 	}
 }
@@ -104,8 +104,8 @@ void	draw_line(t_img *img, t_pixel p0, t_pixel p1)
 	int				e[2];
 	unsigned int 	index;
 
-	d = (t_pixel){ abs(p1.x - p0.x), abs(p1.y - p0.y) };
-	s = (t_pixel){ (p0.x < p1.x ? 1 : -1), (p0.y < p1.y ? 1 : -1) };
+	d = (t_pixel){ abs(p1.x - p0.x), abs(p1.y - p0.y), 0 };
+	s = (t_pixel){ (p0.x < p1.x ? 1 : -1), (p0.y < p1.y ? 1 : -1), 0 };
 	e[0] = (d.x > d.y ? d.x : -d.y) / 2;
 	while (p0.x != p1.x || p0.y != p1.y)
 	{

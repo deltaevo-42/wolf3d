@@ -51,8 +51,8 @@ static void			render_fov(t_wolf *wolf)
 
 void				render_minimap(t_wolf *wolf)
 {
-	int i;
-	int j;
+	uint32_t	i;
+	uint32_t	j;
 	const t_vec2	s = { wolf->world.size.x / (float)wolf->minimap_size,
 		wolf->world.size.y / (float)wolf->minimap_size };
 	t_vec2 map;
