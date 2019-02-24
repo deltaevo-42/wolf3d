@@ -73,6 +73,8 @@ struct							s_block_round
 	t_block			super;
 	t_color			minimap_color;
 	float			radius;
+	float			last_hit_x;
+	float			last_hit_y;
 };
 
 t_block				*load_json_block(t_world *world, t_json_object *obj);

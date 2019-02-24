@@ -56,10 +56,11 @@ t_ray			create_ray(t_wolf *wolf, int x)
 
 void			dist_round_block(t_wolf *wolf, t_ray *ray)
 {
+	t_block_round *block = (t_block_round *)ray->hit->block;
 	double p = ray->hit_pos.x + 0.5;
 	double q = ray->hit_pos.y + 0.5;
 
-	double r = ((t_block_round *)ray->hit->block)->radius;
+	double r = block->radius;
 
 	if (ray->hit->block->height == 2)
 		return ;
@@ -96,6 +97,9 @@ void			dist_round_block(t_wolf *wolf, t_ray *ray)
 		float dy2 = y2 - wolf->player.pos.y;
 
 		float dist2 = dx2 * dx2 + dy2 * dy2;
+
+		block->last_hit_x = (dist1 < dist2 ? x1 : x2) - p;
+		block->last_hit_y = (dist1 < dist2 ? y1 : y2) - q;
 
 		ray->dist = sqrt(dist1 < dist2 ? dist1 : dist2);
 	} else
