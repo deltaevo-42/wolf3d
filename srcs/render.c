@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/25 00:03:42 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/25 00:25:27 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ void			render_main(t_wolf *wolf)
 			{
 				render_wall(wolf, &ray);
 				if (ray.hit->block->height == wolf->world.size.z
-					|| (ray.dist <= 1 && wolf->player.pos.z + 1 <= ray.hit->block->height))
+					|| (ray.dist <= 1 && wolf->player.pos.z + 1 <= ray.hit->block->height && wolf->player.pos.z >= 0.2))
 					break ;
 				float hit_h = ray.hit->block->height;
 				float h1 = S_HEIGHT / ray.dist;
 				int p1 = S_HEIGHT_2 + h1 * (wolf->player.pos.z + 1) * 0.5 - h1 * hit_h;
-				if (p1 <= 0)
+				if (p1 <= 0 && p1 + h1 > S_HEIGHT)
 					break;
 				if (next_ray(wolf, &ray))
 					skip = TRUE;

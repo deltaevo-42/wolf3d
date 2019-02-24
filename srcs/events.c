@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 16:53:36 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/25 00:22:09 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void		hook_events(t_wolf *wolf)
 	if (state[SDL_SCANCODE_SPACE] || state[SDL_SCANCODE_LSHIFT])
 	{
 		wolf->player.pos.z += (state[SDL_SCANCODE_LSHIFT] ? -1 : 1) * move_speed;
-		if (wolf->player.pos.z > wolf->world.size.z - 0.5)
-			wolf->player.pos.z = wolf->world.size.z - 0.5;
-		if (wolf->player.pos.z < 0)
-			wolf->player.pos.z = 0;
+		if (wolf->player.pos.z > wolf->world.size.z + 0.5)
+			wolf->player.pos.z = wolf->world.size.z + 0.5;
+		if (wolf->player.pos.z < -0.5)
+			wolf->player.pos.z = -0.5;
 	}
 	if (state[SDL_SCANCODE_M])
 	{
