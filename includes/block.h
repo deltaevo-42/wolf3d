@@ -21,6 +21,7 @@ typedef enum e_face				t_face;
 typedef struct s_block			t_block;
 typedef struct s_block_side		t_block_side;
 typedef struct s_block_normal	t_block_normal;
+typedef struct s_block_round	t_block_round;
 typedef struct s_block_state	t_block_state;
 
 enum							e_face
@@ -38,6 +39,7 @@ enum							e_face
 enum							e_block_type
 {
 	B_NORMAL,
+	B_ROUND,
 	B_NONE
 };
 
@@ -45,6 +47,12 @@ struct							s_block_side
 {
 	t_texture		*texture;
 	t_color			color;
+};
+
+struct							s_block_state
+{
+	t_block_type	type;
+	t_block			*block;
 };
 
 struct							s_block
@@ -60,11 +68,11 @@ struct 							s_block_normal
 	t_block_side	faces[6];
 };
 
-
-struct							s_block_state
+struct							s_block_round
 {
-	t_block_type	type;
-	t_block			*block;
+	t_block			super;
+	t_color			minimap_color;
+	float			radius;
 };
 
 t_block				*load_json_block(t_world *world, t_json_object *obj);

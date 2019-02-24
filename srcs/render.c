@@ -36,6 +36,8 @@ t_bool			render_wall(t_wolf *wolf, t_ray *ray)
 {
 	if (ray->hit->block->type == B_NORMAL)
 		return (render_block_normal_wall(wolf, ray));
+	if (ray->hit->block->type == B_ROUND)
+		return (render_block_round_wall(wolf, ray));
 	return (TRUE);
 }
 

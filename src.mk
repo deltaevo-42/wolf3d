@@ -1,4 +1,5 @@
 SRC+=blocks/block_normal.c
+SRC+=blocks/block_round.c
 SRC+=events.c
 SRC+=game.c
 SRC+=main.c
@@ -9,6 +10,7 @@ SRC+=map/texture.c
 SRC+=minimap.c
 SRC+=ray.c
 SRC+=render/block_normal.c
+SRC+=render/block_round.c
 SRC+=render.c
 SRC+=sdl.c
 SRC+=textures/texture_normal.c

@@ -18,6 +18,8 @@ static t_block_type	get_block_type(char *string)
 
 	if (len == 6 && ft_strncmp(string, "NORMAL", 6) == 0)
 		return (B_NORMAL);
+	if (len == 5 && ft_strncmp(string, "ROUND", 5) == 0)
+		return (B_ROUND);
 	return (B_NONE);
 }
 
@@ -61,5 +63,7 @@ t_block				*load_json_block(t_world *world, t_json_object *obj)
 	}
 	if (block_type == B_NORMAL)
 		return (load_normal_block(world, obj));
+	if (block_type == B_ROUND)
+		return (load_round_block(world, obj));
 	return (NULL);
 }
