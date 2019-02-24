@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:15:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/20 22:48:55 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 20:36:07 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void		sdl_init(t_wolf *wolf)
 	wolf->win = SDL_CreateWindow("|| Wolf 3D ||", 0, 0, 1000, 1000, SDL_WINDOW_SHOWN);
 	wolf->renderer = SDL_CreateRenderer(wolf->win, -1, SDL_RENDERER_ACCELERATED);
 	SDL_RenderSetLogicalSize(wolf->renderer, S_WIDTH, S_HEIGHT);
-	//SDL_Set
 	wolf->screen = SDL_CreateTexture(wolf->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, S_WIDTH, S_HEIGHT);
 	if (!(wolf->pixels = malloc(S_WIDTH * S_HEIGHT * 4)))
 		return ; //TODO malloc fail;

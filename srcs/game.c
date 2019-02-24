@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:51:33 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/22 16:44:34 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 20:41:14 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,17 @@ void			game_loop(t_wolf *wolf)
 	// printf("SDL_Init failed: %s\n", SDL_GetError());
 	while (wolf->running)
 	{
-		
-		SDL_SetRenderDrawColor(wolf->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_SetRenderDrawColor(wolf->renderer, 255, 0, 255, 0);
+		SDL_SetRenderTarget(wolf->renderer, NULL);
 		SDL_RenderClear(wolf->renderer);
-		SDL_SetRenderTarget(wolf->renderer, wolf->screen);
+		ft_memset(wolf->pixels, 0, S_WIDTH * 4 * S_HEIGHT);
+	
 		render_main(wolf);
 		render_minimap(wolf);
+		render_debug(wolf);
 		update_fps(wolf);
 		SDL_UpdateTexture(wolf->screen, NULL, wolf->pixels, S_WIDTH * 4);
-		SDL_SetRenderTarget(wolf->renderer, NULL);
 		SDL_RenderCopy(wolf->renderer, wolf->screen, NULL, NULL);
-		render_debug(wolf);
 		SDL_RenderPresent(wolf->renderer);
 		hook_events(wolf);
 	}

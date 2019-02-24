@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 23:40:27 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/21 14:17:10 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 20:36:38 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,59 @@
 
 Uint32 getpixel(SDL_Surface *surface, int x, int y)
 {
-	unsigned int	index;
+	const int			bpp = surface->format->BytesPerPixel;
+	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
-	int bpp = surface->format->BytesPerPixel;
-	index = y * surface->pitch + x * bpp;
-	Uint8 *p = (Uint8 *)surface->pixels + index;
-	return ((p[0] << 16) | (p[1] << 8) | p[2]);
+    switch(bpp)
+    {
+        case 1:
+            return *p;
+        case 2:
+            return *(Uint16 *)p;
+        case 3:
+            if (SDL_BYTEORDER != SDL_BIG_ENDIAN)
+                return p[0] << 16 | p[1] << 8 | p[2];
+            else
+                return p[0] | p[1] << 8 | p[2] << 16;
+        case 4:
+            if (SDL_BYTEORDER != SDL_BIG_ENDIAN)
+                return p[3] << 24 | p[0] << 16 | p[1] << 8 | p[2];
+            else
+                return *(Uint32 *)p;
+        default:
+            return 0;
+    }
+}
+
+void	apply_surface2(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
+{
+	int 			i;
+	int 			j;
+	const float		s_w = src.w / (float)dst.w;
+	const float		s_h = src.h / (float)dst.h;
+	unsigned int 	index;
+
+	i = -1;
+	while (++i < dst.h)
+	{
+		j = -1;
+		while (++j < dst.w)
+		{
+			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
+			if (index >= IMG_MAX_I)
+				continue;
+			dest[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
+		}
+	}
 }
 
 void	apply_surface(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 {
-	int i;
-	int j;
+	int 			i;
+	int 			j;
 	const float		s_w = src.w / (float)dst.w;
 	const float		s_h = src.h / (float)dst.h;
-	unsigned int index;
+	unsigned int 	index;
 
 	i = -1;
 	while (++i < dst.h)

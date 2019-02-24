@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 16:54:13 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 20:34:15 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,18 @@ void			render_debug(t_wolf *wolf)
 	SDL_Texture		*fps_texture;
 	SDL_Rect		dest;
 
-	fps_text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.fps).str, (SDL_Color){255, 255, 255, 0});
-	fps_texture = SDL_CreateTextureFromSurface(wolf->renderer, fps_text);
-	dest = (SDL_Rect){5, 5, 25, 25};
-	SDL_RenderCopy(wolf->renderer, fps_texture, NULL, &dest);
+	fps_text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.fps).str, (SDL_Color){255, 255, 255, 255});
+	//fps_texture = SDL_CreateTextureFromSurface(wolf->renderer, fps_text);
+	//	printf("%d %d\n", fps_text->w, fps_text->h);
+	apply_surface2(wolf->pixels, fps_text, (SDL_Rect){0, 0, fps_text->w, fps_text->h}, (SDL_Rect){5, 5, fps_text->w + 5, fps_text->h + 5});
+	/*SDL_RenderCopy(wolf->renderer, fps_texture, NULL, &dest);
 	SDL_DestroyTexture(fps_texture);
 	SDL_FreeSurface(fps_text);
 	fps_text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str((int)wolf->stats.avg_ms).str, (SDL_Color){255, 255, 255, 0});
 	fps_texture = SDL_CreateTextureFromSurface(wolf->renderer, fps_text);
 	dest = (SDL_Rect){5, 35, 25, 25};
 	SDL_RenderCopy(wolf->renderer, fps_texture, NULL, &dest);
-	SDL_DestroyTexture(fps_texture);
+	SDL_DestroyTexture(fps_texture);*/
 	SDL_FreeSurface(fps_text);
 }
 
@@ -48,7 +49,6 @@ void			render_main(t_wolf *wolf)
 	int		x;
 	t_ray	ray;
 
-	ft_memset(wolf->pixels, 0, S_WIDTH * 4 * S_HEIGHT);
 	x = -1;
 	while (++x < S_WIDTH)
 	{

@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 16:42:52 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 20:27:44 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ t_ray			create_ray(t_wolf *wolf, int x)
 	ray.x = x;
 	ray.dir = ft_mat2_mulv(wolf->player.matrix, ft_vec2_add(
 		(t_vec2){0, 1},
-		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f) * (S_WIDTH / S_HEIGHT), 0}));
+		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f) * S_RATIO, 0}));
 	ray.step = (t_pixel) { ray.dir.x > 0 ? 1 : -1 , ray.dir.y > 0 ? 1 : -1 };
 	ray.side_dist = (t_vec2){0, 0};
-	ray.delta_dist = (t_vec2){ft_absf(1.0f / ray.dir.x), ft_absf(1.0f / ray.dir.y)};
+	ray.delta_dist = (t_vec2){fabs(1.0f / ray.dir.x), fabs(1.0f / ray.dir.y)};
 	ray.hit_pos = (t_pixel){.x = wolf->player.pos.x, .y = wolf->player.pos.y};
 	ray.hit = 0;
 	return (ray);
