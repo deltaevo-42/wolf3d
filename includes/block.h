@@ -79,6 +79,7 @@ t_block				*load_json_block(t_world *world, t_json_object *obj);
 t_block_state		***load_map_data(t_world *w, t_json_value *val);
 
 t_block				*load_normal_block(t_world *w, t_json_object *obj);
+t_block				*load_round_block(t_world *w, t_json_object *obj);
 int					normal_block_minimap(t_wolf *wolf, t_block_state *state);
 t_face 				get_face_type(char *string);
 
