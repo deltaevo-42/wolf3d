@@ -55,7 +55,22 @@ void	apply_surface2(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
 			if (index >= IMG_MAX_I)
 				continue;
-			dest[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
+
+			unsigned int value = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
+			int g1 = (value >> 0) & 0xFF;
+			int b1 = (value >> 8) & 0xFF;
+			int r1 = (value >> 16) & 0xFF;
+			float a1 = ((value >> 24) & 0xFF) / 255.0;
+			int g2 = (dest[index] >> 0) & 0xFF;
+			int b2 = (dest[index] >> 8) & 0xFF;
+			int r2 = (dest[index] >> 16) & 0xFF;
+			float a2 = ((dest[index] >> 24) & 0xFF) / 255.0;
+
+			float a = a2 * (1 - a1);
+			dest[index] = (((int)((a1 + a) * 0xFF) << 24)
+						| ((int)(r1 * a1 + r2 * a) & 0xFF) << 16
+						| ((int)(b1 * a1 + b2 * a) & 0xFF) << 8
+						| ((int)(g1 * a1 + g2 * a) & 0xFF)) / a2;
 		}
 	}
 }

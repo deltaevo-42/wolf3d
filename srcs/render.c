@@ -18,7 +18,7 @@ void			render_debug(t_wolf *wolf)
 	SDL_Texture		*fps_texture;
 	SDL_Rect		dest;
 
-	fps_text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.fps).str, (SDL_Color){255, 255, 255, 255});
+	fps_text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.fps).str, (SDL_Color){255, 255, 255});
 	//fps_texture = SDL_CreateTextureFromSurface(wolf->renderer, fps_text);
 	//	printf("%d %d\n", fps_text->w, fps_text->h);
 	apply_surface2(wolf->pixels, fps_text, (SDL_Rect){0, 0, fps_text->w, fps_text->h}, (SDL_Rect){5, 5, fps_text->w + 5, fps_text->h + 5});
