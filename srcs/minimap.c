@@ -23,6 +23,8 @@ static int			compute_block_minimap(t_wolf *wolf, t_vec2 map)
 		return (-1);
 	if (state->block->type == B_NORMAL)
 		return (normal_block_minimap(wolf, state));
+	if (state->block->type == B_ROUND)
+		return (round_block_minimap(wolf, state, map));
 	return (-1);
 }
 
