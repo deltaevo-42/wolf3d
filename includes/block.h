@@ -85,6 +85,8 @@ t_block				*load_normal_block(t_world *w, t_json_object *obj);
 t_block				*load_round_block(t_world *w, t_json_object *obj);
 int					normal_block_minimap(t_wolf *wolf, t_block_state *state);
 int					round_block_minimap(t_wolf *wolf, t_block_state *state, t_vec2 map);
+t_bool				render_block_normal_wall(t_wolf *wolf, t_ray *ray);
+t_bool				render_block_round_wall(t_wolf *wolf, t_ray *ray);
 t_face 				get_face_type(char *string);
 
 #endif

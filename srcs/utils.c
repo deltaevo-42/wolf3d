@@ -104,8 +104,8 @@ void	draw_line(uint32_t *pixels, uint32_t width, t_pixel p0, t_pixel p1)
 	int				e[2];
 	unsigned int 	index;
 
-	d = (t_pixel){ abs(p1.x - p0.x), abs(p1.y - p0.y) };
-	s = (t_pixel){ (p0.x < p1.x ? 1 : -1), (p0.y < p1.y ? 1 : -1) };
+	d = (t_pixel){ abs(p1.x - p0.x), abs(p1.y - p0.y), 0 };
+	s = (t_pixel){ (p0.x < p1.x ? 1 : -1), (p0.y < p1.y ? 1 : -1), 0 };
 	e[0] = (d.x > d.y ? d.x : -d.y) / 2;
 	while (p0.x != p1.x || p0.y != p1.y)
 	{

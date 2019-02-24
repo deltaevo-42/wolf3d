@@ -44,7 +44,7 @@ t_ray			create_ray(t_wolf *wolf, int x)
 	ray.dir = ft_mat2_mulv(wolf->player.matrix, ft_vec2_add(
 		(t_vec2){0, DIST_TO_PLANE},
 		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f) * S_RATIO, 0}));
-	ray.step = (t_pixel) { ray.dir.x > 0 ? 1 : -1 , ray.dir.y > 0 ? 1 : -1 };
+	ray.step = (t_pixel) { ray.dir.x > 0 ? 1 : -1 , ray.dir.y > 0 ? 1 : -1, 0 };
 	ray.side_dist = (t_vec2){0, 0};
 	ray.delta_dist = (t_vec2){fabs(1.0f / ray.dir.x), fabs(1.0f / ray.dir.y)};
 	ray.hit_pos = (t_pixel){.x = wolf->player.pos.x, .y = wolf->player.pos.y};
