@@ -6,6 +6,5 @@ Wolf:
 - HUD (Crosshair, FPS, ....)
 - "Events" (Rigth/Left click) on blocks 
 - Colisions
-- FPS counting (using apply_surface)
 - Jump
 - Sprites

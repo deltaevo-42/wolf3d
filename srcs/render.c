@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 21:49:46 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 21:52:52 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			render_debug(t_wolf *wolf)
 	fps_text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.fps).str, (SDL_Color){255, 255, 255});
 	//fps_texture = SDL_CreateTextureFromSurface(wolf->renderer, fps_text);
 	//	printf("%d %d\n", fps_text->w, fps_text->h);
-	apply_surface2(wolf->pixels, fps_text, (SDL_Rect){0, 0, fps_text->w, fps_text->h}, (SDL_Rect){5, 5, fps_text->w + 5, fps_text->h + 5});
+	apply_surface_blended(wolf->pixels, fps_text, (SDL_Rect){0, 0, fps_text->w, fps_text->h}, (SDL_Rect){5, 5, fps_text->w + 5, fps_text->h + 5});
 	/*SDL_RenderCopy(wolf->renderer, fps_texture, NULL, &dest);
 	SDL_DestroyTexture(fps_texture);
 	SDL_FreeSurface(fps_text);

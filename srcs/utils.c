@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 23:40:27 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 21:21:01 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 21:52:05 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
     }
 }
 
-void	apply_surface2(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
+void	apply_surface_blended(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 {
 	int 			i;
 	int 			j;

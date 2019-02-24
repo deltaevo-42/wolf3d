@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 20:26:51 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/24 21:52:27 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,6 @@ Uint32 		getpixel(SDL_Surface *surface, int x, int y);
 void		draw_line(uint32_t *pixels, uint32_t width, t_pixel p0, t_pixel p1);
 void		stroke_rect(uint32_t *pixels, uint32_t width, uint32_t color, SDL_Rect rect);
 void		apply_surface(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
-void		apply_surface2(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
+void		apply_surface_blended(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
 
 #endif
