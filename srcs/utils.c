@@ -70,7 +70,7 @@ void	apply_surface_blended(uint32_t *dest, SDL_Surface *s, SDL_Rect src, SDL_Rec
 			dest[index] = (((int)((a1 + a) * 0xFF) << 24)
 						| ((int)(r1 * a1 + r2 * a) & 0xFF) << 16
 						| ((int)(b1 * a1 + b2 * a) & 0xFF) << 8
-						| ((int)(g1 * a1 + g2 * a) & 0xFF)) / a2;
+						| ((int)(g1 * a1 + g2 * a) & 0xFF));
 		}
 	}
 }
