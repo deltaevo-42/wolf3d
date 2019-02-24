@@ -70,7 +70,7 @@ struct		s_ray
 {
 	int				x;
 	t_vec2			dir;
-	t_vec2			step;
+	t_pixel			step;
 	t_vec2			side_dist;
 	t_vec2			delta_dist;
 	t_pixel			hit_pos;
