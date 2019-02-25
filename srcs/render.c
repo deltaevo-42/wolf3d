@@ -22,14 +22,17 @@ void			render_debug(t_wolf *wolf)
 	text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str((int)wolf->stats.avg_ms).str, (SDL_Color){255, 255, 255, 0});
 	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h}, (SDL_Rect){5, text->h + 10, text->w + 5, text->h + 5});
 	SDL_FreeSurface(text);
+	text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.num_rays).str, (SDL_Color){255, 255, 255, 0});
+	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h}, (SDL_Rect){5, text->h * 2 + 15, text->w + 5, text->h + 5});
+	SDL_FreeSurface(text);
 }
 
-t_bool			render_wall(t_wolf *wolf, t_ray *ray)
+t_bool			render_wall(t_wolf *wolf, t_ray *from, t_ray *to)
 {
-	if (ray->hit->block->type == B_NORMAL)
-		return (render_block_normal_wall(wolf, ray));
-	if (ray->hit->block->type == B_ROUND)
-		return (render_block_round_wall(wolf, ray));
+	if (from->hit->block->type == B_NORMAL)
+		return (render_block_normal_wall(wolf, from, to));
+	if (from->hit->block->type == B_ROUND)
+		return (render_block_round_wall(wolf, from));
 	return (TRUE);
 }
 
@@ -45,39 +48,94 @@ t_bool			render_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p)
 
 void			render_floor(t_wolf *wolf, int x, t_ray *ray, t_bool f);
 
+#include <assert.h>
+
+t_bool			double_cast_ray(t_wolf *wolf, int x1, int x2)
+{
+	t_ray first = create_ray(wolf, x1);
+	t_ray second = create_ray(wolf, x2);
+	t_bool skip = FALSE;
+
+	while (skip || (next_ray(wolf, &first) & next_ray(wolf, &second)))
+	{
+		skip = FALSE;
+		if (first.hit || second.hit)
+		{
+			if (first.hit != second.hit || first.face != second.face || first.hit->block->type == B_ROUND)
+				return (FALSE);
+			//render_floor(wolf, ray->x, &ray, TRUE);
+			render_wall(wolf, &first, &second);
+			if (first.hit->block->height == wolf->world.size.z
+				|| (first.dist <= 1 && wolf->player.pos.z + 1 <= first.hit->block->height && wolf->player.pos.z >= 0.2))
+				break ;
+			t_block_state *hit = first.hit;
+			float h = S_HEIGHT / first.dist;
+			int p = S_HEIGHT_2 + h * (wolf->player.pos.z + 1) * 0.5 - h * hit->block->height;
+			if (p <= 0 && p + h > S_HEIGHT)
+				break;
+			skip = next_ray(wolf, &first);
+			skip = next_ray(wolf, &second);
+			//render_top(wolf, &first, hit, p);
+		}
+	}
+	/*wolf->last_rays[x] = ray;*/
+	return (TRUE);
+}
+
+t_ray			cast_ray(t_wolf *wolf, int x)
+{
+	t_ray ray = create_ray(wolf, x);
+	t_bool skip = FALSE;
+
+	while (skip || next_ray(wolf, &ray))
+	{
+		skip = FALSE;
+		if (ray.hit)
+		{
+			render_floor(wolf, ray.x, &ray, TRUE);
+			render_wall(wolf, &ray, &ray);
+			if (ray.hit->block->height == wolf->world.size.z
+				|| (ray.dist <= 1 && wolf->player.pos.z + 1 <= ray.hit->block->height && wolf->player.pos.z >= 0.2))
+				break ;
+			t_block_state *hit = ray.hit;
+			float h = S_HEIGHT / ray.dist;
+			int p = S_HEIGHT_2 + h * (wolf->player.pos.z + 1) * 0.5 - h * hit->block->height;
+			if (p <= 0 && p + h > S_HEIGHT)
+				break;
+			skip = next_ray(wolf, &ray);
+			//render_top(wolf, &ray, hit, p);
+		}
+	}
+	wolf->last_rays[x] = ray;
+	return (ray);
+}
+
+void			render_binary(t_wolf *wolf, t_ray first, t_ray second)
+{
+	if (second.x - first.x == 1)
+		return ;
+	if (first.hit == second.hit && first.face == second.face)
+	{
+		if (double_cast_ray(wolf, first.x, second.x))
+			return ;
+		//render_wall(wolf, &first, &second);
+		//render_floor(wolf, &first, &second)
+	}
+	t_ray mid = cast_ray(wolf, (first.x + second.x)/2);
+	wolf->stats.num_rays++;
+	render_binary(wolf, first, mid);
+	render_binary(wolf, mid, second);
+}
+
 void			render_main(t_wolf *wolf)
 {
-	int		x;
-	t_ray	ray;
+	wolf->stats.num_rays = 2;
+	render_binary(wolf, cast_ray(wolf, 0), cast_ray(wolf, S_WIDTH - 1));
+	/*int		x;
 
 	x = -1;
 	while (++x < S_WIDTH)
-	{
-		ray = create_ray(wolf, x);
-		t_ray last = ray;
-		while (1)
-		{
-			if (ray.hit)
-			{
-				t_block_state *hit = ray.hit;
-				float h = S_HEIGHT / ray.dist;
-				int p = S_HEIGHT_2 + h * (wolf->player.pos.z + 1) * 0.5 - h * hit->block->height;
-				render_floor(wolf, x, &ray, TRUE); // On veut decider quand cacher le sol au dessous d un block (C est actuellement a TRUE car j arrive pas a trouver dans quel cas le definir) cette modif n as visiblement aucun impact sur les pers (tant mieux)
-				render_wall(wolf, &ray);
-				if (ray.hit->block->height == wolf->world.size.z || (ray.dist <= 1 && wolf->player.pos.z + 1 <= ray.hit->block->height && wolf->player.pos.z >= 0.2))
-					break ;
-				if (p <= 0 && p + h > S_HEIGHT)
-					break;
-				last = ray;
-				next_ray(wolf, &ray);
-				render_top(wolf, &ray, hit, p);
-				continue ;
-			}
-			if (!next_ray(wolf, &ray))
-				break ;
-		}
-		wolf->last_rays[x] = ray;
-	}
+		cast_ray(wolf, x);*/
 }
 
 void	render_floor(t_wolf *wolf, int x, t_ray *ray, t_bool f)

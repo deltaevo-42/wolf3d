@@ -11,28 +11,66 @@
 /* ************************************************************************** */
 
 #include "wolf.h"
-t_bool	render_block_normal_wall(t_wolf *wolf, t_ray *ray)
+
+typedef struct s_render_info {
+	int		texX;
+	int		y;
+	float	height;
+}				t_render_info;
+
+
+t_render_info	get_render_infos(t_wolf *wolf, t_ray *ray)
 {
 	t_block_normal		*block;
 	t_texture			*texture;
-	float				height;
+	t_render_info		infos;
 	double				wallX;
-	int					texX;
+	double				garbage;
 
 	block = (t_block_normal *)ray->hit->block;
 	texture = block->faces[ray->face].texture;
-	height = (S_HEIGHT / ray->dist);
+	infos.height = S_HEIGHT / ray->dist;
 	if (ray->side == 0)
-		wallX = wolf->player.pos.y + ray->dist * ray->dir.y;
+		wallX= wolf->player.pos.y + ray->dist * ray->dir.y;
 	else
 		wallX = wolf->player.pos.x + ray->dist * ray->dir.x;
-	wallX -= floor((wallX));
-	texX = wallX * texture->size.x;
-	if ((ray->side == 0 && ray->dir.x > 0) || (ray->side == 1 && ray->dir.y < 0))
-		texX = texture->size.x - texX - 1;
-	apply_texture(wolf->img, texture,
-		(SDL_Rect){ texX, 0, 1, texture->size.y }, 
-		(SDL_Rect){ ray->x, S_HEIGHT_2 + height * (wolf->player.pos.z + 1) / 2. - height * block->super.height, 1, height * block->super.height});
+	wallX = modf(wallX, &garbage);
+	infos.texX = wallX * texture->size.x;
+	infos.y = S_HEIGHT_2 + infos.height * (wolf->player.pos.z + 1) / 2. - infos.height * block->super.height;
+	return (infos);
+}
+
+t_bool	render_block_normal_wall(t_wolf *wolf, t_ray *from_ray, t_ray *to_ray)
+{
+	t_block_normal		*block;
+	t_texture	*texture;
+	t_render_info	from;
+	t_render_info	to;
+
+	block = (t_block_normal *)from_ray->hit->block;
+	texture = block->faces[from_ray->face].texture;
+	from = get_render_infos(wolf, from_ray);
+	if (from_ray == to_ray)
+	{
+		apply_texture(wolf->img, texture,
+			(SDL_Rect){ from.texX, 0, 1, texture->size.y }, 
+			(SDL_Rect){ from_ray->x, from.y, 1, from.height * block->super.height });
+	} else
+	{
+		to = get_render_infos(wolf, to_ray);
+		int x = from_ray->x;
+		while (x < to_ray->x)
+		{
+			float progress = (float)(x - from_ray->x)/(float)(to_ray->x - from_ray->x);
+			int texX = from.texX + progress * (float)(to.texX - from.texX);
+			int y = from.y + progress * (to.y - from.y);
+			double height = from.height + progress * (to.height - from.height);
+			apply_texture(wolf->img, texture,
+				(SDL_Rect){ texX, 0, 1, texture->size.y }, 
+				(SDL_Rect){ x, y, 1, height * block->super.height });
+			x++;
+		}
+	}
 	return (FALSE);
 }
 

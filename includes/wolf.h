@@ -61,6 +61,7 @@ struct		s_stats
 	int		fps;
 	double	avg_ms;
 	double	delta;
+	uint32_t num_rays;
 };
 
 struct		s_fonts
