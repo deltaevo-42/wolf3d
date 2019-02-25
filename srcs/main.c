@@ -20,6 +20,7 @@ int		main(int argc, char **argv)
 		.player = {
 			.rotation = 0.01
 		},
+		.dist_to_plane = 1.0,
 		.minimap_size = 100,
 		.minimap_padding = 10
 	};

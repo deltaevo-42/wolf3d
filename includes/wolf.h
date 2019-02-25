@@ -28,7 +28,6 @@
 # define S_HEIGHT_2 (S_HEIGHT / 2)
 # define S_RATIO (S_WIDTH / S_HEIGHT)
 # define IMG_MAX_I (S_WIDTH * S_HEIGHT)
-# define DIST_TO_PLANE 1.0
 # define PLANE ((S_WIDTH / 2) / S_WIDTH)
 
 
@@ -56,6 +55,8 @@ struct		s_world
 	t_block			**blocks;
 	t_vec3			size;
 	t_block_state	***data;
+	t_texture		*ceil;
+	t_texture		*floor;
 };
 
 
@@ -116,6 +117,7 @@ struct		s_wolf
 
 	uint32_t		minimap_size;
 	uint32_t		minimap_padding;
+	float			dist_to_plane;
 };
 
 /* World */

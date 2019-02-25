@@ -104,12 +104,20 @@ static t_block		**load_blocks(t_world *world, t_json_object *obj)
 
 static t_bool		load_map(t_world *world, t_json_object *obj)
 {
+	double	*texture_i;
+
 	if(!(obj = json_get_object(obj, "map")))
 		return (FALSE);
 	if(!ft_json_vec3(json_object_get(obj, "size"), &world->size))
 		return (FALSE);
 	printf("Size %f %f\n", world->size.x, world->size.y);
 	world->data = load_map_data(world,  json_object_get(obj, "data"));
+	if (!(texture_i = json_get_number(obj, "ceil_texture")))
+		return (FALSE);
+	world->ceil = world->textures[(int)*texture_i];
+	if (!(texture_i = json_get_number(obj, "floor_texture")))
+		return (FALSE);
+	world->floor = world->textures[(int)*texture_i];
 	return (TRUE);
 }
 

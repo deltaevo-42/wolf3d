@@ -82,6 +82,11 @@ void		hook_events(t_wolf *wolf)
 		wolf->minimap_size = 100;
 		wolf->minimap_padding = 10;
 	}
+
+	if (state[SDL_SCANCODE_KP_PLUS])
+		wolf->dist_to_plane += move_speed * 0.1;
+	if (state[SDL_SCANCODE_KP_MINUS] && wolf->dist_to_plane > move_speed * 0.1)
+		wolf->dist_to_plane -= move_speed * 0.1;
 	/*if (wolf->player.pos.x < 0)
 		wolf->player.pos.x = 0;
 	if (wolf->player.pos.y < 0)

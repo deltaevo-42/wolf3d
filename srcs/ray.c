@@ -42,7 +42,7 @@ t_ray			create_ray(t_wolf *wolf, int x)
 
 	ray.x = x;
 	ray.dir = ft_mat2_mulv(wolf->player.matrix, ft_vec2_add(
-		(t_vec2){0, DIST_TO_PLANE},
+		(t_vec2){0, wolf->dist_to_plane },
 		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f) * S_RATIO, 0}));
 	ray.step = (t_pixel) { ray.dir.x > 0 ? 1 : -1 , ray.dir.y > 0 ? 1 : -1, 0 };
 	ray.side_dist = (t_vec2){0, 0};
@@ -83,24 +83,24 @@ void			dist_round_block(t_wolf *wolf, t_ray *ray)
 		float x1 = (-B - s_delta) / (2 * A);
 		float y1 = m * x1 + c;
 
-		float dx1 = x1 - wolf->player.pos.x;
-		float dy1 = y1 - wolf->player.pos.y;
-
-		float dist1 = dx1 * dx1 + dy1 * dy1;
-
+		float dist1;
+		if (ray->side == 0)
+			dist1 = (x1 - wolf->player.pos.x) / ray->dir.x;
+		else
+			dist1 = (y1 - wolf->player.pos.y) / ray->dir.y;
 		float x2 = (-B + s_delta) / (2 * A);
 		float y2 = m * x2 + c;
 
-		float dx2 = x2 - wolf->player.pos.x;
-		float dy2 = y2 - wolf->player.pos.y;
-
-		float dist2 = dx2 * dx2 + dy2 * dy2;
-
+		float dist2;
+		if (ray->side == 0)
+			dist2 = (x2 - wolf->player.pos.x) / ray->dir.x;
+		else
+			dist2 = (y2 - wolf->player.pos.y) / ray->dir.y;
 		block->last_hit_x = (dist1 < dist2 ? x1 : x2) - p;
 		block->last_hit_y = (dist1 < dist2 ? y1 : y2) - q;
-		block->last_out_dist = sqrt(dist1 < dist2 ? dist2 : dist1);
+		block->last_out_dist = dist1 < dist2 ? dist2 : dist1;
 
-		ray->dist = sqrt(dist1 < dist2 ? dist1 : dist2);
+		ray->dist = dist1 < dist2 ? dist1 : dist2;
 	} else
 		ray->hit = 0;
 }

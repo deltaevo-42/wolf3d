@@ -75,7 +75,7 @@ void			render_main(t_wolf *wolf)
 			}
 		}
 		wolf->last_rays[x] = ray;
-		if (ray.dist > 1 && ray.hit)
+		if (ray.hit)
 			render_floor(wolf, x, &ray);
 	}
 }
@@ -95,7 +95,6 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 	else
 		wallX = wolf->player.pos.x + ray->dist * ray->dir.x;
 	wallX -= floor((wallX));
-	int texWidth = wolf->tmp_texture->w;
 	t_vec2 floorWall;
 	if (ray->side == 0 && ray->dir.x > 0)
 		floorWall = (t_vec2) {ray->hit_pos.x, ray->hit_pos.y + wallX};
@@ -108,6 +107,9 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 	float distZ = ray->dist / (wolf->player.pos.z + 1);
 	float rDistZ = ray->dist / -(wolf->world.size.z - wolf->player.pos.z + 1);
 
+	SDL_Surface *floor_tex = ((t_texture_normal *)wolf->world.floor)->surface;
+	SDL_Surface *ceil_tex = ((t_texture_normal *)wolf->world.ceil)->surface;
+
 	for (int y = 0; y < S_HEIGHT_2; y++)
 	{
 		if (bottom + y < S_HEIGHT)
@@ -119,11 +121,11 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 				weight * floorWall.y + (1.0 - weight) * wolf->player.pos.y
 			};
 			int floorTexX, floorTexY;
-			floorTexX = ft_abs((int)(curr_floor.x * texWidth)) % texWidth;
-			floorTexY = ft_abs((int)(curr_floor.y * wolf->tmp_texture->h)) % wolf->tmp_texture->h;
+			floorTexX = ft_abs((int)(curr_floor.x * floor_tex->w)) % floor_tex->w;
+			floorTexY = ft_abs((int)(curr_floor.y * floor_tex->h)) % floor_tex->h;
 
 			if (wolf->img->pixels[((bottom + y) * (int)S_WIDTH + x)] == 0)
-				wolf->img->pixels[((bottom + y) * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY);
+				wolf->img->pixels[((bottom + y) * (int)S_WIDTH) + x] = getpixel(floor_tex, floorTexX, floorTexY);
 		}
 		if (y <= top)
 		{
@@ -134,11 +136,11 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 				weight * floorWall.y + (1.0 - weight) * wolf->player.pos.y
 			};
 			int floorTexX, floorTexY;
-			floorTexX = ft_abs((int)(curr_floor.x * texWidth)) % texWidth;
-			floorTexY = ft_abs((int)(curr_floor.y * wolf->tmp_texture->h)) % wolf->tmp_texture->h;
+			floorTexX = ft_abs((int)(curr_floor.x * ceil_tex->w)) % ceil_tex->w;
+			floorTexY = ft_abs((int)(curr_floor.y * ceil_tex->h)) % ceil_tex->h;
 
 			if (wolf->img->pixels[((top - y) * (int)S_WIDTH + x)] == 0)
-				wolf->img->pixels[((top - y) * (int)S_WIDTH) + x] = getpixel(wolf->tmp_texture, floorTexX, floorTexY);
+				wolf->img->pixels[((top - y) * (int)S_WIDTH) + x] = getpixel(ceil_tex, floorTexX, floorTexY);
 		}
 	}
 }
