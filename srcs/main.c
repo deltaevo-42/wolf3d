@@ -18,7 +18,7 @@ int		main(int argc, char **argv)
 
 	wolf = (t_wolf) {
 		.player = {
-			.rotation = M_PI/3
+			.rotation = 0.01
 		},
 		.minimap_size = 100,
 		.minimap_padding = 10
