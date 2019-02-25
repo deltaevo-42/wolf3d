@@ -12,11 +12,16 @@
 
 #include "wolf.h"
 
+#define STAIR_MAX 0.5
+
 void		hook_events(t_wolf *wolf)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	double move_speed = wolf->stats.delta * 3.;
 	SDL_Event event;
+	float	x;
+	float	y;
+	t_block_state	*b_state;
 
 	event = wolf->event;
 	if (event.type == SDL_QUIT || state[SDL_SCANCODE_ESCAPE])
@@ -28,17 +33,44 @@ void		hook_events(t_wolf *wolf)
 	}
 	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_S])
 	{
-		wolf->player.pos.y += sinf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1) * move_speed;
-		wolf->player.pos.x += cosf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1) * move_speed;
+		y = sinf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1) * move_speed;
+		x = cosf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1) * move_speed;
+
+		b_state = wolf->world.data[(int)(wolf->player.pos.y + y)][(int)(wolf->player.pos.x + x)];
+
+		if (!b_state || (b_state->block->height <= wolf->player.pos.z + STAIR_MAX && b_state->block->height < wolf->world.size.z - 0.5))
+		{
+			wolf->player.pos.y += y;
+			wolf->player.pos.x += x;
+			if (b_state && wolf->player.pos.z < b_state->block->height + 0.5)
+				wolf->player.pos.z = b_state->block->height + 0.5;
+		}
 	}
 	if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_D])
 	{
-		wolf->player.pos.y += -cosf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ? 1 : -1)  * move_speed;
-		wolf->player.pos.x += sinf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ?  1 : -1)  * move_speed;
+		y += -cosf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ? 1 : -1)  * move_speed;
+		x += sinf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ?  1 : -1)  * move_speed;
+
+		b_state = wolf->world.data[(int)(wolf->player.pos.y + y)][(int)(wolf->player.pos.x + x)];
+
+		if (!b_state || (b_state->block->height <= wolf->player.pos.z + STAIR_MAX && b_state->block->height < wolf->world.size.z - 0.5))
+		{
+			wolf->player.pos.y += y;
+			wolf->player.pos.x += x;
+			if (b_state && wolf->player.pos.z < b_state->block->height + 0.5)
+				wolf->player.pos.z = b_state->block->height + 0.5;
+		}
 	}
 	if (state[SDL_SCANCODE_SPACE] || state[SDL_SCANCODE_LSHIFT])
 	{
-		wolf->player.pos.z += (state[SDL_SCANCODE_LSHIFT] ? -1 : 1) * move_speed;
+		float z = (state[SDL_SCANCODE_LSHIFT] ? -1 : 1) * move_speed;
+
+		b_state = wolf->world.data[(int)(wolf->player.pos.y)][(int)(wolf->player.pos.x)];
+
+		if (!b_state || b_state->block->height < wolf->player.pos.z - 0.5)
+		{
+			wolf->player.pos.z += z;
+		}
 	}
 	if (state[SDL_SCANCODE_M])
 	{
