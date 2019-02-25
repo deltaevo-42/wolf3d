@@ -98,6 +98,7 @@ void			dist_round_block(t_wolf *wolf, t_ray *ray)
 
 		block->last_hit_x = (dist1 < dist2 ? x1 : x2) - p;
 		block->last_hit_y = (dist1 < dist2 ? y1 : y2) - q;
+		block->last_out_dist = sqrt(dist1 < dist2 ? dist2 : dist1);
 
 		ray->dist = sqrt(dist1 < dist2 ? dist1 : dist2);
 	} else

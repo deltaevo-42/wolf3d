@@ -35,6 +35,16 @@ t_bool			render_wall(t_wolf *wolf, t_ray *ray)
 	return (TRUE);
 }
 
+t_bool			render_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p)
+{
+	if (hit->block->type == B_NORMAL)
+		return (render_block_normal_top(wolf, ray, hit, p));
+	if (hit->block->type == B_ROUND)
+		return (render_block_round_top(wolf, ray, hit, p));
+	return (TRUE);
+}
+
+
 void			render_floor(t_wolf *wolf, int x, t_ray *ray);
 
 void			render_main(t_wolf *wolf)
@@ -57,23 +67,13 @@ void			render_main(t_wolf *wolf)
 				if (ray.hit->block->height == wolf->world.size.z
 					|| (ray.dist <= 1 && wolf->player.pos.z + 1 <= ray.hit->block->height && wolf->player.pos.z >= 0.2))
 					break ;
-				float hit_h = ray.hit->block->height;
-				float h1 = S_HEIGHT / ray.dist;
-				int p1 = S_HEIGHT_2 + h1 * (wolf->player.pos.z + 1) * 0.5 - h1 * hit_h;
-				if (p1 <= 0 && p1 + h1 > S_HEIGHT)
+				t_block_state *hit = ray.hit;
+				float h = S_HEIGHT / ray.dist;
+				int p = S_HEIGHT_2 + h * (wolf->player.pos.z + 1) * 0.5 - h * hit->block->height;
+				if (p <= 0 && p + h > S_HEIGHT)
 					break;
-				if (next_ray(wolf, &ray))
-					skip = TRUE;
-				float h0 = S_HEIGHT / ray.dist;
-				int p0 = S_HEIGHT_2 + h0 * (wolf->player.pos.z + 1) / 2. - h0 * hit_h;
-				for (int y = p0; p0 < p1 && y < p1; y++)
-				{
-					int i = y * S_WIDTH + x;
-					if (i >= IMG_MAX_I || i < 0)
-						break ;
-					if (wolf->img->pixels[i] == 0)
-						wolf->img->pixels[i] = 255;
-				}
+				skip = next_ray(wolf, &ray);
+				render_top(wolf, &ray, hit, p);
 			}
 		}
 		wolf->last_rays[x] = ray;

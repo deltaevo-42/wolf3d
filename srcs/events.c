@@ -39,10 +39,6 @@ void		hook_events(t_wolf *wolf)
 	if (state[SDL_SCANCODE_SPACE] || state[SDL_SCANCODE_LSHIFT])
 	{
 		wolf->player.pos.z += (state[SDL_SCANCODE_LSHIFT] ? -1 : 1) * move_speed;
-		if (wolf->player.pos.z > wolf->world.size.z + 0.5)
-			wolf->player.pos.z = wolf->world.size.z + 0.5;
-		if (wolf->player.pos.z < -0.5)
-			wolf->player.pos.z = -0.5;
 	}
 	if (state[SDL_SCANCODE_M])
 	{
@@ -54,5 +50,13 @@ void		hook_events(t_wolf *wolf)
 		wolf->minimap_size = 100;
 		wolf->minimap_padding = 10;
 	}
+	/*if (wolf->player.pos.x < 0)
+		wolf->player.pos.x = 0;
+	if (wolf->player.pos.y < 0)
+		wolf->player.pos.y = 0;*/
+	if (wolf->player.pos.z > wolf->world.size.z + 0.5)
+		wolf->player.pos.z = wolf->world.size.z + 0.5;
+	if (wolf->player.pos.z < -0.5)
+		wolf->player.pos.z = -0.5;
 	SDL_PollEvent(&wolf->event);
 }

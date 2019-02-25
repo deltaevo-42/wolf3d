@@ -76,6 +76,7 @@ struct							s_block_round
 	t_texture		*texture;
 	float			last_hit_x;
 	float			last_hit_y;
+	float			last_out_dist;
 };
 
 t_block				*load_json_block(t_world *world, t_json_object *obj);
@@ -87,6 +88,8 @@ int					normal_block_minimap(t_wolf *wolf, t_block_state *state);
 int					round_block_minimap(t_wolf *wolf, t_block_state *state, t_vec2 map);
 t_bool				render_block_normal_wall(t_wolf *wolf, t_ray *ray);
 t_bool				render_block_round_wall(t_wolf *wolf, t_ray *ray);
+t_bool				render_block_normal_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p);
+t_bool				render_block_round_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p);
 t_face 				get_face_type(char *string);
 
 #endif
