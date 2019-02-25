@@ -14,16 +14,14 @@
 
 void			render_debug(t_wolf *wolf)
 {
-	SDL_Surface		*fps_text;
-	SDL_Texture		*fps_texture;
-	SDL_Rect		dest;
+	SDL_Surface		*text;
 
-	fps_text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.fps).str, (SDL_Color){255, 255, 255, 0});
-	apply_surface_blended(wolf->img, fps_text, (SDL_Rect){0, 0, fps_text->w, fps_text->h}, (SDL_Rect){5, 5, fps_text->w + 5, fps_text->h + 5});
-	SDL_FreeSurface(fps_text);
-	fps_text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str((int)wolf->stats.avg_ms).str, (SDL_Color){255, 255, 255, 0});
-	apply_surface_blended(wolf->img, fps_text, (SDL_Rect){0, 0, fps_text->w, fps_text->h}, (SDL_Rect){5, fps_text->h + 10, fps_text->w + 5, fps_text->h + 5});
-	SDL_FreeSurface(fps_text);
+	text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.fps).str, (SDL_Color){255, 255, 255, 0});
+	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h}, (SDL_Rect){5, 5, text->w + 5, text->h + 5});
+	SDL_FreeSurface(text);
+	text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str((int)wolf->stats.avg_ms).str, (SDL_Color){255, 255, 255, 0});
+	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h}, (SDL_Rect){5, text->h + 10, text->w + 5, text->h + 5});
+	SDL_FreeSurface(text);
 }
 
 t_bool			render_wall(t_wolf *wolf, t_ray *ray)
