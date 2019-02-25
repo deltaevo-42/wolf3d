@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/25 00:22:09 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/25 12:19:19 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void		hook_events(t_wolf *wolf)
 	}
 	if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_D])
 	{
-		y += -cosf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ? 1 : -1)  * move_speed;
-		x += sinf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ?  1 : -1)  * move_speed;
+		y = -cosf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ? 1 : -1)  * move_speed;
+		x = sinf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ?  1 : -1)  * move_speed;
 
 		b_state = wolf->world.data[(int)(wolf->player.pos.y + y)][(int)(wolf->player.pos.x + x)];
 
