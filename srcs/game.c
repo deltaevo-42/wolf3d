@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:51:33 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/25 00:11:34 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/26 18:50:25 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,29 @@ static void		update_fps(t_wolf *wolf)
 	}
 }
 
+void			update_textures(t_wolf *wolf)
+{
+	int		i;
+	t_texture_animated	*t;
+
+	i = 0;
+	while (i < wolf->world.textures_count)
+	{
+		if (wolf->world.textures[i]->type == T_ANIMATED)
+		{
+			t = (t_texture_animated *)wolf->world.textures[i];
+			if (SDL_GetTicks() - t->last_seen > t->delay)
+			{
+				t->last_seen = SDL_GetTicks();
+				t->index++;
+				if (t->index == t->step_count.x * t->step_count.y)
+					t->index = 0;
+			}
+		}
+		i++;
+	}
+}
+
 void			game_loop(t_wolf *wolf)
 {
 	wolf->player.pos = (t_vec3){ 6, 7, 0 };
@@ -39,12 +62,13 @@ void			game_loop(t_wolf *wolf)
 	{
 		ft_memset(wolf->img->pixels, 0, wolf->img->size * 4);
 		render_main(wolf);
-		render_minimap(wolf);
+	//	render_minimap(wolf);
 		render_debug(wolf);
 		SDL_UpdateTexture(wolf->screen, NULL, wolf->img->pixels, wolf->img->width * 4);
 		SDL_RenderCopy(wolf->renderer, wolf->screen, NULL, NULL);
 		SDL_RenderPresent(wolf->renderer);
 		hook_events(wolf);
 		update_fps(wolf);
+		update_textures(wolf);
 	}
 }

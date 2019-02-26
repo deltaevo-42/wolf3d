@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 23:40:27 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/25 00:13:50 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/26 19:05:52 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,26 @@ void	apply_surface(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 			img->pixels[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
 		}
 	}
+}
+
+void	apply_texture(t_img *img, t_texture *t, SDL_Rect src, SDL_Rect dst)
+{
+	t_texture_animated *a;
+	SDL_Rect s;
+
+	s = src;
+	if (t->type == T_ANIMATED)
+	{
+		a = (t_texture_animated *)t;
+		s.x = src.x + (int)(a->step_size.x + a->spacer.x) * (a->index % (int)a->step_count.x);
+		s.y = src.y + (int)(a->step_size.y + a->spacer.y) * (a->index % (int)a->step_count.y);
+	}
+	apply_surface(img, t->surface, s, dst);
+}
+
+void	apply_texture_blended(t_img *img, t_texture *t, SDL_Rect src, SDL_Rect dst)
+{
+	apply_surface_blended(img, t->surface, src, dst);
 }
 
 void	draw_line(t_img *img, t_pixel p0, t_pixel p1)

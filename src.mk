@@ -13,5 +13,6 @@ SRC+=render/block_normal.c
 SRC+=render/block_round.c
 SRC+=render.c
 SRC+=sdl.c
+SRC+=textures/texture_animated.c
 SRC+=textures/texture_normal.c
 SRC+=utils.c

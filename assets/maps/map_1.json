@@ -5,7 +5,14 @@
 			"type": "NORMAL",
 			"path": "assets/textures/cobblestone.png"
 		},
-		
+		{
+			"type": "ANIMATED",
+			"step_count": [ 1, 17 ],
+			"spacer": [ 0, 0 ],
+			"step_size": [ 256, 256 ],
+			"delay": 20,
+			"path": "assets/textures/water.png"
+		},
 		{
 			"_name": "adolf",
 			"type": "NORMAL",
@@ -85,7 +92,7 @@
 	],
 	"map": {
 		"size": [ 24, 24, 2 ],
-		"floor_texture": 1,
+		"floor_texture": 3,
 		"ceil_texture": 2,
 		"data": [
 			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],

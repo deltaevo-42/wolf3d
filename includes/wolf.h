@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 23:57:25 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/26 17:55:13 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,6 @@
 # define IMG_MAX_I (S_WIDTH * S_HEIGHT)
 # define PLANE ((S_WIDTH / 2) / S_WIDTH)
 
-
-typedef enum e_texture_type		t_texture_type;
-typedef struct s_texture		t_texture;
-typedef struct s_texture_normal	t_texture_normal;
 
 typedef struct s_world			t_world;
 typedef struct s_img			t_img;
@@ -149,5 +145,8 @@ void		draw_line(t_img *img, t_pixel p0, t_pixel p1);
 void		stroke_rect(t_img *img, uint32_t color, SDL_Rect rect);
 void		apply_surface(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
 void		apply_surface_blended(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
+
+void		apply_texture(t_img *img, t_texture *t, SDL_Rect src, SDL_Rect dst);
+void		apply_texture_blended(t_img *img, t_texture *t, SDL_Rect src, SDL_Rect dst);
 
 #endif

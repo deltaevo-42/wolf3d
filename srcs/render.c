@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/25 00:25:27 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/26 17:44:40 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 	float distZ = ray->dist / (wolf->player.pos.z + 1);
 	float rDistZ = ray->dist / -(wolf->world.size.z - wolf->player.pos.z + 1);
 
-	SDL_Surface *floor_tex = ((t_texture_normal *)wolf->world.floor)->surface;
-	SDL_Surface *ceil_tex = ((t_texture_normal *)wolf->world.ceil)->surface;
+	SDL_Surface *floor_tex = (wolf->world.floor)->surface;
+	SDL_Surface *ceil_tex = (wolf->world.ceil)->surface;
 
 	for (int y = 0; y < S_HEIGHT_2; y++)
 	{
@@ -121,8 +121,8 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 				weight * floorWall.y + (1.0 - weight) * wolf->player.pos.y
 			};
 			int floorTexX, floorTexY;
-			floorTexX = ft_abs((int)(curr_floor.x * floor_tex->w)) % floor_tex->w;
-			floorTexY = ft_abs((int)(curr_floor.y * floor_tex->h)) % floor_tex->h;
+			floorTexX = ft_abs((int)(curr_floor.x * (int)wolf->world.floor->size.x)) % (int)wolf->world.floor->size.x;
+			floorTexY = ft_abs((int)(curr_floor.y * (int)wolf->world.floor->size.y)) % (int)wolf->world.floor->size.y;
 
 			if (wolf->img->pixels[((bottom + y) * (int)S_WIDTH + x)] == 0)
 				wolf->img->pixels[((bottom + y) * (int)S_WIDTH) + x] = getpixel(floor_tex, floorTexX, floorTexY);
@@ -136,8 +136,8 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 				weight * floorWall.y + (1.0 - weight) * wolf->player.pos.y
 			};
 			int floorTexX, floorTexY;
-			floorTexX = ft_abs((int)(curr_floor.x * ceil_tex->w)) % ceil_tex->w;
-			floorTexY = ft_abs((int)(curr_floor.y * ceil_tex->h)) % ceil_tex->h;
+			floorTexX = ft_abs((int)(curr_floor.x * (int)wolf->world.ceil->size.x)) % (int)wolf->world.ceil->size.x;
+			floorTexY = ft_abs((int)(curr_floor.y * (int)wolf->world.ceil->size.y)) % (int)wolf->world.ceil->size.y;
 
 			if (wolf->img->pixels[((top - y) * (int)S_WIDTH + x)] == 0)
 				wolf->img->pixels[((top - y) * (int)S_WIDTH) + x] = getpixel(ceil_tex, floorTexX, floorTexY);
