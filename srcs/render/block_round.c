@@ -23,7 +23,7 @@ t_bool	render_block_round_wall(t_wolf *wolf, t_ray *ray)
 	block = (t_block_round *)ray->hit->block;
 	texture = block->texture;
 	height = (S_HEIGHT / ray->dist);
-	wallX = (atan2(block->last_hit_y, block->last_hit_x) + M_PI) / (2 * M_PI);
+	wallX = (atan2(ray->circle_last_hit_y, ray->circle_last_hit_x) + M_PI) / (2 * M_PI);
 	texX = wallX * texture->size.x;
 	apply_texture(wolf->img, texture,
 		(SDL_Rect){ texX, 0, 1, texture->size.y }, 
@@ -36,7 +36,7 @@ t_bool	render_block_round_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int 
 	t_block_round *block;
 	block = (t_block_round *)hit->block;
 	float hit_h = block->super.height;
-	float h0 = S_HEIGHT / block->last_out_dist;
+	float h0 = S_HEIGHT / ray->circle_last_out_dist;
 	int p0 = S_HEIGHT_2 + h0 * (wolf->player.pos.z + 1) / 2. - h0 * hit_h;
 
 	for (int y = p0; p0 < p1 && y < p1; y++)

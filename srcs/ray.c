@@ -12,6 +12,30 @@
 
 #include "wolf.h"
 
+static void		compute_dir(t_wolf *wolf, t_ray *ray)
+{
+	if (ray->dir.x < 0)
+		ray->side_dist.x = (wolf->player.pos.x - (float)ray->hit_pos.x) * ray->delta_dist.x;
+	else
+		ray->side_dist.x = ((float)ray->hit_pos.x + 1.0 - wolf->player.pos.x) * ray->delta_dist.x;
+	if (ray->dir.y < 0)
+		ray->side_dist.y = (wolf->player.pos.y - (float)ray->hit_pos.y) * ray->delta_dist.y;
+	else
+		ray->side_dist.y = ((float)ray->hit_pos.y + 1.0 - wolf->player.pos.y) * ray->delta_dist.y;
+}
+
+static void	compute_face(t_ray *ray)
+{
+	if (ray->side == 0 && ray->dir.x < 0)
+		ray->face = F_NORTH;
+	if (ray->side == 0 && ray->dir.x > 0)
+		ray->face = F_SOUTH;
+	if (ray->side == 1 && ray->dir.y > 0)
+		ray->face = F_WEST;
+	if (ray->side == 1 && ray->dir.y < 0)
+		ray->face = F_EAST;
+}
+
 void			dist_round_block(t_wolf *wolf, t_ray *ray)
 {
 	t_block_round *block = (t_block_round *)ray->hit->block;
@@ -56,37 +80,13 @@ void			dist_round_block(t_wolf *wolf, t_ray *ray)
 			dist2 = (x2 - wolf->player.pos.x) / ray->dir.x;
 		else
 			dist2 = (y2 - wolf->player.pos.y) / ray->dir.y;
-		block->last_hit_x = (dist1 < dist2 ? x1 : x2) - p;
-		block->last_hit_y = (dist1 < dist2 ? y1 : y2) - q;
-		block->last_out_dist = dist1 < dist2 ? dist2 : dist1;
+		ray->circle_last_hit_x = (dist1 < dist2 ? x1 : x2) - p;
+		ray->circle_last_hit_y = (dist1 < dist2 ? y1 : y2) - q;
+		ray->circle_last_out_dist = dist1 < dist2 ? dist2 : dist1;
 
 		ray->dist = dist1 < dist2 ? dist1 : dist2;
 	} else
-		ray->hit = 0;
-}
-
-static void		compute_dir(t_wolf *wolf, t_ray *ray)
-{
-	if (ray->dir.x < 0)
-		ray->side_dist.x = (wolf->player.pos.x - (float)ray->hit_pos.x) * ray->delta_dist.x;
-	else
-		ray->side_dist.x = ((float)ray->hit_pos.x + 1.0 - wolf->player.pos.x) * ray->delta_dist.x;
-	if (ray->dir.y < 0)
-		ray->side_dist.y = (wolf->player.pos.y - (float)ray->hit_pos.y) * ray->delta_dist.y;
-	else
-		ray->side_dist.y = ((float)ray->hit_pos.y + 1.0 - wolf->player.pos.y) * ray->delta_dist.y;
-}
-
-static void	compute_face(t_ray *ray)
-{
-	if (ray->side == 0 && ray->dir.x < 0)
-		ray->face = F_NORTH;
-	if (ray->side == 0 && ray->dir.x > 0)
-		ray->face = F_SOUTH;
-	if (ray->side == 1 && ray->dir.y > 0)
-		ray->face = F_WEST;
-	if (ray->side == 1 && ray->dir.y < 0)
-		ray->face = F_EAST;
+		ray->hit = NULL;
 }
 
 static void	compute_dist(t_wolf *wolf, t_ray *ray)
@@ -118,6 +118,7 @@ t_ray			create_ray(t_wolf *wolf, int x)
 	ray.delta_dist = (t_vec2){fabs(1.0f / ray.dir.x), fabs(1.0f / ray.dir.y)};
 	ray.hit_pos = (t_pixel){.x = wolf->player.pos.x, .y = wolf->player.pos.y};
 	ray.hit = wolf->world.data[ray.hit_pos.y][ray.hit_pos.x];
+	ray.fhit = ray.hit;
 	compute_face(&ray);
 	compute_dist(wolf, &ray);
 	return (ray);
@@ -139,9 +140,11 @@ t_bool			next_ray(t_wolf *wolf, t_ray *ray)
 		ray->side = 1;
 	}
 	ray->hit = NULL;
+	ray->fhit = NULL;
 	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.x || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.y)
 		return (FALSE);
 	ray->hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
+	ray->fhit = ray->hit;
 	compute_face(ray);
 	compute_dist(wolf, ray);
 	return (TRUE);
@@ -163,9 +166,11 @@ t_bool			prev_ray(t_wolf *wolf, t_ray *ray)
 		ray->side = 0;
 	}
 	ray->hit = NULL;
+	ray->fhit = NULL;
 	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.x || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.y)
 		return (FALSE);
 	ray->hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
+	ray->fhit = ray->hit;
 	compute_face(ray);
 	compute_dist(wolf, ray);
 	return (TRUE);

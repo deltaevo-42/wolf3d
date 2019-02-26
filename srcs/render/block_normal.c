@@ -59,7 +59,7 @@ t_bool	render_block_normal_wall(t_wolf *wolf, t_ray *from_ray, t_ray *to_ray)
 	{
 		to = get_render_infos(wolf, to_ray);
 		int x = from_ray->x;
-		while (x < to_ray->x)
+		while (x <= to_ray->x)
 		{
 			float progress = (float)(x - from_ray->x)/(float)(to_ray->x - from_ray->x);
 			int texX = from.texX + progress * (float)(to.texX - from.texX);

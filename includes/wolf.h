@@ -81,6 +81,11 @@ struct		s_ray
 	t_face			face;
 	float			dist;
 	int				side;
+	t_block_state	*fhit;
+
+	float			circle_last_hit_x;
+	float			circle_last_hit_y;
+	float			circle_last_out_dist;
 };
 
 struct		s_player
