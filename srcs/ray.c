@@ -12,46 +12,6 @@
 
 #include "wolf.h"
 
-static void		compute_dir(t_wolf *wolf, t_ray *ray)
-{
-	if (ray->dir.x < 0)
-		ray->side_dist.x = (wolf->player.pos.x - (float)ray->hit_pos.x) * ray->delta_dist.x;
-	else
-		ray->side_dist.x = ((float)ray->hit_pos.x + 1.0 - wolf->player.pos.x) * ray->delta_dist.x;
-	if (ray->dir.y < 0)
-		ray->side_dist.y = (wolf->player.pos.y - (float)ray->hit_pos.y) * ray->delta_dist.y;
-	else
-		ray->side_dist.y = ((float)ray->hit_pos.y + 1.0 - wolf->player.pos.y) * ray->delta_dist.y;
-}
-
-static void	compute_face(t_ray *ray)
-{
-	if (ray->side == 0 && ray->dir.x < 0)
-		ray->face = F_NORTH;
-	if (ray->side == 0 && ray->dir.x > 0)
-		ray->face = F_SOUTH;
-	if (ray->side == 1 && ray->dir.y > 0)
-		ray->face = F_WEST;
-	if (ray->side == 1 && ray->dir.y < 0)
-		ray->face = F_EAST;
-}
-
-t_ray			create_ray(t_wolf *wolf, int x)
-{
-	t_ray	ray;
-
-	ray.x = x;
-	ray.dir = ft_mat2_mulv(wolf->player.matrix, ft_vec2_add(
-		(t_vec2){0, wolf->dist_to_plane },
-		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f) * S_RATIO, 0}));
-	ray.step = (t_pixel) { ray.dir.x > 0 ? 1 : -1 , ray.dir.y > 0 ? 1 : -1, 0 };
-	ray.side_dist = (t_vec2){0, 0};
-	ray.delta_dist = (t_vec2){fabs(1.0f / ray.dir.x), fabs(1.0f / ray.dir.y)};
-	ray.hit_pos = (t_pixel){.x = wolf->player.pos.x, .y = wolf->player.pos.y};
-	ray.hit = 0;
-	return (ray);
-}
-
 void			dist_round_block(t_wolf *wolf, t_ray *ray)
 {
 	t_block_round *block = (t_block_round *)ray->hit->block;
@@ -105,7 +65,31 @@ void			dist_round_block(t_wolf *wolf, t_ray *ray)
 		ray->hit = 0;
 }
 
-void			compute_dist(t_wolf *wolf, t_ray *ray)
+static void		compute_dir(t_wolf *wolf, t_ray *ray)
+{
+	if (ray->dir.x < 0)
+		ray->side_dist.x = (wolf->player.pos.x - (float)ray->hit_pos.x) * ray->delta_dist.x;
+	else
+		ray->side_dist.x = ((float)ray->hit_pos.x + 1.0 - wolf->player.pos.x) * ray->delta_dist.x;
+	if (ray->dir.y < 0)
+		ray->side_dist.y = (wolf->player.pos.y - (float)ray->hit_pos.y) * ray->delta_dist.y;
+	else
+		ray->side_dist.y = ((float)ray->hit_pos.y + 1.0 - wolf->player.pos.y) * ray->delta_dist.y;
+}
+
+static void	compute_face(t_ray *ray)
+{
+	if (ray->side == 0 && ray->dir.x < 0)
+		ray->face = F_NORTH;
+	if (ray->side == 0 && ray->dir.x > 0)
+		ray->face = F_SOUTH;
+	if (ray->side == 1 && ray->dir.y > 0)
+		ray->face = F_WEST;
+	if (ray->side == 1 && ray->dir.y < 0)
+		ray->face = F_EAST;
+}
+
+static void	compute_dist(t_wolf *wolf, t_ray *ray)
 {
 	if (ray->hit)
 	{
@@ -116,6 +100,27 @@ void			compute_dist(t_wolf *wolf, t_ray *ray)
 		ray->dist = (ray->hit_pos.x - wolf->player.pos.x + (1 - ray->step.x) / 2.0) / ray->dir.x;
 	else
 		ray->dist = (ray->hit_pos.y - wolf->player.pos.y + (1 - ray->step.y) / 2.0) / ray->dir.y;
+
+	if (ray->dist <= 0.1)
+		ray->dist = 0.1;
+}
+
+t_ray			create_ray(t_wolf *wolf, int x)
+{
+	t_ray	ray;
+
+	ray.x = x;
+	ray.dir = ft_mat2_mulv(wolf->player.matrix, ft_vec2_add(
+		(t_vec2){0, wolf->dist_to_plane },
+		(t_vec2){ PLANE * (2.0f * (float)x / S_WIDTH - 1.0f) * S_RATIO, 0}));
+	ray.step = (t_pixel) { ray.dir.x > 0 ? 1 : -1 , ray.dir.y > 0 ? 1 : -1, 0 };
+	ray.side_dist = (t_vec2){0, 0};
+	ray.delta_dist = (t_vec2){fabs(1.0f / ray.dir.x), fabs(1.0f / ray.dir.y)};
+	ray.hit_pos = (t_pixel){.x = wolf->player.pos.x, .y = wolf->player.pos.y};
+	ray.hit = wolf->world.data[ray.hit_pos.y][ray.hit_pos.x];
+	compute_face(&ray);
+	compute_dist(wolf, &ray);
+	return (ray);
 }
 
 t_bool			next_ray(t_wolf *wolf, t_ray *ray)
@@ -133,13 +138,12 @@ t_bool			next_ray(t_wolf *wolf, t_ray *ray)
 		ray->hit_pos.y += ray->step.y;
 		ray->side = 1;
 	}
+	ray->hit = NULL;
 	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.x || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.y)
 		return (FALSE);
 	ray->hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
 	compute_face(ray);
 	compute_dist(wolf, ray);
-	if (ray->dist <= 0.1)
-		ray->dist = 0.1;
 	return (TRUE);
 }
 
@@ -158,6 +162,7 @@ t_bool			prev_ray(t_wolf *wolf, t_ray *ray)
 		ray->hit_pos.y -= ray->step.y;
 		ray->side = 0;
 	}
+	ray->hit = NULL;
 	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= wolf->world.size.x || ray->hit_pos.y < 0 || ray->hit_pos.y >= wolf->world.size.y)
 		return (FALSE);
 	ray->hit = wolf->world.data[ray->hit_pos.y][ray->hit_pos.x];
