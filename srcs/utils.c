@@ -11,31 +11,12 @@
 /* ************************************************************************** */
 
 #include "wolf.h"
+#include <assert.h>
 
 Uint32 getpixel(SDL_Surface *surface, int x, int y)
 {
-	const int			bpp = surface->format->BytesPerPixel;
-	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
-
-    switch(bpp)
-    {
-        case 1:
-            return *p;
-        case 2:
-            return *(Uint16 *)p;
-        case 3:
-            if (SDL_BYTEORDER != SDL_BIG_ENDIAN)
-                return p[0] << 16 | p[1] << 8 | p[2];
-            else
-                return p[0] | p[1] << 8 | p[2] << 16;
-        case 4:
-            if (SDL_BYTEORDER != SDL_BIG_ENDIAN)
-                return p[3] << 24 | p[0] << 16 | p[1] << 8 | p[2];
-            else
-                return *(Uint32 *)p;
-        default:
-            return 0;
-    }
+	assert(surface->format->BytesPerPixel == 4);
+    return *(Uint32 *)(surface->pixels + y * surface->pitch + x * 4);
 }
 
 void	apply_surface_blended(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
@@ -90,9 +71,10 @@ void	apply_surface(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst)
 		while (++j < dst.w)
 		{
 			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
-			if (index >= img->size || img->pixels[index] != 0)
-				continue;
-			img->pixels[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
+			if (index >= img->size)
+				break ;
+			if (img->pixels[index] == 0)
+				img->pixels[index] = getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y);
 		}
 	}
 }

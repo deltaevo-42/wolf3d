@@ -27,6 +27,7 @@ t_texture				*load_json_texture(t_json_object *texture_obj)
 {
 	t_json_string	*j_string;
 	t_texture_type	texture_type;
+	t_texture		*texture;
 
 	if(!(j_string = json_get_string(texture_obj, "type")))
 		return (NULL);
@@ -38,8 +39,11 @@ t_texture				*load_json_texture(t_json_object *texture_obj)
 		return (NULL);
 	}
 	if (texture_type == T_NORMAL)
-		return (load_normal_texture(texture_obj));
+		texture = load_normal_texture(texture_obj);
 	else if (texture_type == T_ANIMATED)
-		return (load_animated_texture(texture_obj));
-	return (NULL);
+		texture = load_animated_texture(texture_obj);
+	else
+		return (NULL);
+	texture->surface = SDL_ConvertSurfaceFormat(texture->surface, SDL_PIXELFORMAT_ARGB8888, 0);
+	return (texture);
 }

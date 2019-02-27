@@ -54,11 +54,9 @@ void			render_main(t_wolf *wolf)
 	while (++x < S_WIDTH)
 	{
 		ray = create_ray(wolf, x);
-		t_bool skip = FALSE;
 
-		while (skip || next_ray(wolf, &ray))
+		while (1)
 		{
-			skip = FALSE;
 			if (ray.hit)
 			{
 				render_wall(wolf, &ray);
@@ -70,9 +68,12 @@ void			render_main(t_wolf *wolf)
 				int p = S_HEIGHT_2 + h * (wolf->player.pos.z + 1) * 0.5 - h * hit->block->height;
 				if (p <= 0 && p + h > S_HEIGHT)
 					break;
-				skip = next_ray(wolf, &ray);
+				next_ray(wolf, &ray);
 				render_top(wolf, &ray, hit, p);
+				continue ;
 			}
+			if (!next_ray(wolf, &ray))
+				break ;
 		}
 		wolf->last_rays[x] = ray;
 		if (ray.hit)

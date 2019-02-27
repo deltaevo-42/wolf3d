@@ -70,6 +70,7 @@ struct		s_fonts
 
 struct		s_ray
 {
+	t_block_state	*hit;
 	int				x;
 	t_vec2			dir;
 	t_pixel			step;
@@ -79,7 +80,6 @@ struct		s_ray
 	t_face			face;
 	float			dist;
 	int				side;
-	t_block_state	*hit;
 };
 
 struct		s_player
