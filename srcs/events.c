@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/28 02:34:54 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/28 16:22:33 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,13 @@ void		hook_events(t_wolf *wolf)
 		wolf->dist_to_plane += move_speed * 0.1;
 	if (state[SDL_SCANCODE_KP_MINUS] && wolf->dist_to_plane > move_speed * 0.1)
 		wolf->dist_to_plane -= move_speed * 0.1;
+	int xM = 0;
+	SDL_GetRelativeMouseState(&xM, NULL);
+	if (xM != 0)
+	{
+		wolf->player.rotation -= 0.01 * xM * move_speed;
+		wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
+	}
 	/*if (wolf->player.pos.x < 0)
 		wolf->player.pos.x = 0;
 	if (wolf->player.pos.y < 0)
