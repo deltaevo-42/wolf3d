@@ -287,22 +287,30 @@ void	render_floor(t_wolf *wolf, t_ray *from, t_ray *to, t_bool f)
 				toWeight * toFloorWall.y + (1.0 - toWeight) * wolf->player.pos.y
 			};
 
+			float toFloorTexX, toFloorTexY;
+			toFloorTexX = to_curr_floor.x * floor_tex->w;
+			toFloorTexY = to_curr_floor.y * floor_tex->h;
+
+			float fromFloorTexX, fromFloorTexY;
+			fromFloorTexX = from_curr_floor.x * floor_tex->w;
+			fromFloorTexY = from_curr_floor.y * floor_tex->h;
+
+			float incX = (toFloorTexX - fromFloorTexX)/(to->x == from->x ? 1 : to->x - from->x);
+			float incY = (toFloorTexY - fromFloorTexY)/(to->x == from->x ? 1 : to->x - from->x);
+
+			//float bottom = fromBottom;
+			float incBottom = (float)(toBottom - fromBottom)/(to->x == from->x ? 1 : to->x - from->x);
+
 			int x = from->x;
 			while (x <= to->x)
 			{
-				float progress = (float)(x - from->x) / (float)(to->x == from->x ? 1 : to->x - from->x);
-				t_vec2 curr_floor = (t_vec2)
-				{
-					from_curr_floor.x + (to_curr_floor.x - from_curr_floor.x) * progress,
-					from_curr_floor.y + (to_curr_floor.y - from_curr_floor.y) * progress
-				};
-				int floorTexX, floorTexY;
-				floorTexX = ft_abs((int)(curr_floor.x * floor_tex->w)) % floor_tex->w;
-				floorTexY = ft_abs((int)(curr_floor.y * floor_tex->h)) % floor_tex->h;
+				int floorTexX = (int)fabs(fromFloorTexX + incX * (x - from->x)) % floor_tex->w;
+				int floorTexY = (int)fabs(fromFloorTexY + incY * (x - from->x)) % floor_tex->h;
 
-				int bottom = fromBottom + (toBottom - fromBottom) * progress;
-				if (bottom + y < S_HEIGHT && wolf->img->pixels[((bottom + y) * (int)S_WIDTH + x)] == 0)
-					wolf->img->pixels[((bottom + y) * (int)S_WIDTH) + x] = getpixel(floor_tex, floorTexX, floorTexY);
+				float bottom = fromBottom + incBottom * (x - from->x);
+
+				if ((int)bottom + y < S_HEIGHT && wolf->img->pixels[(((int)bottom + y) * (int)S_WIDTH + x)] == 0)
+					wolf->img->pixels[(((int)bottom + y) * (int)S_WIDTH) + x] = getpixel(floor_tex, floorTexX, floorTexY);
 				x++;
 			}
 		}
@@ -322,22 +330,29 @@ void	render_floor(t_wolf *wolf, t_ray *from, t_ray *to, t_bool f)
 				toWeight * toFloorWall.y + (1.0 - toWeight) * wolf->player.pos.y
 			};
 
+			float toFloorTexX, toFloorTexY;
+			toFloorTexX = to_curr_floor.x * ceil_tex->w;
+			toFloorTexY = to_curr_floor.y * ceil_tex->h;
+
+			float fromFloorTexX, fromFloorTexY;
+			fromFloorTexX = from_curr_floor.x * ceil_tex->w;
+			fromFloorTexY = from_curr_floor.y * ceil_tex->h;
+
+			float incX = (toFloorTexX - fromFloorTexX)/(to->x == from->x ? 1 : to->x - from->x);
+			float incY = (toFloorTexY - fromFloorTexY)/(to->x == from->x ? 1 : to->x - from->x);
+
+			float incTop = (float)(toTop - fromTop)/(to->x == from->x ? 1 : to->x - from->x);
+
 			int x = from->x;
 			while (x <= to->x)
 			{
-				float progress = (float)(x - from->x) / (float)(to->x == from->x ? 1 : to->x - from->x);
-				t_vec2 curr_floor = (t_vec2)
-				{
-					from_curr_floor.x + (to_curr_floor.x - from_curr_floor.x) * progress,
-					from_curr_floor.y + (to_curr_floor.y - from_curr_floor.y) * progress
-				};
-				int floorTexX, floorTexY;
-				floorTexX = ft_abs((int)(curr_floor.x * ceil_tex->w)) % ceil_tex->w;
-				floorTexY = ft_abs((int)(curr_floor.y * ceil_tex->h)) % ceil_tex->h;
+				int floorTexX = (int)fabs(fromFloorTexX + incX * (x - from->x)) % ceil_tex->w;
+				int floorTexY = (int)fabs(fromFloorTexY + incY * (x - from->x)) % ceil_tex->h;
 
-				int top = fromTop + (toTop - fromTop) * progress;
-				if (y <= top && wolf->img->pixels[((top - y) * (int)S_WIDTH + x)] == 0)
-					wolf->img->pixels[((top - y) * (int)S_WIDTH) + x] = getpixel(ceil_tex, floorTexX, floorTexY);
+				float top = fromTop + incTop * (x - from->x);
+
+				if (y <= (int)top && wolf->img->pixels[(((int)top - y) * (int)S_WIDTH + x)] == 0)
+					wolf->img->pixels[(((int)top - y) * (int)S_WIDTH) + x] = getpixel(ceil_tex, floorTexX, floorTexY);
 				x++;
 			}
 		}
