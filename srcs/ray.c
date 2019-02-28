@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 22:55:11 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/28 02:33:14 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void			dist_round_block(t_wolf *wolf, t_ray *ray)
 
 	double r = block->radius;
 
-	if (ray->hit->block->height == 2)
-		return ;
+	/*if (ray->hit->block->height == 2)
+		return ;*/ // MEH / 20 ? (On devrai le fix !)
 	if (ray->dir.x == 0)
 	{
 		ray->dist -= 1 - (r * 2);

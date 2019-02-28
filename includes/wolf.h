@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/26 17:55:13 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/28 01:48:38 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ typedef struct s_player			t_player;
 
 struct		s_world
 {
-	int				textures_count;
-	t_texture		**textures;
-	int				blocks_count;
-	t_block			**blocks;
-	t_vec3			size;
 	t_block_state	***data;
+	t_texture		**textures;
+	t_block			**blocks;
 	t_texture		*ceil;
 	t_texture		*floor;
+	int				textures_count;
+	int				blocks_count;
+	t_vec3			size;
 };
 
 
@@ -91,25 +91,26 @@ struct		s_player
 
 struct		s_img
 {
+	uint32_t	*pixels;
 	uint32_t	size;
 	uint32_t	width;
-	uint32_t	*pixels;
+	uint32_t	height;
 };
 
 struct		s_wolf
 {
-	SDL_Window		*win;
-	SDL_Renderer	*renderer;
-	SDL_Texture		*screen;
-	SDL_Event		event;
 	t_img			*img;
+	SDL_Texture		*screen;
+	SDL_Surface		*tmp_texture;
+	SDL_Renderer	*renderer;
+	SDL_Window		*win;
+	t_world			world;
+	SDL_Event		event;
 	t_ray			last_rays[(int)S_WIDTH];
 	t_bool			running;
 	t_stats			stats;
 	t_fonts			fonts;
 	t_player		player;
-	t_world			world;
-	SDL_Surface		*tmp_texture;
 
 	uint32_t		minimap_size;
 	uint32_t		minimap_padding;

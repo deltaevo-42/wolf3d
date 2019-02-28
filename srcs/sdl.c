@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:15:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/25 00:14:34 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/27 22:08:39 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void		sdl_init(t_wolf *wolf)
 	if (!(wolf->img = (t_img *)malloc(sizeof(t_img))))
 		return ; //TODO: malloc fail;
 	wolf->img->width = S_WIDTH;
+	wolf->img->height = S_HEIGHT;
 	wolf->img->size = IMG_MAX_I;
 	if (!(wolf->img->pixels = malloc(wolf->img->size * 4)))
 		return ; //TODO: malloc fail;

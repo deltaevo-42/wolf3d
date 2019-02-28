@@ -7,11 +7,11 @@
 		},
 		{
 			"type": "ANIMATED",
-			"step_count": [ 1, 17 ],
-			"spacer": [ 0, 0 ],
-			"step_size": [ 256, 256 ],
-			"delay": 20,
-			"path": "assets/textures/water.png"
+			"step_count": [ 5, 4 ],
+			"spacer": [ 1, 1 ],
+			"step_size": [ 64, 64 ],
+			"delay": 100,
+			"path": "assets/textures/weapons.png"
 		},
 		{
 			"_name": "adolf",
@@ -75,7 +75,8 @@
 		{
 			"type": "ROUND",
 			"minimap_color": [ 255, 0, 0 ],
-			"texture": 1
+			"texture": 1,
+			"height": 1.5
 		},
 		{
 			"type": "ROUND",

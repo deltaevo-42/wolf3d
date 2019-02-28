@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/26 17:44:40 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/28 03:44:39 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_bool			render_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p)
 }
 
 
-void			render_floor(t_wolf *wolf, int x, t_ray *ray);
+void			render_floor(t_wolf *wolf, int x, t_ray *ray, t_bool f);
 
 void			render_main(t_wolf *wolf)
 {
@@ -54,20 +54,21 @@ void			render_main(t_wolf *wolf)
 	while (++x < S_WIDTH)
 	{
 		ray = create_ray(wolf, x);
-
+		t_ray last = ray;
 		while (1)
 		{
 			if (ray.hit)
 			{
-				render_wall(wolf, &ray);
-				if (ray.hit->block->height == wolf->world.size.z
-					|| (ray.dist <= 1 && wolf->player.pos.z + 1 <= ray.hit->block->height && wolf->player.pos.z >= 0.2))
-					break ;
 				t_block_state *hit = ray.hit;
 				float h = S_HEIGHT / ray.dist;
 				int p = S_HEIGHT_2 + h * (wolf->player.pos.z + 1) * 0.5 - h * hit->block->height;
+				render_floor(wolf, x, &ray, TRUE); // On veut decider quand cacher le sol au dessous d un block (C est actuellement a TRUE car j arrive pas a trouver dans quel cas le definir) cette modif n as visiblement aucun impact sur les pers (tant mieux)
+				render_wall(wolf, &ray);
+				if (ray.hit->block->height == wolf->world.size.z || (ray.dist <= 1 && wolf->player.pos.z + 1 <= ray.hit->block->height && wolf->player.pos.z >= 0.2))
+					break ;
 				if (p <= 0 && p + h > S_HEIGHT)
 					break;
+				last = ray;
 				next_ray(wolf, &ray);
 				render_top(wolf, &ray, hit, p);
 				continue ;
@@ -76,13 +77,16 @@ void			render_main(t_wolf *wolf)
 				break ;
 		}
 		wolf->last_rays[x] = ray;
-		if (ray.hit)
-			render_floor(wolf, x, &ray);
 	}
 }
 
-void	render_floor(t_wolf *wolf, int x, t_ray *ray)
+void	render_floor(t_wolf *wolf, int x, t_ray *ray, t_bool f)
 {
+	/*t_ray r2 = *ray;
+	prev_ray(wolf, &r2);
+	if (r2.hit && ray->hit)
+		f = FALSE;*/
+
 	int height = S_HEIGHT / ray->dist;
 
 	int world_height = height * wolf->world.size.z;
@@ -113,7 +117,7 @@ void	render_floor(t_wolf *wolf, int x, t_ray *ray)
 
 	for (int y = 0; y < S_HEIGHT_2; y++)
 	{
-		if (bottom + y < S_HEIGHT)
+		if (bottom + y < S_HEIGHT && f)
 		{
 			float weight = S_HEIGHT/((2 * (y + bottom) - S_HEIGHT) * distZ);
 			t_vec2 curr_floor = (t_vec2)
