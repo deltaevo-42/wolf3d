@@ -73,6 +73,7 @@ struct		s_ray
 {
 	t_block_state	*hit;
 	int				x;
+	t_vec2			start;
 	t_vec2			dir;
 	t_pixel			step;
 	t_vec2			side_dist;
@@ -82,6 +83,7 @@ struct		s_ray
 	float			dist;
 	int				side;
 	t_block_state	*fhit;
+	t_world			*world;
 
 	float			circle_last_hit_x;
 	float			circle_last_hit_y;
@@ -141,9 +143,9 @@ void		render_minimap(t_wolf *wolf);
 void		render_main(t_wolf *wolf);
 
 /* Ray */
-t_bool		next_ray(t_wolf *wolf, t_ray *ray);
-t_bool		prev_ray(t_wolf *wolf, t_ray *ray);
-t_ray		create_ray(t_wolf *wolf, int x);
+t_bool		next_ray(t_ray *ray);
+t_bool		prev_ray(t_ray *ray);
+t_ray		create_ray(t_wolf *wolf, int x, t_vec2 start);
 
 /* Game */
 void		game_loop(t_wolf *wolf);

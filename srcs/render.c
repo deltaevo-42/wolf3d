@@ -69,11 +69,11 @@ void			cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 				break ;
 			if (p <= 0 && p + h > S_HEIGHT)
 				break;
-			next_ray(wolf, ray);
-			//render_top(wolf, ray, hit, p);
+			next_ray(ray);
+			render_top(wolf, ray, hit, p);
 			continue ;
 		}
-		if (!next_ray(wolf, ray))
+		if (!next_ray(ray))
 			break ;
 	}
 	wolf->last_rays[wolf->stats.num_rays++] = *ray;
@@ -82,14 +82,14 @@ void			cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 
 t_bool			double_cast_ray(t_wolf *wolf, int x1, int x2)
 {
-	t_ray	first = create_ray(wolf, x1);
-	t_ray	second = create_ray(wolf, x2);
+	t_ray	first = create_ray(wolf, x1, (t_vec2) { wolf->player.pos.x, wolf->player.pos.y });
+	t_ray	second = create_ray(wolf, x2, (t_vec2) { wolf->player.pos.x, wolf->player.pos.y });
 	int		last_y = INT_MAX;
 
 	while (1)
 	{
-		t_bool	next_first = next_ray(wolf, &first);
-		t_bool	next_second = next_ray(wolf, &second);
+		t_bool	next_first = next_ray(&first);
+		t_bool	next_second = next_ray(&second);
 
 		if (!next_first && !next_second)
 			break ;
@@ -115,8 +115,12 @@ t_bool			double_cast_ray(t_wolf *wolf, int x1, int x2)
 				return (FALSE);
 			}
 			t_block_state *hit = first.hit;
-			float h = S_HEIGHT / first.dist;
-			int p = S_HEIGHT_2 + h * (wolf->player.pos.z + 1) * 0.5 - h * hit->block->height;
+			float hf = S_HEIGHT / first.dist;
+			int pf = S_HEIGHT_2 + hf * (wolf->player.pos.z + 1) * 0.5 - hf * hit->block->height;
+			float hs = S_HEIGHT / second.dist;
+			int ps = S_HEIGHT_2 + hs * (wolf->player.pos.z + 1) * 0.5 - hs * hit->block->height;
+			float h = pf > ps ? hf : hs;
+			int p = pf > ps ? pf : ps;
 			render_wall(wolf, &first, &second, last_y);
 			if (p < last_y)
 				render_floor(wolf, &first, &second, TRUE, last_y);
@@ -126,9 +130,11 @@ t_bool			double_cast_ray(t_wolf *wolf, int x1, int x2)
 				break ;
 			if (p <= 0 && p + h > S_HEIGHT)
 				break;
-			/*next_ray(wolf, &first);
-			next_ray(wolf, &second);
-			render_top(wolf, &first, hit, p);*/
+			next_ray(&first);
+			next_ray(&second);
+			render_top(wolf, &first, hit, pf);
+			prev_ray(&first);
+			prev_ray(&second);
 		}
 	}
 	render_floor(wolf, &first, &second, FALSE, S_HEIGHT);
@@ -143,7 +149,7 @@ void			render_binary(t_wolf *wolf, int x1, int x2)
 		return ;
 	if (x1 == x2)
 	{
-		t_ray ray = create_ray(wolf, x1);
+		t_ray ray = create_ray(wolf, x1, (t_vec2) { wolf->player.pos.x, wolf->player.pos.y });
 		cast_ray(wolf, &ray, INT_MAX);
 	} else
 	{
@@ -317,7 +323,8 @@ void	render_floor(t_wolf *wolf, t_ray *from, t_ray *to, t_bool f, int last_floor
 
 				float bottom = fromBottom + incBottom * (x - from->x);
 
-				if ((int)bottom + y < last_floor && (int)bottom + y < (int)S_HEIGHT) /*&& wolf->img->pixels[(((int)bottom + y) * (int)S_WIDTH + x)] == 0*/
+				// TODO: Remove zero checking by better last_floor
+				if ((int)bottom + y < last_floor && (int)bottom + y < (int)S_HEIGHT && wolf->img->pixels[(((int)bottom + y) * (int)S_WIDTH + x)] == 0)
 					wolf->img->pixels[(((int)bottom + y) * (int)S_WIDTH) + x] = getpixel(floor_tex, floorTexX, floorTexY);
 				x++;
 			}
