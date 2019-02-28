@@ -119,6 +119,7 @@ t_ray			create_ray(t_wolf *wolf, int x)
 	ray.hit_pos = (t_pixel){.x = wolf->player.pos.x, .y = wolf->player.pos.y};
 	ray.hit = wolf->world.data[ray.hit_pos.y][ray.hit_pos.x];
 	ray.fhit = ray.hit;
+	ray.side = ray.side_dist.x < ray.side_dist.y;
 	compute_face(&ray);
 	compute_dist(wolf, &ray);
 	return (ray);
