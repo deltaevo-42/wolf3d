@@ -83,7 +83,7 @@ t_block				*load_normal_block(t_world *w, t_json_object *obj);
 t_block				*load_round_block(t_world *w, t_json_object *obj);
 int					normal_block_minimap(t_wolf *wolf, t_block_state *state);
 int					round_block_minimap(t_wolf *wolf, t_block_state *state, t_vec2 map);
-t_bool				render_block_normal_wall(t_wolf *wolf, t_ray *from, t_ray *to);
+t_bool				render_block_normal_wall(t_wolf *wolf, t_ray *from, t_ray *to, int last_y);
 t_bool				render_block_round_wall(t_wolf *wolf, t_ray *ray);
 t_bool				render_block_normal_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p);
 t_bool				render_block_round_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p);
