@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/28 01:48:38 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/28 18:04:31 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 
 # define BAR_H (100.0)
-# define S_WIDTH (1000.0)
-# define S_HEIGHT (1000.0)
+# define S_WIDTH (1280.0)
+# define S_HEIGHT (720.0)
 # define S_WIDTH_2 (S_WIDTH / 2)
 # define S_HEIGHT_2 (S_HEIGHT / 2)
 # define S_RATIO (S_WIDTH / S_HEIGHT)
@@ -117,6 +117,7 @@ struct		s_wolf
 	t_stats			stats;
 	t_fonts			fonts;
 	t_player		player;
+	t_bool			fullscreen;
 
 	uint32_t		minimap_size;
 	uint32_t		minimap_padding;

@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/28 16:22:33 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/02/28 18:09:03 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,22 @@ void		hook_events(t_wolf *wolf)
 		wolf->minimap_padding = 10;
 	}
 
+	if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F)
+	{
+		wolf->fullscreen = !wolf->fullscreen;
+		SDL_SetWindowFullscreen(wolf->win, wolf->fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+	}
+
+	if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_P)
+	{
+		SDL_SetRelativeMouseMode(SDL_FALSE);
+		SDL_SetWindowGrab(wolf->win, SDL_FALSE);
+	}
+	if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_O)
+	{
+		SDL_SetRelativeMouseMode(SDL_TRUE);
+		SDL_SetWindowGrab(wolf->win, SDL_TRUE);
+	}
 	if (state[SDL_SCANCODE_KP_PLUS])
 		wolf->dist_to_plane += move_speed * 0.1;
 	if (state[SDL_SCANCODE_KP_MINUS] && wolf->dist_to_plane > move_speed * 0.1)
