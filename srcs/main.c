@@ -22,7 +22,8 @@ int		main(int argc, char **argv)
 		},
 		.dist_to_plane = 1.0,
 		.minimap_size = 100,
-		.minimap_padding = 10
+		.minimap_padding_x = 10,
+		.minimap_padding_y = 10
 	};
 	load_world(&wolf.world, "assets/maps/map_1.json");
 	sdl_init(&wolf);

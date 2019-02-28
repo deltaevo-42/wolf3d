@@ -76,7 +76,7 @@ void			cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 		if (!next_ray(wolf, ray))
 			break ;
 	}
-	//wolf->last_rays[x] = ray;
+	wolf->last_rays[wolf->stats.num_rays++] = *ray;
 	render_floor(wolf, ray, ray, FALSE, S_HEIGHT);
 }
 
@@ -132,7 +132,8 @@ t_bool			double_cast_ray(t_wolf *wolf, int x1, int x2)
 		}
 	}
 	render_floor(wolf, &first, &second, FALSE, S_HEIGHT);
-	/*wolf->last_rays[x] = ray;*/
+	wolf->last_rays[wolf->stats.num_rays++] = first;
+	wolf->last_rays[wolf->stats.num_rays++] = second;
 	return (TRUE);
 }
 
@@ -142,12 +143,10 @@ void			render_binary(t_wolf *wolf, int x1, int x2)
 		return ;
 	if (x1 == x2)
 	{
-		wolf->stats.num_rays += 1;
 		t_ray ray = create_ray(wolf, x1);
 		cast_ray(wolf, &ray, INT_MAX);
 	} else
 	{
-		wolf->stats.num_rays += 2;
 		if (double_cast_ray(wolf, x1, x2))
 			return ;
 		if (x2 - x1 < 2)

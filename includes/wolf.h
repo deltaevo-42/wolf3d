@@ -120,7 +120,8 @@ struct		s_wolf
 	t_bool			fullscreen;
 
 	uint32_t		minimap_size;
-	uint32_t		minimap_padding;
+	uint32_t		minimap_padding_x;
+	uint32_t		minimap_padding_y;
 	float			dist_to_plane;
 };
 
