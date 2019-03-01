@@ -89,17 +89,18 @@ void			dist_round_block(t_ray *ray)
 
 static void	compute_dist(t_ray *ray)
 {
-	if (ray->hit)
-	{
-		if (ray->hit->block->type == B_ROUND)
-			return (dist_round_block(ray));
-	}
 	if (ray->side == 0)
 		ray->dist = (ray->hit_pos.x - ray->start.x + (1 - ray->step.x) / 2.0) / ray->dir.x;
 	else
 		ray->dist = (ray->hit_pos.y - ray->start.y + (1 - ray->step.y) / 2.0) / ray->dir.y;
 	if (ray->dist <= 0.1)
 		ray->dist = 0.1;
+	ray->sdist = ray->dist;
+	if (ray->hit)
+	{
+		if (ray->hit->block->type == B_ROUND)
+			return (dist_round_block(ray));
+	}
 }
 
 t_ray			create_ray(t_wolf *wolf, int x, t_vec2 start)

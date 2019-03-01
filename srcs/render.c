@@ -240,9 +240,9 @@ t_vec2	get_floor_wall(t_wolf *wolf, t_ray *ray)
 	float wallX = 0;
 
 	if (ray->side == 0)
-		wallX = wolf->player.pos.y + ray->dist * ray->dir.y;
+		wallX = wolf->player.pos.y + ray->sdist * ray->dir.y;
 	else
-		wallX = wolf->player.pos.x + ray->dist * ray->dir.x;
+		wallX = wolf->player.pos.x + ray->sdist * ray->dir.x;
 	wallX -= floor((wallX));
 	t_vec2 floorWall;
 	if (ray->side == 0 && ray->dir.x > 0)
@@ -273,10 +273,10 @@ void	render_floor(t_wolf *wolf, t_ray *from, t_ray *to, t_bool f, int last_floor
 	t_vec2 fromFloorWall = get_floor_wall(wolf, from);
 	t_vec2 toFloorWall = get_floor_wall(wolf, to);
 
-	float fromDistZ = from->dist / (wolf->player.pos.z + 1);
-	float fromRevDistZ = from->dist / -(wolf->world.size.z - wolf->player.pos.z + 1);
-	float toDistZ = to->dist / (wolf->player.pos.z + 1);
-	float toRevDistZ = to->dist / -(wolf->world.size.z - wolf->player.pos.z + 1);
+	float fromDistZ = from->sdist / (wolf->player.pos.z + 1);
+	float fromRevDistZ = from->sdist / -(wolf->world.size.z - wolf->player.pos.z + 1);
+	float toDistZ = to->sdist / (wolf->player.pos.z + 1);
+	float toRevDistZ = to->sdist / -(wolf->world.size.z - wolf->player.pos.z + 1);
 
 	SDL_Surface *floor_tex = wolf->world.floor->surface;
 	SDL_Surface *ceil_tex = wolf->world.ceil->surface;

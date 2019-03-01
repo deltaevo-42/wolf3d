@@ -81,6 +81,7 @@ struct		s_ray
 	t_pixel			hit_pos;
 	t_face			face;
 	float			dist;
+	float			sdist;
 	int				side;
 	t_block_state	*fhit;
 	t_world			*world;

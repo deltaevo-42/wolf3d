@@ -53,7 +53,7 @@
 				},
 				"EAST": {
 					"color": [ 255, 0, 0 ],
-					"texture": 1
+					"texture": 0
 				}
 			}
 		},
@@ -64,7 +64,7 @@
 			"sides": {
 				"ALL": {
 					"color": [ 255, 255, 0 ],
-					"texture": 1
+					"texture": 0
 				},
 				"NORTH": {
 					"color": [ 255, 0, 0 ],
@@ -75,26 +75,26 @@
 		{
 			"type": "ROUND",
 			"minimap_color": [ 255, 0, 0 ],
-			"texture": 1,
+			"texture": 0,
 			"height": 1.5
 		},
 		{
 			"type": "ROUND",
 			"minimap_color": [ 255, 0, 0 ],
 			"radius": 0.2,
-			"texture": 2
+			"texture": 0
 		},
 		{
 			"type": "ROUND",
 			"minimap_color": [ 255, 0, 0 ],
 			"radius": 0.02,
-			"texture": 1
+			"texture": 0
 		}
 	],
 	"map": {
 		"size": [ 24, 24, 2 ],
 		"floor_texture": 0,
-		"ceil_texture": 2,
+		"ceil_texture": 0,
 		"data": [
 			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 			[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],

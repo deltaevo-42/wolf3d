@@ -45,7 +45,7 @@ t_bool	render_block_round_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int 
 		if (i < 0 || (uint32_t)i >= wolf->img->size)
 			break ;
 		if (wolf->img->pixels[i] == 0)
-			wolf->img->pixels[i] = 255;
+			wolf->img->pixels[i] = 0xFF0000FF;
 	}
 	return (FALSE);
 }
