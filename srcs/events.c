@@ -102,6 +102,9 @@ static void	events_window(t_wolf *wolf, SDL_Event *event)
 {
 	const SDL_Scancode	key = event->key.keysym.scancode;
 
+
+	if (event->type == SDL_QUIT)
+		wolf->running = FALSE;
 	if (event->type == SDL_KEYDOWN)
 	{
 		if (key == SDL_SCANCODE_F)
@@ -140,7 +143,7 @@ void		hook_events(t_wolf *wolf)
 	SDL_Event		event;
 	int				x_m;
 
-	if (event.type == SDL_QUIT || state[SDL_SCANCODE_ESCAPE])
+	if (state[SDL_SCANCODE_ESCAPE])
 		wolf->running = FALSE;
 	events_move(wolf, state);
 	events_minimap(wolf, state);
