@@ -6,7 +6,7 @@
 #    By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/07 14:49:27 by llelievr          #+#    #+#              #
-#    Updated: 2019/02/28 01:29:59 by llelievr         ###   ########.fr        #
+#    Updated: 2019/03/01 16:27:52 by llelievr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,6 +73,6 @@ re: fclean $(NAME)
 
 
 get_files:
-	$(shell find srcs -type f | sed 's/srcs\///g' | sed 's/^/SRC+=/' > src.mk)
+	@find srcs -type f | sed 's/srcs\///g' | sed 's/^/SRC+=/' > src.mk
 
-.PHONY: clean fclean re all
+.PHONY: clean fclean re all get_files
