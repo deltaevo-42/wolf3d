@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 00:54:09 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 01:52:22 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,37 @@ void		hook_events(t_wolf *wolf)
 	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_S])
 	{
 		y = sinf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1) * move_speed;
+		b_state = wolf->world.data[(int)(wolf->player.pos.y + y)][(int)(wolf->player.pos.x)];
+		if (!b_state)
+			wolf->player.pos.y += y;
 		x = cosf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1) * move_speed;
-
+		b_state = wolf->world.data[(int)(wolf->player.pos.y)][(int)(wolf->player.pos.x + x)];
+		if (!b_state)
+			wolf->player.pos.x += x;
 		b_state = wolf->world.data[(int)(wolf->player.pos.y + y)][(int)(wolf->player.pos.x + x)];
 
-		if (!b_state || (b_state->block->height <= wolf->player.pos.z + STAIR_MAX && b_state->block->height < wolf->world.size.z - 0.5))
+	/*	if ((b_state->block->height <= wolf->player.pos.z + STAIR_MAX && b_state->block->height < wolf->world.size.z - 0.5))
 		{
-			wolf->player.pos.y += y;
-			wolf->player.pos.x += x;
 			if (b_state && wolf->player.pos.z < b_state->block->height + 0.5)
 				wolf->player.pos.z = b_state->block->height + 0.5;
-		}
+		}*/
 	}
 	if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_D])
 	{
 		y = -cosf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ? 1 : -1)  * move_speed;
-		x = sinf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ?  1 : -1)  * move_speed;
-
-		b_state = wolf->world.data[(int)(wolf->player.pos.y + y)][(int)(wolf->player.pos.x + x)];
-
-		if (!b_state || (b_state->block->height <= wolf->player.pos.z + STAIR_MAX && b_state->block->height < wolf->world.size.z - 0.5))
-		{
+		b_state = wolf->world.data[(int)(wolf->player.pos.y + y)][(int)(wolf->player.pos.x)];
+		if (!b_state)
 			wolf->player.pos.y += y;
+		x = sinf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ?  1 : -1)  * move_speed;
+		b_state = wolf->world.data[(int)(wolf->player.pos.y)][(int)(wolf->player.pos.x + x)];
+		if (!b_state)
 			wolf->player.pos.x += x;
+		b_state = wolf->world.data[(int)(wolf->player.pos.y + y)][(int)(wolf->player.pos.x + x)];
+	/*	if ((b_state->block->height <= wolf->player.pos.z + STAIR_MAX && b_state->block->height < wolf->world.size.z - 0.5))
+		{
 			if (b_state && wolf->player.pos.z < b_state->block->height + 0.5)
 				wolf->player.pos.z = b_state->block->height + 0.5;
-		}
+		}*/
 	}
 	if (state[SDL_SCANCODE_SPACE] || state[SDL_SCANCODE_LSHIFT])
 	{
