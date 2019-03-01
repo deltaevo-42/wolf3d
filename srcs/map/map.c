@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:29:48 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 16:56:07 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 17:25:04 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,9 @@ t_block_state		***load_map_data(t_world *w, t_json_value *val)
 	t_block_state	***states;
 	int				i;
 	int				j;
-	
-	if (!(arr = json_to_array(val)) || arr->elems_count != w->size.y)
-		return (NULL);
-	if (!(states = (t_block_state ***)malloc(sizeof(t_block_state **) * w->size.y)))
+
+	if (!(arr = json_to_array(val)) || arr->elems_count != w->size.y ||
+	!(states = (t_block_state ***)malloc(sizeof(t_block_state **) * w->size.y)))
 		return (NULL);
 	row_elem = arr->elements;
 	i = 0;
@@ -64,9 +63,8 @@ t_block_state		***load_map_data(t_world *w, t_json_value *val)
 		j = 0;
 		while (col_elem)
 		{
-			if (col_elem->value->type != JSON_NUMBER)
-				return (NULL);
-			if (!(states[i][j++] = create_block_state(w, (int)((t_json_number *)col_elem->value)->value - 1)) && (int)((t_json_number *)col_elem->value)->value > 0)
+			if (col_elem->value->type != JSON_NUMBER || 
+			!(states[i][j++] = create_block_state(w, (int)((t_json_number *)col_elem->value)->value - 1)) && (int)((t_json_number *)col_elem->value)->value > 0)
 				return (NULL);
 			col_elem = col_elem->next;
 		}
