@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 16:14:57 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/01 18:36:05 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ struct					s_wolf
 ** World
 */
 
-void					load_world(t_world *world, char *file);
+t_bool					load_world(t_world *world, char *file);
 
 /*
 ** SDL

@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:12:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 01:25:54 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 18:06:26 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,11 @@ int		main(int argc, char **argv)
 			.delay = 500
 		}
 	};
-	load_world(&wolf.world, "assets/maps/map_1.json");
+	if (!load_world(&wolf.world, "assets/maps/map_1.json"))
+	{
+		printf("Unnable to load world");
+		return (1);//FREE 
+	}
 	sdl_init(&wolf);
 	game_loop(&wolf);
 	sdl_quit(&wolf);

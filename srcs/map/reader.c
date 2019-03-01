@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 17:12:38 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 18:40:13 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,16 +108,18 @@ static t_bool		load_map(t_world *world, t_json_object *obj)
 		return (FALSE);
 	printf("Size %f %f\n", world->size.x, world->size.y);
 	world->data = load_map_data(world, json_object_get(obj, "data"));
-	if (!(texture_i = json_get_number(obj, "ceil_texture")))
+	if (!(texture_i = json_get_number(obj, "ceil_texture"))
+		|| *texture_i < 0 || *texture_i >= world->textures_count)
 		return (FALSE);
 	world->ceil = world->textures[(int)*texture_i];
-	if (!(texture_i = json_get_number(obj, "floor_texture")))
+	if (!(texture_i = json_get_number(obj, "floor_texture"))
+		|| *texture_i < 0 || *texture_i >= world->textures_count)
 		return (FALSE);
 	world->floor = world->textures[(int)*texture_i];
 	return (TRUE);
 }
 
-void				load_world(t_world *world, char *file)
+t_bool				load_world(t_world *world, char *file)
 {
 	t_json_state	state;
 	t_json_value	*val;
@@ -130,13 +132,15 @@ void				load_world(t_world *world, char *file)
 		printf("Invalid file\n");
 		if (content)
 			free((void *)content);
-		return ;
+		return (FALSE);
 	}
 	free((void *)content);
 	if (!(world->textures = load_textures(world, (t_json_object *)val)))
-		return ;
+		return (FALSE);
 	if (!(world->blocks = load_blocks(world, (t_json_object *)val)))
-		return ;
-	load_map(world, (t_json_object *)val);
+		return (FALSE);
+	if (!load_map(world, (t_json_object *)val))
+		return (FALSE);
 	json_free_value(val);
+	return (TRUE);
 }

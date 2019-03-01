@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 17:41:56 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 17:01:07 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 18:37:41 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_bool	load_block_side(t_world *w, t_json_object *o,
 	if (!(val = json_object_get(o, "texture")) || val->type != JSON_NUMBER)
 		return (FALSE);
 	texture_i = (int)((t_json_number *)val)->value;
-	if (texture_i >= w->textures_count)
+	if (texture_i < 0 || texture_i >= w->textures_count)
 		return (FALSE);
 	side->texture = w->textures[texture_i];
 	return (TRUE);

@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:00:00 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 17:54:04 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 18:38:43 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ t_block		*load_round_block(t_world *w, t_json_object *obj)
 	val = json_object_get(obj, "radius");
 	b->radius = (!val || val->type != JSON_NUMBER ? 0.5
 		: ((t_json_number *)val)->value);
-	if (!(texture_i = json_get_number(obj, "texture")))
+	if (!(texture_i = json_get_number(obj, "texture")) 
+		|| *texture_i < 0 || *texture_i >= w->textures_count)
 		return (NULL);
 	b->texture = w->textures[(int)*texture_i];
 	return ((t_block *)b);
