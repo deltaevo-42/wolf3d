@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:51:33 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 01:28:58 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 16:22:25 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static void		update_fps(t_wolf *wolf)
 	{
 		t3 = t1;
 		wolf->stats.fps = 1 / wolf->stats.delta;
-		wolf->stats.avg_ms = 1000 / (wolf->stats.fps == 0 ? 0.001 : wolf->stats.fps);
+		wolf->stats.avg_ms = 1000
+			/ (wolf->stats.fps == 0 ? 0.001 : wolf->stats.fps);
 	}
 }
 
@@ -54,16 +55,17 @@ void			update_textures(t_wolf *wolf)
 	update_texture(&wolf->heads_texture);
 }
 
+#define WEAPONS "assets/textures/weapons.png"
+
 void			game_loop(t_wolf *wolf)
 {
 	wolf->player.pos = (t_vec3){ 6, 7, 0 };
 	wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
-	wolf->tmp_texture = IMG_Load("assets/textures/cobblestone_2.png");
 	wolf->head_overlay = IMG_Load("assets/textures/head_overlay.png");
-	// printf("SDL_Init failed: %s\n", SDL_GetError());
-	setup_animated_texture(&wolf->weapons_texture, "assets/textures/weapons.png");
+	setup_animated_texture(&wolf->weapons_texture, WEAPONS);
 	setup_animated_texture(&wolf->heads_texture, "assets/textures/heads.png");
-	wolf->weapons_texture.index = wolf->player.selected_weapon * wolf->weapons_texture.step_count.x;
+	wolf->weapons_texture.index = wolf->player.selected_weapon
+		* wolf->weapons_texture.step_count.x;
 	while (wolf->running)
 	{
 		ft_memset(wolf->img->pixels, 0, wolf->img->size * 4);
@@ -71,7 +73,8 @@ void			game_loop(t_wolf *wolf)
 		render_debug(wolf);
 		render_hud(wolf);
 		render_minimap(wolf);
-		SDL_UpdateTexture(wolf->screen, NULL, wolf->img->pixels, wolf->img->width * 4);
+		SDL_UpdateTexture(wolf->screen, NULL, wolf->img->pixels,
+				wolf->img->width * 4);
 		SDL_RenderCopy(wolf->renderer, wolf->screen, NULL, NULL);
 		SDL_RenderPresent(wolf->renderer);
 		hook_events(wolf);
