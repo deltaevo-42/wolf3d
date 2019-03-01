@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:00:00 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 17:00:55 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 17:54:04 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_block		*load_round_block(t_world *w, t_json_object *obj)
 	b->super.height = (!val || val->type != JSON_NUMBER ? 1
 		: ((t_json_number *)val)->value);
 	val = json_object_get(obj, "radius");
-	b->radius = (!val || val->type != JSON_NUMBER ? 0.5 
+	b->radius = (!val || val->type != JSON_NUMBER ? 0.5
 		: ((t_json_number *)val)->value);
 	if (!(texture_i = json_get_number(obj, "texture")))
 		return (NULL);
@@ -39,11 +39,10 @@ t_block		*load_round_block(t_world *w, t_json_object *obj)
 int			round_block_minimap(t_wolf *wolf, t_block_state *state, t_vec2 map)
 {
 	t_block_round	*b;
+	const float		x = map.x - (int)map.x - 0.5;
+	const float		y = map.y - (int)map.y - 0.5;
 
 	b = (t_block_round *)state->block;
-	(void)wolf;
-	float x = map.x - (int)map.x - 0.5;
-	float y = map.y - (int)map.y - 0.5;
 	if (x * x + y * y < b->radius * b->radius)
 		return (ft_color_i(b->minimap_color));
 	else
