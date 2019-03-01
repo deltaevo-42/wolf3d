@@ -1,36 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   block_round.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/01 17:00:00 by llelievr          #+#    #+#             */
+/*   Updated: 2019/03/01 17:00:55 by llelievr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf.h"
 
 t_block		*load_round_block(t_world *w, t_json_object *obj)
 {
-	t_block_round	*block;
+	t_block_round	*b;
 	t_json_value	*val;
 	double			*texture_i;
 
-	if (!(block = (t_block_round *)malloc(sizeof(t_block_round))))
+	if (!(b = (t_block_round *)malloc(sizeof(t_block_round))))
 		return (NULL);
-	block->super.type = B_ROUND;
-	if (!ft_json_color(json_object_get(obj, "minimap_color"), &block->minimap_color))
-		return (json_free_ret(block));
+	b->super.type = B_ROUND;
+	if (!ft_json_color(json_object_get(obj, "minimap_color"),
+		&b->minimap_color))
+		return (json_free_ret(b));
 	val = json_object_get(obj, "height");
-	block->super.height = (!val || val->type != JSON_NUMBER ? 1 : ((t_json_number *)val)->value);
+	b->super.height = (!val || val->type != JSON_NUMBER ? 1
+		: ((t_json_number *)val)->value);
 	val = json_object_get(obj, "radius");
-	block->radius = (!val || val->type != JSON_NUMBER ? 0.5 : ((t_json_number *)val)->value);
+	b->radius = (!val || val->type != JSON_NUMBER ? 0.5 
+		: ((t_json_number *)val)->value);
 	if (!(texture_i = json_get_number(obj, "texture")))
 		return (NULL);
-	block->texture = w->textures[(int)*texture_i];
-	return ((t_block *)block);
+	b->texture = w->textures[(int)*texture_i];
+	return ((t_block *)b);
 }
 
 int			round_block_minimap(t_wolf *wolf, t_block_state *state, t_vec2 map)
 {
-	t_block_round	*block;
+	t_block_round	*b;
 
-	block = (t_block_round *)state->block;
+	b = (t_block_round *)state->block;
 	(void)wolf;
 	float x = map.x - (int)map.x - 0.5;
 	float y = map.y - (int)map.y - 0.5;
-	if (x * x + y * y < block->radius * block->radius)
-		return (ft_color_i(block->minimap_color));
+	if (x * x + y * y < b->radius * b->radius)
+		return (ft_color_i(b->minimap_color));
 	else
 		return (-1);
 }

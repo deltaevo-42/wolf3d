@@ -6,18 +6,18 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 17:41:56 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/22 15:12:50 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 17:01:07 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-
-static t_bool load_block_side(t_world *w, t_json_object *o, t_block_side *side)
+static t_bool	load_block_side(t_world *w, t_json_object *o,
+	t_block_side *side)
 {
 	t_json_value	*val;
 	int				texture_i;
-	
+
 	if (!ft_json_color(json_object_get(o, "color"), &side->color))
 		return (FALSE);
 	if (!(val = json_object_get(o, "texture")) || val->type != JSON_NUMBER)
@@ -29,7 +29,8 @@ static t_bool load_block_side(t_world *w, t_json_object *o, t_block_side *side)
 	return (TRUE);
 }
 
-static t_bool load_block_sides(t_world *w, t_json_value *v, t_block_side *faces)
+static t_bool	load_block_sides(t_world *w, t_json_value *v,
+	t_block_side *faces)
 {
 	t_json_object	*obj;
 	t_json_member	*elem;
@@ -47,7 +48,7 @@ static t_bool load_block_sides(t_world *w, t_json_value *v, t_block_side *faces)
 			return (FALSE);
 		i = (face == F_ALL ? 0 : face);
 		while (i <= (int)face - (face == F_ALL) || i == 0)
-			if(!load_block_side(w, obj, &faces[i++]))
+			if (!load_block_side(w, obj, &faces[i++]))
 				return (FALSE);
 		elem = elem->next;
 	}
@@ -58,24 +59,26 @@ static t_bool load_block_sides(t_world *w, t_json_value *v, t_block_side *faces)
 	return (TRUE);
 }
 
-t_block		*load_normal_block(t_world *w, t_json_object *obj)
+t_block			*load_normal_block(t_world *w, t_json_object *obj)
 {
-	t_block_normal	*block;
+	t_block_normal	*b;
 	t_json_value	*val;
 
-	if (!(block = (t_block_normal *)malloc(sizeof(t_block_normal))))
+	if (!(b = (t_block_normal *)malloc(sizeof(t_block_normal))))
 		return (NULL);
-	block->super.type = B_NORMAL;
-	if (!ft_json_color(json_object_get(obj, "minimap_color"), &block->minimap_color))
-		return (json_free_ret(block));
+	b->super.type = B_NORMAL;
+	if (!ft_json_color(json_object_get(obj, "minimap_color"),
+		&b->minimap_color))
+		return (json_free_ret(b));
 	val = json_object_get(obj, "height");
-	block->super.height = (!val || val->type != JSON_NUMBER ? 1 : ((t_json_number *)val)->value);
-	if (!load_block_sides(w, json_object_get(obj, "sides"), block->faces))
-		return (json_free_ret(block));
-	return ((t_block *)block);
+	b->super.height = (!val || val->type != JSON_NUMBER ? 1
+		: ((t_json_number *)val)->value);
+	if (!load_block_sides(w, json_object_get(obj, "sides"), b->faces))
+		return (json_free_ret(b));
+	return ((t_block *)b);
 }
 
-int			normal_block_minimap(t_wolf *wolf, t_block_state *state)
+int				normal_block_minimap(t_wolf *wolf, t_block_state *state)
 {
 	(void)wolf;
 	return (ft_color_i(((t_block_normal *)state->block)->minimap_color));
