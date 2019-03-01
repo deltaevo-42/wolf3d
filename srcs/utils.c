@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 23:40:27 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/28 02:29:33 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 00:33:14 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,19 @@ void	apply_texture(t_img *img, t_texture *t, SDL_Rect src, SDL_Rect dst)
 
 void	apply_texture_blended(t_img *img, t_texture *t, SDL_Rect src, SDL_Rect dst)
 {
-	apply_surface_blended(img, t->surface, src, dst);
+	t_texture_animated *a;
+	SDL_Rect s;
+	int	row;
+
+	s = src;
+	if (t->type == T_ANIMATED)
+	{
+		a = (t_texture_animated *)t;
+		row = a->index / (int)a->step_count.x;
+		s.y = src.y + (int)(a->step_size.y + a->spacer.y) * row;
+		s.x = src.x + (int)(a->step_size.x + a->spacer.x) * (a->index - (int)(row * (int)a->step_count.x));
+	}
+	apply_surface_blended(img, t->surface, s, dst);
 }
 
 void	draw_line(t_img *img, t_pixel p0, t_pixel p1)

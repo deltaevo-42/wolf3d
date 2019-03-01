@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:48:06 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/28 16:45:09 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 00:03:06 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ struct		s_texture_animated
 /* Textures */
 t_texture	*load_json_texture(t_json_object *texture_obj);
 t_texture	*load_normal_texture(t_json_object *j_obj);
+t_bool		setup_animated_texture(t_texture_animated *texture, char *path);
 t_texture	*load_animated_texture(t_json_object *texture_obj);
 
 #endif

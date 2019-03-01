@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:12:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/19 22:15:45 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 01:21:06 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,24 @@ int		main(int argc, char **argv)
 
 	wolf = (t_wolf) {
 		.player = {
-			.rotation = 0.01
+			.rotation = 0.01,
+			.selected_weapon = 0,
 		},
 		.dist_to_plane = 1.0,
 		.minimap_size = 100,
-		.minimap_padding = 10
+		.minimap_padding = 10,
+		.weapons_texture = { 
+			.step_count = { 5, 4 },
+			.step_size = { 64, 64 },
+			.spacer = { 1, 1 },
+			.delay = 50
+		},
+		.heads_texture = { 
+			.step_count = { 3, 1 },
+			.step_size = { 24, 32 },
+			.spacer = { 1, 1 },
+			.delay = 500
+		}
 	};
 	load_world(&wolf.world, "assets/maps/map_1.json");
 	sdl_init(&wolf);

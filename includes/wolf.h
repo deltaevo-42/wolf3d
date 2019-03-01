@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/28 18:04:31 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 01:13:48 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ struct		s_player
 	t_vec3	pos;
 	float	rotation;
 	t_mat2	matrix;
+	int		selected_weapon;
+	t_bool	shooting;
 };
 
 struct		s_img
@@ -105,23 +107,27 @@ struct		s_img
 
 struct		s_wolf
 {
-	t_img			*img;
-	SDL_Texture		*screen;
-	SDL_Surface		*tmp_texture;
-	SDL_Renderer	*renderer;
-	SDL_Window		*win;
-	t_world			world;
-	SDL_Event		event;
-	t_ray			last_rays[(int)S_WIDTH];
-	t_bool			running;
-	t_stats			stats;
-	t_fonts			fonts;
-	t_player		player;
-	t_bool			fullscreen;
+	t_img				*img;
+	SDL_Texture			*screen;
+	SDL_Surface			*tmp_texture;
+	SDL_Renderer		*renderer;
+	SDL_Window			*win;
+	t_world				world;
+	SDL_Event			event;
+	t_ray				last_rays[(int)S_WIDTH];
+	t_bool				running;
+	t_stats				stats;
+	t_fonts				fonts;
+	t_player			player;
+	t_bool				fullscreen;
 
-	uint32_t		minimap_size;
-	uint32_t		minimap_padding;
-	float			dist_to_plane;
+	t_texture_animated	weapons_texture;
+	t_texture_animated	heads_texture;
+	SDL_Surface			*head_overlay;
+
+	uint32_t			minimap_size;
+	uint32_t			minimap_padding;
+	float				dist_to_plane;
 };
 
 /* World */
@@ -138,6 +144,8 @@ void		hook_events(t_wolf *wolf);
 void		render_debug(t_wolf *wolf);
 void		render_minimap(t_wolf *wolf);
 void		render_main(t_wolf *wolf);
+
+void		render_hud(t_wolf *wolf);
 
 /* Ray */
 t_bool		next_ray(t_wolf *wolf, t_ray *ray);

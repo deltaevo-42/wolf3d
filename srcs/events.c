@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/28 18:09:03 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 00:54:09 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void		hook_events(t_wolf *wolf)
 	float	y;
 	t_block_state	*b_state;
 
-	event = wolf->event;
 	if (event.type == SDL_QUIT || state[SDL_SCANCODE_ESCAPE])
 		wolf->running = FALSE;
 	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_L])
@@ -83,26 +82,48 @@ void		hook_events(t_wolf *wolf)
 		wolf->minimap_padding = 10;
 	}
 
-	if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F)
+	while (SDL_PollEvent(&event))
 	{
-		wolf->fullscreen = !wolf->fullscreen;
-		SDL_SetWindowFullscreen(wolf->win, wolf->fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+		if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F)
+		{
+			wolf->fullscreen = !wolf->fullscreen;
+			SDL_SetWindowFullscreen(wolf->win, wolf->fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+		}
+
+		if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_P)
+		{
+			SDL_SetRelativeMouseMode(SDL_FALSE);
+			SDL_SetWindowGrab(wolf->win, SDL_FALSE);
+		}
+		if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_O)
+		{
+			SDL_SetRelativeMouseMode(SDL_TRUE);
+			SDL_SetWindowGrab(wolf->win, SDL_TRUE);
+		}
+
+		if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_UP)
+		{
+			wolf->player.selected_weapon++;
+			if (wolf->player.selected_weapon == 4)
+				wolf->player.selected_weapon = 0;
+			printf("hum ?\n");
+			wolf->weapons_texture.index = wolf->player.selected_weapon * wolf->weapons_texture.step_count.x;
+			wolf->player.shooting = FALSE;
+		}
 	}
 
-	if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_P)
-	{
-		SDL_SetRelativeMouseMode(SDL_FALSE);
-		SDL_SetWindowGrab(wolf->win, SDL_FALSE);
-	}
-	if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_O)
-	{
-		SDL_SetRelativeMouseMode(SDL_TRUE);
-		SDL_SetWindowGrab(wolf->win, SDL_TRUE);
-	}
 	if (state[SDL_SCANCODE_KP_PLUS])
 		wolf->dist_to_plane += move_speed * 0.1;
 	if (state[SDL_SCANCODE_KP_MINUS] && wolf->dist_to_plane > move_speed * 0.1)
 		wolf->dist_to_plane -= move_speed * 0.1;
+
+	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
+	{
+		printf("CLICK %d\n", wolf->player.shooting);
+		if (!wolf->player.shooting)
+			wolf->player.shooting = TRUE;
+	}
+	
 	int xM = 0;
 	SDL_GetRelativeMouseState(&xM, NULL);
 	if (xM != 0)
@@ -118,5 +139,5 @@ void		hook_events(t_wolf *wolf)
 		wolf->player.pos.z = wolf->world.size.z + 0.5;
 	if (wolf->player.pos.z < -0.5)
 		wolf->player.pos.z = -0.5;
-	SDL_PollEvent(&wolf->event);
+	SDL_PumpEvents();
 }
