@@ -40,15 +40,19 @@ t_bool				load_map_cols(t_world *w, int i, t_json_element *col_elem,
 	t_block_state ***s)
 {
 	int		j;
+	int		block_id;
 
 	if (!(s[i] = (t_block_state **)malloc(sizeof(t_block_side *) * w->size.x)))
 		return (FALSE);
 	j = 0;
 	while (col_elem)
 	{
-		if (col_elem->value->type != JSON_NUMBER 
-			|| !(s[i][j++] = create_block_state(w,
-				(int)((t_json_number *)col_elem->value)->value - 1)))
+		if (col_elem->value->type != JSON_NUMBER)
+			return (FALSE);
+		block_id = (int)((t_json_number *)col_elem->value)->value - 1;
+		if (block_id == -1)
+			s[i][j++] = NULL;
+		else if (!(s[i][j++] = create_block_state(w, block_id)))
 			return (FALSE);
 		col_elem = col_elem->next;
 	}
