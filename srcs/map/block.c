@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:32:51 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 16:03:31 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 17:20:25 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_block_type	get_block_type(char *string)
 {
-	const int	len = ft_strlen(string);	
+	const int	len = ft_strlen(string);
 
 	if (len == 6 && ft_strncmp(string, "NORMAL", 6) == 0)
 		return (B_NORMAL);
@@ -23,9 +23,9 @@ static t_block_type	get_block_type(char *string)
 	return (B_NONE);
 }
 
-t_face get_face_type(char *string)
+t_face				get_face_type(char *string)
 {
-	const int	len = ft_strlen(string);	
+	const int	len = ft_strlen(string);
 
 	if (len == 5 && ft_strncmp(string, "NORTH", 5) == 0)
 		return (F_NORTH);
@@ -49,7 +49,7 @@ t_block				*load_json_block(t_world *world, t_json_object *obj)
 	t_json_string	*j_string;
 	t_block_type	block_type;
 
-	if(!(j_string = json_get_string(obj, "type")))
+	if (!(j_string = json_get_string(obj, "type")))
 		return (NULL);
 	block_type = get_block_type(j_string->value);
 	if (block_type == B_NONE)
