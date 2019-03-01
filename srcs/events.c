@@ -108,7 +108,7 @@ void		hook_events(t_wolf *wolf)
 			SDL_SetWindowGrab(wolf->win, SDL_TRUE);
 		}
 
-		if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_UP)
+		if (event.type == SDL_MOUSEWHEEL || (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_UP))
 		{
 			wolf->player.selected_weapon++;
 			if (wolf->player.selected_weapon == 4)
