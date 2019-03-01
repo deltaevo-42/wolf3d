@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:29:48 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 17:25:04 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 17:45:32 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,26 @@ t_block_state		*create_block_state(t_world *w, int block_id)
 	return (state);
 }
 
+t_bool				load_map_cols(t_world *w, int i, t_json_element *col_elem,
+	t_block_state ***s)
+{
+	int		j;
+
+	if (!(s[i] = (t_block_state **)malloc(sizeof(t_block_side *) * w->size.x)))
+		return (FALSE);
+	j = 0;
+	while (col_elem)
+	{
+		if (col_elem->value->type != JSON_NUMBER ||
+			(!(s[i][j++] = create_block_state(w,
+			(int)((t_json_number *)col_elem->value)->value - 1))
+			&& (int)((t_json_number *)col_elem->value)->value > 0))
+			return (FALSE);
+		col_elem = col_elem->next;
+	}
+	return (TRUE);
+}
+
 t_block_state		***load_map_data(t_world *w, t_json_value *val)
 {
 	t_json_array	*arr;
@@ -46,7 +66,6 @@ t_block_state		***load_map_data(t_world *w, t_json_value *val)
 	t_json_element	*col_elem;
 	t_block_state	***states;
 	int				i;
-	int				j;
 
 	if (!(arr = json_to_array(val)) || arr->elems_count != w->size.y ||
 	!(states = (t_block_state ***)malloc(sizeof(t_block_state **) * w->size.y)))
@@ -55,20 +74,12 @@ t_block_state		***load_map_data(t_world *w, t_json_value *val)
 	i = 0;
 	while (row_elem)
 	{
-		if (row_elem->value->type != JSON_ARRAY || ((t_json_array *)row_elem->value)->elems_count != w->size.x)
+		if (row_elem->value->type != JSON_ARRAY ||
+			((t_json_array *)row_elem->value)->elems_count != w->size.x)
 			return (NULL);
 		col_elem = ((t_json_array *)row_elem->value)->elements;
-		if (!(states[i] = (t_block_state **)malloc(sizeof(t_block_side *) * w->size.x)))
+		if (!load_map_cols(w, i++, col_elem, states))
 			return (NULL);
-		j = 0;
-		while (col_elem)
-		{
-			if (col_elem->value->type != JSON_NUMBER || 
-			!(states[i][j++] = create_block_state(w, (int)((t_json_number *)col_elem->value)->value - 1)) && (int)((t_json_number *)col_elem->value)->value > 0)
-				return (NULL);
-			col_elem = col_elem->next;
-		}
-		i++;
 		row_elem = row_elem->next;
 	}
 	return (states);
