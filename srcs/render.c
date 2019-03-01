@@ -55,6 +55,12 @@ void			cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 {
 	while (1)
 	{
+		if (ray->hit && ray->hit->type == B_PORTAL)
+		{
+			render_floor(wolf, ray, ray, TRUE, last_y);
+			render_floor(wolf, ray, ray, FALSE, S_HEIGHT);
+			ray_use_portal(ray);
+		}
 		if (ray->hit)
 		{
 			t_block_state *hit = ray->hit;
@@ -105,6 +111,13 @@ t_bool			double_cast_ray(t_wolf *wolf, int x1, int x2)
 			cast_ray(wolf, &first, last_y);
 			cast_ray(wolf, &second, last_y);
 			return (FALSE);
+		}
+		if (first.fhit == second.fhit && first.fhit && first.fhit->type == B_PORTAL)
+		{
+			render_floor(wolf, &first, &second, TRUE, last_y);
+			render_floor(wolf, &first, &second, FALSE, S_HEIGHT);
+			ray_use_portal(&first);
+			ray_use_portal(&second);
 		}
 		if (first.hit || second.hit)
 		{
@@ -240,9 +253,9 @@ t_vec2	get_floor_wall(t_wolf *wolf, t_ray *ray)
 	float wallX = 0;
 
 	if (ray->side == 0)
-		wallX = wolf->player.pos.y + ray->sdist * ray->dir.y;
+		wallX = ray->start.y + (ray->sdist - ray->extra_dist) * ray->dir.y;
 	else
-		wallX = wolf->player.pos.x + ray->sdist * ray->dir.x;
+		wallX = ray->start.x + (ray->sdist - ray->extra_dist) * ray->dir.x;
 	wallX -= floor((wallX));
 	t_vec2 floorWall;
 	if (ray->side == 0 && ray->dir.x > 0)
@@ -273,10 +286,10 @@ void	render_floor(t_wolf *wolf, t_ray *from, t_ray *to, t_bool f, int last_floor
 	t_vec2 fromFloorWall = get_floor_wall(wolf, from);
 	t_vec2 toFloorWall = get_floor_wall(wolf, to);
 
-	float fromDistZ = from->sdist / (wolf->player.pos.z + 1);
-	float fromRevDistZ = from->sdist / -(wolf->world.size.z - wolf->player.pos.z + 1);
-	float toDistZ = to->sdist / (wolf->player.pos.z + 1);
-	float toRevDistZ = to->sdist / -(wolf->world.size.z - wolf->player.pos.z + 1);
+	float fromDistZ = (from->sdist - from->extra_dist) / (wolf->player.pos.z + 1);
+	float fromRevDistZ = (from->sdist - from->extra_dist) / -(wolf->world.size.z - wolf->player.pos.z + 1);
+	float toDistZ = (to->sdist - to->extra_dist) / (wolf->player.pos.z + 1);
+	float toRevDistZ = (to->sdist - to->extra_dist) / -(wolf->world.size.z - wolf->player.pos.z + 1);
 
 	SDL_Surface *floor_tex = wolf->world.floor->surface;
 	SDL_Surface *ceil_tex = wolf->world.ceil->surface;
@@ -288,15 +301,15 @@ void	render_floor(t_wolf *wolf, t_ray *from, t_ray *to, t_bool f, int last_floor
 			float fromWeight = S_HEIGHT/((2 * (y + fromBottom) - S_HEIGHT) * fromDistZ);
 			t_vec2 from_curr_floor = (t_vec2)
 			{
-				fromWeight * fromFloorWall.x + (1.0 - fromWeight) * wolf->player.pos.x,
-				fromWeight * fromFloorWall.y + (1.0 - fromWeight) * wolf->player.pos.y
+				fromWeight * fromFloorWall.x + (1.0 - fromWeight) * from->start.x,
+				fromWeight * fromFloorWall.y + (1.0 - fromWeight) * from->start.y
 			};
 
 			float toWeight = S_HEIGHT/((2 * (y + toBottom) - S_HEIGHT) * toDistZ);
 			t_vec2 to_curr_floor = (t_vec2)
 			{
-				toWeight * toFloorWall.x + (1.0 - toWeight) * wolf->player.pos.x,
-				toWeight * toFloorWall.y + (1.0 - toWeight) * wolf->player.pos.y
+				toWeight * toFloorWall.x + (1.0 - toWeight) * to->start.x,
+				toWeight * toFloorWall.y + (1.0 - toWeight) * to->start.y
 			};
 
 			float toFloorTexX, toFloorTexY;
@@ -334,15 +347,15 @@ void	render_floor(t_wolf *wolf, t_ray *from, t_ray *to, t_bool f, int last_floor
 			float fromWeight = S_HEIGHT/((2 * (fromTop - y) - S_HEIGHT) * fromRevDistZ);
 			t_vec2 from_curr_floor = (t_vec2)
 			{
-				fromWeight * fromFloorWall.x + (1.0 - fromWeight) * wolf->player.pos.x,
-				fromWeight * fromFloorWall.y + (1.0 - fromWeight) * wolf->player.pos.y
+				fromWeight * fromFloorWall.x + (1.0 - fromWeight) * from->start.x,
+				fromWeight * fromFloorWall.y + (1.0 - fromWeight) * from->start.y
 			};
 
 			float toWeight = S_HEIGHT/((2 * (toTop - y) - S_HEIGHT) * toRevDistZ);
 			t_vec2 to_curr_floor = (t_vec2)
 			{
-				toWeight * toFloorWall.x + (1.0 - toWeight) * wolf->player.pos.x,
-				toWeight * toFloorWall.y + (1.0 - toWeight) * wolf->player.pos.y
+				toWeight * toFloorWall.x + (1.0 - toWeight) * from->start.x,
+				toWeight * toFloorWall.y + (1.0 - toWeight) * from->start.y
 			};
 
 			float toFloorTexX, toFloorTexY;

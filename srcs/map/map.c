@@ -28,7 +28,13 @@ t_block_state		*create_block_state(t_world *w, int block_id)
 	}
 	if (!(state = (t_block_state *)malloc(sizeof(t_block_state))))
 		return (NULL);
-	state->type = B_NORMAL;
+	if (block_id == 6)
+	{
+		state->type = B_PORTAL;
+		state->portal_to = (t_pixel) { 3, 3, 0 };
+	}
+	else
+		state->type = B_NORMAL;
 	state->block = w->blocks[block_id];
 	return (state);
 }

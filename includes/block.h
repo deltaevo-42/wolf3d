@@ -40,6 +40,7 @@ enum							e_block_type
 {
 	B_NORMAL,
 	B_ROUND,
+	B_PORTAL,
 	B_NONE
 };
 
@@ -53,6 +54,7 @@ struct							s_block_state
 {
 	t_block_type	type;
 	t_block			*block;
+	t_pixel			portal_to;
 };
 
 struct							s_block

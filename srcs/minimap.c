@@ -33,20 +33,23 @@ static void			render_fov(t_wolf *wolf)
 {
 	const t_vec2	s = { (float)wolf->minimap_size / wolf->world.size.x,
 		 (float)wolf->minimap_size / wolf->world.size.y};
-	int 	i;
+	uint32_t 	i;
 	t_vec2	pos;
 
-	pos = (t_vec2){
-		wolf->player.pos.x * s.x,
-		wolf->player.pos.y * s.y};
 	i = -1;
 	while (++i < wolf->stats.num_rays)
+	{
+		pos = (t_vec2){
+		wolf->last_rays[i].start.x * s.x,
+		wolf->last_rays[i].start.y * s.y};
+		float dist = wolf->last_rays[i].dist - wolf->last_rays[i].extra_dist;
 		draw_line(wolf->img, (t_pixel){
 		S_WIDTH - wolf->minimap_size - wolf->minimap_padding_x + pos.x,
 		pos.y + wolf->minimap_padding_y, BACKGROUND_COLOR_FOV},
 		(t_pixel){
-			S_WIDTH - wolf->minimap_size - wolf->minimap_padding_x + (pos.x + (wolf->last_rays[i].dir.x * wolf->last_rays[i].dist * s.x)),
-			pos.y + (wolf->last_rays[i].dir.y * wolf->last_rays[i].dist * s.y) + wolf->minimap_padding_y , 0});
+			S_WIDTH - wolf->minimap_size - wolf->minimap_padding_x + (pos.x + (wolf->last_rays[i].dir.x * dist * s.x)),
+			pos.y + (wolf->last_rays[i].dir.y * dist * s.y) + wolf->minimap_padding_y , 0});
+	}
 }
 
 void				render_minimap(t_wolf *wolf)

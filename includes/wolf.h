@@ -82,6 +82,7 @@ struct		s_ray
 	t_face			face;
 	float			dist;
 	float			sdist;
+	float			extra_dist;
 	int				side;
 	t_block_state	*fhit;
 	t_world			*world;
@@ -155,6 +156,7 @@ void		render_hud(t_wolf *wolf);
 t_bool		next_ray(t_ray *ray);
 t_bool		prev_ray(t_ray *ray);
 t_ray		create_ray(t_wolf *wolf, int x, t_vec2 start);
+void		ray_use_portal(t_ray *ray);
 
 /* Game */
 void		game_loop(t_wolf *wolf);

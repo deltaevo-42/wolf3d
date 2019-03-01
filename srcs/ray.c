@@ -67,17 +67,17 @@ void			dist_round_block(t_ray *ray)
 
 		float dist1;
 		if (ray->side == 0)
-			dist1 = (x1 - ray->start.x) / ray->dir.x;
+			dist1 = ray->extra_dist + (x1 - ray->start.x) / ray->dir.x;
 		else
-			dist1 = (y1 - ray->start.y) / ray->dir.y;
+			dist1 = ray->extra_dist + (y1 - ray->start.y) / ray->dir.y;
 		float x2 = (-B + s_delta) / (2 * A);
 		float y2 = m * x2 + c;
 
 		float dist2;
 		if (ray->side == 0)
-			dist2 = (x2 - ray->start.x) / ray->dir.x;
+			dist2 = ray->extra_dist + (x2 - ray->start.x) / ray->dir.x;
 		else
-			dist2 = (y2 - ray->start.y) / ray->dir.y;
+			dist2 = ray->extra_dist +  (y2 - ray->start.y) / ray->dir.y;
 		ray->circle_last_hit_x = (dist1 < dist2 ? x1 : x2) - p;
 		ray->circle_last_hit_y = (dist1 < dist2 ? y1 : y2) - q;
 		ray->circle_last_out_dist = dist1 < dist2 ? dist2 : dist1;
@@ -87,20 +87,35 @@ void			dist_round_block(t_ray *ray)
 		ray->hit = NULL;
 }
 
+void	ray_use_portal(t_ray *ray)
+{
+	double wallX;
+	double garbage;
+
+	if (ray->extra_dist > 100)
+		return ;
+	ray->extra_dist += ray->dist;
+	ray->hit_pos = ray->hit->portal_to;
+	if (ray->side == 0)
+		wallX = ray->start.y + ray->sdist * ray->dir.y;
+	else
+		wallX = ray->start.x + ray->sdist * ray->dir.x;
+	wallX = modf(wallX, &garbage);
+	ray->start = (t_vec2) { ray->hit_pos.x + (ray->side == 1 ? wallX : 0), ray->hit_pos.y + (ray->side == 0 ? wallX : 0) };
+	ray->hit = 0;
+}
+
 static void	compute_dist(t_ray *ray)
 {
 	if (ray->side == 0)
-		ray->dist = (ray->hit_pos.x - ray->start.x + (1 - ray->step.x) / 2.0) / ray->dir.x;
+		ray->dist = ray->extra_dist + (ray->hit_pos.x - ray->start.x + (1 - ray->step.x) / 2.0) / ray->dir.x;
 	else
-		ray->dist = (ray->hit_pos.y - ray->start.y + (1 - ray->step.y) / 2.0) / ray->dir.y;
+		ray->dist = ray->extra_dist + (ray->hit_pos.y - ray->start.y + (1 - ray->step.y) / 2.0) / ray->dir.y;
 	if (ray->dist <= 0.1)
 		ray->dist = 0.1;
 	ray->sdist = ray->dist;
-	if (ray->hit)
-	{
-		if (ray->hit->block->type == B_ROUND)
-			return (dist_round_block(ray));
-	}
+	if (ray->hit && ray->hit->block->type == B_ROUND)
+		dist_round_block(ray);
 }
 
 t_ray			create_ray(t_wolf *wolf, int x, t_vec2 start)
@@ -120,6 +135,7 @@ t_ray			create_ray(t_wolf *wolf, int x, t_vec2 start)
 	ray.hit = ray.world->data[ray.hit_pos.y][ray.hit_pos.x];
 	ray.fhit = ray.hit;
 	ray.side = ray.side_dist.x < ray.side_dist.y;
+	ray.extra_dist = 0;
 	compute_face(&ray);
 	compute_dist(&ray);
 	return (ray);

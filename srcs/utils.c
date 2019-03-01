@@ -135,7 +135,7 @@ void	draw_line(t_img *img, t_pixel p0, t_pixel p1)
 	while (p0.x != p1.x || p0.y != p1.y)
 	{
 		index = p0.y * img->width + p0.x;
-		if (index >= img->pixels)
+		if (index >= img->pixels || index < 0)
 			break ;
 		img->pixels[index] = p0.color;
 		e[1] = e[0];

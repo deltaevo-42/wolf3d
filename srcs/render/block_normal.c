@@ -31,9 +31,9 @@ t_render_info	get_render_infos(t_wolf *wolf, t_ray *ray)
 	texture = block->faces[ray->face].texture;
 	infos.height = S_HEIGHT / ray->dist;
 	if (ray->side == 0)
-		wallX= wolf->player.pos.y + ray->dist * ray->dir.y;
+		wallX = ray->start.y + (ray->dist - ray->extra_dist) * ray->dir.y;
 	else
-		wallX = wolf->player.pos.x + ray->dist * ray->dir.x;
+		wallX = ray->start.x + (ray->dist - ray->extra_dist) * ray->dir.x;
 	wallX = modf(wallX, &garbage);
 	infos.texX = wallX * texture->size.x;
 	infos.y = S_HEIGHT_2 + infos.height * (wolf->player.pos.z + 1) / 2. - infos.height * block->super.height;
