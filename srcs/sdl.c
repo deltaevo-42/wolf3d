@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:15:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/28 18:08:38 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 17:24:24 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void		sdl_init(t_wolf *wolf)
 	SDL_Init(SDL_INIT_VIDEO);
 	IMG_Init(IMG_INIT_PNG);
 	TTF_Init();
-	wolf->win = SDL_CreateWindow("|| Wolf 3D ||", 0, 0, 1280, 720, SDL_WINDOW_SHOWN);
+	wolf->win = SDL_CreateWindow("|| Wolf 3D ||", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
 	wolf->renderer = SDL_CreateRenderer(wolf->win, -1, SDL_RENDERER_ACCELERATED);
 	SDL_RenderSetLogicalSize(wolf->renderer, S_WIDTH, S_HEIGHT);
 	wolf->screen = SDL_CreateTexture(wolf->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, S_WIDTH, S_HEIGHT);
