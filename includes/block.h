@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:46:04 by llelievr          #+#    #+#             */
-/*   Updated: 2019/02/24 17:08:25 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 16:18:15 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ struct							s_block
 	float			height;
 };
 
-struct 							s_block_normal
+struct							s_block_normal
 {
 	t_block			super;
 	t_color			minimap_color;
@@ -78,17 +78,26 @@ struct							s_block_round
 	t_texture		*texture;
 };
 
-t_block				*load_json_block(t_world *world, t_json_object *obj);
-t_block_state		***load_map_data(t_world *w, t_json_value *val);
+t_block							*load_json_block(t_world *world,
+		t_json_object *obj);
+t_block_state					***load_map_data(t_world *w, t_json_value *val);
 
-t_block				*load_normal_block(t_world *w, t_json_object *obj);
-t_block				*load_round_block(t_world *w, t_json_object *obj);
-int					normal_block_minimap(t_wolf *wolf, t_block_state *state);
-int					round_block_minimap(t_wolf *wolf, t_block_state *state, t_vec2 map);
-t_bool				render_block_normal_wall(t_wolf *wolf, t_ray *from, t_ray *to, int last_y);
-t_bool				render_block_round_wall(t_wolf *wolf, t_ray *ray);
-t_bool				render_block_normal_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p);
-t_bool				render_block_round_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p);
-t_face 				get_face_type(char *string);
+t_block							*load_normal_block(t_world *w,
+		t_json_object *obj);
+t_block							*load_round_block(t_world *w,
+		t_json_object *obj);
+int								normal_block_minimap(t_wolf *wolf,
+		t_block_state *state);
+int								round_block_minimap(t_wolf *wolf,
+		t_block_state *state, t_vec2 map);
+t_bool							render_block_normal_wall(t_wolf *wolf,
+		t_ray *from, t_ray *to, int last_y);
+t_bool							render_block_round_wall(t_wolf *wolf,
+		t_ray *ray);
+t_bool							render_block_normal_top(t_wolf *wolf,
+		t_ray *ray, t_block_state *hit, int p);
+t_bool							render_block_round_top(t_wolf *wolf, t_ray *ray,
+		t_block_state *hit, int p);
+t_face							get_face_type(char *string);
 
 #endif

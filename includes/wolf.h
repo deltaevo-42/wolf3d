@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 01:25:33 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 16:14:57 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include "libft.h"
 # include <stdlib.h>
 
-
 # define BAR_H (100.0)
 # define S_WIDTH (1280.0)
 # define S_HEIGHT (720.0)
@@ -30,20 +29,19 @@
 # define IMG_MAX_I (S_WIDTH * S_HEIGHT)
 # define PLANE ((S_WIDTH / 2) / S_WIDTH)
 
+typedef struct s_world	t_world;
+typedef struct s_img	t_img;
 
-typedef struct s_world			t_world;
-typedef struct s_img			t_img;
-
-typedef struct s_wolf			t_wolf;
-typedef struct s_stats			t_stats;
-typedef struct s_fonts			t_fonts;
-typedef struct s_ray			t_ray;
-typedef struct s_player			t_player;
+typedef struct s_wolf	t_wolf;
+typedef struct s_stats	t_stats;
+typedef struct s_fonts	t_fonts;
+typedef struct s_ray	t_ray;
+typedef struct s_player	t_player;
 
 # include "texture.h"
 # include "block.h"
 
-struct		s_world
+struct					s_world
 {
 	t_block_state	***data;
 	t_texture		**textures;
@@ -55,21 +53,20 @@ struct		s_world
 	t_vec3			size;
 };
 
-
-struct		s_stats
+struct					s_stats
 {
-	int		fps;
-	double	avg_ms;
-	double	delta;
-	uint32_t num_rays;
+	int			fps;
+	double		avg_ms;
+	double		delta;
+	uint32_t	num_rays;
 };
 
-struct		s_fonts
+struct					s_fonts
 {
 	TTF_Font	*helvetica;
 };
 
-struct		s_ray
+struct					s_ray
 {
 	t_block_state	*hit;
 	int				x;
@@ -92,7 +89,7 @@ struct		s_ray
 	float			circle_last_out_dist;
 };
 
-struct		s_player
+struct					s_player
 {
 	t_vec3	pos;
 	float	rotation;
@@ -101,7 +98,7 @@ struct		s_player
 	t_bool	shooting;
 };
 
-struct		s_img
+struct					s_img
 {
 	uint32_t	*pixels;
 	uint32_t	size;
@@ -109,15 +106,13 @@ struct		s_img
 	uint32_t	height;
 };
 
-struct		s_wolf
+struct					s_wolf
 {
 	t_img				*img;
 	SDL_Texture			*screen;
-	SDL_Surface			*tmp_texture;
 	SDL_Renderer		*renderer;
 	SDL_Window			*win;
 	t_world				world;
-	SDL_Event			event;
 	t_ray				last_rays[(int)S_WIDTH];
 	t_bool				running;
 	t_stats				stats;
@@ -135,40 +130,64 @@ struct		s_wolf
 	float				dist_to_plane;
 };
 
-/* World */
-void		load_world(t_world *world, char *file);
+/*
+** World
+*/
 
-/* SDL */
-void		sdl_init(t_wolf *wolf);
-void		sdl_quit(t_wolf *wolf);
+void					load_world(t_world *world, char *file);
 
-/* Events */
-void		hook_events(t_wolf *wolf);
+/*
+** SDL
+*/
 
-/* Render */
-void		render_debug(t_wolf *wolf);
-void		render_minimap(t_wolf *wolf);
-void		render_main(t_wolf *wolf);
+void					sdl_init(t_wolf *wolf);
+void					sdl_quit(t_wolf *wolf);
 
-void		render_hud(t_wolf *wolf);
+/*
+** Events
+*/
 
-/* Ray */
-t_bool		next_ray(t_ray *ray);
-t_bool		prev_ray(t_ray *ray);
-t_ray		create_ray(t_wolf *wolf, int x, t_vec2 start);
-void		ray_use_portal(t_ray *ray);
+void					hook_events(t_wolf *wolf);
 
-/* Game */
-void		game_loop(t_wolf *wolf);
+/*
+** Render
+*/
 
-/* Utils */
-Uint32 		getpixel(SDL_Surface *surface, int x, int y);
-void		draw_line(t_img *img, t_pixel p0, t_pixel p1);
-void		stroke_rect(t_img *img, uint32_t color, SDL_Rect rect);
-void		apply_surface(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
-void		apply_surface_blended(t_img *img, SDL_Surface *s, SDL_Rect src, SDL_Rect dst);
+void					render_debug(t_wolf *wolf);
+void					render_minimap(t_wolf *wolf);
+void					render_main(t_wolf *wolf);
+void					render_hud(t_wolf *wolf);
 
-void		apply_texture(t_img *img, t_texture *t, SDL_Rect src, SDL_Rect dst);
-void		apply_texture_blended(t_img *img, t_texture *t, SDL_Rect src, SDL_Rect dst);
+/*
+** Ray
+*/
+
+t_bool					next_ray(t_ray *ray);
+t_bool					prev_ray(t_ray *ray);
+t_ray					create_ray(t_wolf *wolf, int x, t_vec2 start);
+void					ray_use_portal(t_ray *ray);
+
+/*
+** Game
+*/
+
+void					game_loop(t_wolf *wolf);
+
+/*
+** Utils
+*/
+
+Uint32					getpixel(SDL_Surface *surface, int x, int y);
+void					draw_line(t_img *img, t_pixel p0, t_pixel p1);
+void					stroke_rect(t_img *img, uint32_t color, SDL_Rect rect);
+void					apply_surface(t_img *img, SDL_Surface *s, SDL_Rect src,
+		SDL_Rect dst);
+void					apply_surface_blended(t_img *img, SDL_Surface *s,
+		SDL_Rect src, SDL_Rect dst);
+
+void					apply_texture(t_img *img, t_texture *t, SDL_Rect src,
+		SDL_Rect dst);
+void					apply_texture_blended(t_img *img, t_texture *t,
+		SDL_Rect src, SDL_Rect dst);
 
 #endif

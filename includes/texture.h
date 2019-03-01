@@ -44,8 +44,10 @@ struct		s_texture_animated
 	double			last_seen;
 };
 
+/*
+** Textures
+*/
 
-/* Textures */
 t_texture	*load_json_texture(t_json_object *texture_obj);
 t_texture	*load_normal_texture(t_json_object *j_obj);
 t_bool		setup_animated_texture(t_texture_animated *texture, char *path);
