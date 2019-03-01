@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:12:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 01:21:06 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 01:25:54 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int		main(int argc, char **argv)
 		},
 		.dist_to_plane = 1.0,
 		.minimap_size = 100,
-		.minimap_padding = 10,
+		.minimap_padding_x = 10,
+		.minimap_padding_y = 10,
 		.weapons_texture = { 
 			.step_count = { 5, 4 },
 			.step_size = { 64, 64 },

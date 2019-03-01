@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 01:13:48 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 01:25:33 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ struct		s_ray
 {
 	t_block_state	*hit;
 	int				x;
+	t_vec2			start;
 	t_vec2			dir;
 	t_pixel			step;
 	t_vec2			side_dist;
@@ -82,6 +83,7 @@ struct		s_ray
 	float			dist;
 	int				side;
 	t_block_state	*fhit;
+	t_world			*world;
 
 	float			circle_last_hit_x;
 	float			circle_last_hit_y;
@@ -126,7 +128,8 @@ struct		s_wolf
 	SDL_Surface			*head_overlay;
 
 	uint32_t			minimap_size;
-	uint32_t			minimap_padding;
+	uint32_t			minimap_padding_x;
+	uint32_t			minimap_padding_y;
 	float				dist_to_plane;
 };
 
@@ -148,9 +151,9 @@ void		render_main(t_wolf *wolf);
 void		render_hud(t_wolf *wolf);
 
 /* Ray */
-t_bool		next_ray(t_wolf *wolf, t_ray *ray);
-t_bool		prev_ray(t_wolf *wolf, t_ray *ray);
-t_ray		create_ray(t_wolf *wolf, int x);
+t_bool		next_ray(t_ray *ray);
+t_bool		prev_ray(t_ray *ray);
+t_ray		create_ray(t_wolf *wolf, int x, t_vec2 start);
 
 /* Game */
 void		game_loop(t_wolf *wolf);

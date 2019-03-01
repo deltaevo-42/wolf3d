@@ -73,13 +73,15 @@ void		hook_events(t_wolf *wolf)
 	}
 	if (state[SDL_SCANCODE_M])
 	{
-		wolf->minimap_size = S_WIDTH * 0.8;
-		wolf->minimap_padding = S_WIDTH / 2 - wolf->minimap_size / 2;
+		wolf->minimap_size = (S_WIDTH > S_HEIGHT ? S_HEIGHT : S_WIDTH) * 0.8;
+		wolf->minimap_padding_x = S_WIDTH / 2 - wolf->minimap_size / 2;
+		wolf->minimap_padding_y = S_HEIGHT / 2 - wolf->minimap_size / 2;
 	}
 	else
 	{
 		wolf->minimap_size = 100;
-		wolf->minimap_padding = 10;
+		wolf->minimap_padding_x = 10;
+		wolf->minimap_padding_y = 10;
 	}
 
 	while (SDL_PollEvent(&event))

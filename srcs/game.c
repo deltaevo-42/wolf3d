@@ -68,7 +68,7 @@ void			game_loop(t_wolf *wolf)
 	{
 		ft_memset(wolf->img->pixels, 0, wolf->img->size * 4);
 		render_main(wolf);
-		//render_minimap(wolf);
+		render_minimap(wolf);
 		render_debug(wolf);
 		render_hud(wolf);
 		SDL_UpdateTexture(wolf->screen, NULL, wolf->img->pixels, wolf->img->width * 4);
