@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 18:40:13 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 19:04:13 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ static t_bool		load_map(t_world *world, t_json_object *obj)
 	if (!ft_json_vec3(json_object_get(obj, "size"), &world->size))
 		return (FALSE);
 	printf("Size %f %f\n", world->size.x, world->size.y);
-	world->data = load_map_data(world, json_object_get(obj, "data"));
+	if (!(world->data = load_map_data(world, json_object_get(obj, "data"))))
+		return (FALSE);
 	if (!(texture_i = json_get_number(obj, "ceil_texture"))
 		|| *texture_i < 0 || *texture_i >= world->textures_count)
 		return (FALSE);

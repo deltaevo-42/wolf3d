@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:29:48 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 17:45:32 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 19:03:22 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,11 @@ t_block_state		*create_block_state(t_world *w, int block_id)
 {
 	t_block_state	*state;
 
-	if (block_id >= w->blocks_count || block_id == -1)
+	if (block_id >= w->blocks_count || block_id < -1)
 	{
-		if (block_id >= w->blocks_count)
-		{
-			ft_putstr("Block non declared used: id -> ");
-			ft_putnbr(block_id + 1);
-			ft_putchar('\n');
-		}
+		ft_putstr("Block non declared used: id -> ");
+		ft_putnbr(block_id + 1);
+		ft_putchar('\n');
 		return (NULL);
 	}
 	if (!(state = (t_block_state *)malloc(sizeof(t_block_state))))
@@ -49,10 +46,9 @@ t_bool				load_map_cols(t_world *w, int i, t_json_element *col_elem,
 	j = 0;
 	while (col_elem)
 	{
-		if (col_elem->value->type != JSON_NUMBER ||
-			(!(s[i][j++] = create_block_state(w,
-			(int)((t_json_number *)col_elem->value)->value - 1))
-			&& (int)((t_json_number *)col_elem->value)->value > 0))
+		if (col_elem->value->type != JSON_NUMBER 
+			|| !(s[i][j++] = create_block_state(w,
+				(int)((t_json_number *)col_elem->value)->value - 1)))
 			return (FALSE);
 		col_elem = col_elem->next;
 	}

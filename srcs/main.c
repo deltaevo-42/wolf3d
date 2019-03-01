@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:12:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 18:06:26 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/01 19:04:49 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int		main(int argc, char **argv)
 	};
 	if (!load_world(&wolf.world, "assets/maps/map_1.json"))
 	{
-		printf("Unnable to load world");
+		ft_putendl("Unable to load world");
 		return (1);//FREE 
 	}
 	sdl_init(&wolf);
