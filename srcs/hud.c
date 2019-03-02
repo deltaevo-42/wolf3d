@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 23:45:21 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 18:04:01 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/02 14:07:01 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ void	render_hud(t_wolf *wolf)
 	apply_surface_blended(wolf->img, wolf->head_overlay,
 		(SDL_Rect){ 0, 0, wolf->head_overlay->w + 5, wolf->head_overlay->h + 5},
 		(SDL_Rect){ S_WIDTH - 100 - 12, S_HEIGHT - 120 - 12, 110, 130 });
+	apply_surface_blended(wolf->img, wolf->crosshair,
+		(SDL_Rect){ 0, 0, wolf->crosshair->w, wolf->crosshair->h},
+		(SDL_Rect){ S_WIDTH_2 - 25, S_HEIGHT_2 - 25, 50, 50 });
 	if (SDL_GetTicks() - weapons->last_seen > weapons->delay)
 	{
 		if (!wolf->player.shooting)

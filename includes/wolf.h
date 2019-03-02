@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 18:36:05 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 14:02:12 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ struct					s_wolf
 	t_texture_animated	weapons_texture;
 	t_texture_animated	heads_texture;
 	SDL_Surface			*head_overlay;
+	SDL_Surface			*crosshair;
 
 	uint32_t			minimap_size;
 	uint32_t			minimap_padding_x;
