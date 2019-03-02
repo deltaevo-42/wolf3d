@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 17:43:28 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 17:44:31 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ struct					s_wolf
 	t_block				**blocks;
 	int					textures_count;
 	int					blocks_count;
+	int					worlds_count;
 	t_world				*worlds;
 	t_world				world;
 	t_ray				last_rays[(int)S_WIDTH];

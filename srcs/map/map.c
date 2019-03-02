@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:29:48 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 15:07:38 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 17:14:52 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_block_state		***load_map_data(t_wolf *wolf, t_world *w,
 			((t_json_array *)row_elem->value)->elems_count != w->size.x)
 			return (NULL);
 		col_elem = ((t_json_array *)row_elem->value)->elements;
-		if (!load_map_cols(wolf, i++, w, col_elem, states))
+		if (!load_map_cols(wolf, w, i++, col_elem, states))
 			return (NULL);
 		row_elem = row_elem->next;
 	}
@@ -91,8 +91,6 @@ t_bool		load_map(t_wolf *wolf, t_world *world, t_json_object *obj)
 {
 	double	*texture_i;
 
-	if (!(obj = json_get_object(obj, "map")))
-		return (FALSE);
 	if (!ft_json_vec3(json_object_get(obj, "size"), &world->size))
 		return (FALSE);
 	printf("Size %f %f\n", world->size.x, world->size.y);

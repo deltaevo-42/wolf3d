@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:51:33 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 14:08:55 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 16:39:39 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ void			update_textures(t_wolf *wolf)
 	int		i;
 
 	i = 0;
-	while (i < wolf->world.textures_count)
+	while (i < wolf->textures_count)
 	{
-		if (wolf->world.textures[i]->type == T_ANIMATED)
-			update_texture((t_texture_animated *)wolf->world.textures[i]);
+		if (wolf->textures[i]->type == T_ANIMATED)
+			update_texture((t_texture_animated *)wolf->textures[i]);
 		i++;
 	}
 	update_texture(&wolf->heads_texture);
