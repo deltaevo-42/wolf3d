@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:32:51 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 17:20:25 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 15:04:54 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_face				get_face_type(char *string)
 	return (F_NONE);
 }
 
-t_block				*load_json_block(t_world *world, t_json_object *obj)
+t_block				*load_json_block(t_wolf *wolf, t_json_object *obj)
 {
 	t_json_string	*j_string;
 	t_block_type	block_type;
@@ -59,8 +59,8 @@ t_block				*load_json_block(t_world *world, t_json_object *obj)
 		return (NULL);
 	}
 	if (block_type == B_NORMAL)
-		return (load_normal_block(world, obj));
+		return (load_normal_block(wolf, obj));
 	if (block_type == B_ROUND)
-		return (load_round_block(world, obj));
+		return (load_round_block(wolf, obj));
 	return (NULL);
 }

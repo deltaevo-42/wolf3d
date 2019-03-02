@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 15:15:32 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 15:19:50 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_bool				load_worlds(t_wolf *wolf, t_json_object *val)
 	t_world			*world;
 
 	if (!(arr = json_get_array(obj, "maps") 
-		|| !(world = (t_world*)malloc(sizeof(t_world) * arr->elements)))
+		|| !(world = (t_world*)malloc(sizeof(t_world) * arr->elems_count)))
 		return (FALSE);
 	return (TRUE);
 }

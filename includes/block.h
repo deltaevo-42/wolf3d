@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:46:04 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 16:18:15 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/02 14:55:24 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,14 @@ struct							s_block_round
 	t_texture		*texture;
 };
 
-t_block							*load_json_block(t_world *world,
+t_block							*load_json_block(t_wolf *wolf,
 		t_json_object *obj);
-t_block_state					***load_map_data(t_world *w, t_json_value *val);
+t_block_state					***load_map_data(t_wolf *wolf, t_world *w,
+		t_json_value *val);
 
-t_block							*load_normal_block(t_world *w,
+t_block							*load_normal_block(t_wolf *w,
 		t_json_object *obj);
-t_block							*load_round_block(t_world *w,
+t_block							*load_round_block(t_wolf *w,
 		t_json_object *obj);
 int								normal_block_minimap(t_wolf *wolf,
 		t_block_state *state);

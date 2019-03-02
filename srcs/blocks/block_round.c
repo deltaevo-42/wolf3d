@@ -6,13 +6,13 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:00:00 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 13:32:09 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 15:07:11 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-t_block		*load_round_block(t_world *w, t_json_object *obj)
+t_block		*load_round_block(t_wolf *w, t_json_object *obj)
 {
 	t_block_round	*b;
 	t_json_value	*val;
@@ -30,7 +30,7 @@ t_block		*load_round_block(t_world *w, t_json_object *obj)
 	val = json_object_get(obj, "radius");
 	b->radius = (!val || val->type != JSON_NUMBER ? 0.5
 		: ((t_json_number *)val)->value);
-	if (!(texture_i = json_get_number(obj, "texture"))
+	if (!(texture_i = json_get_number(obj, "texture")) 
 		|| *texture_i < 0 || *texture_i >= w->textures_count)
 		return (NULL);
 	b->texture = w->textures[(int)*texture_i];

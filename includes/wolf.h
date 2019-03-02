@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 16:53:17 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/02 17:43:28 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,8 @@ typedef struct s_player	t_player;
 struct					s_world
 {
 	t_block_state	***data;
-	t_texture		**textures;
-	t_block			**blocks;
 	t_texture		*ceil;
 	t_texture		*floor;
-	int				textures_count;
-	int				blocks_count;
 	t_vec3			size;
 };
 
@@ -112,6 +108,11 @@ struct					s_wolf
 	SDL_Texture			*screen;
 	SDL_Renderer		*renderer;
 	SDL_Window			*win;
+	t_texture			**textures;
+	t_block				**blocks;
+	int					textures_count;
+	int					blocks_count;
+	t_world				*worlds;
 	t_world				world;
 	t_ray				last_rays[(int)S_WIDTH];
 	t_bool				running;
@@ -152,7 +153,8 @@ typedef struct			s_polynom {
 ** World
 */
 
-t_bool					load_world(t_world *world, char *file);
+t_bool					load_map(t_wolf *wolf, t_world *world, t_json_object *obj);
+t_bool					load_config(t_wolf *wolf, char *file);
 
 /*
 ** SDL

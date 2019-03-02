@@ -6,13 +6,13 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 17:41:56 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 18:37:41 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 15:06:42 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-static t_bool	load_block_side(t_world *w, t_json_object *o,
+static t_bool	load_block_side(t_wolf *w, t_json_object *o,
 	t_block_side *side)
 {
 	t_json_value	*val;
@@ -29,7 +29,7 @@ static t_bool	load_block_side(t_world *w, t_json_object *o,
 	return (TRUE);
 }
 
-static t_bool	load_block_sides(t_world *w, t_json_value *v,
+static t_bool	load_block_sides(t_wolf *w, t_json_value *v,
 	t_block_side *faces)
 {
 	t_json_object	*obj;
@@ -59,12 +59,12 @@ static t_bool	load_block_sides(t_world *w, t_json_value *v,
 	return (TRUE);
 }
 
-t_block			*load_normal_block(t_world *w, t_json_object *obj)
+t_block			*load_normal_block(t_wolf *w, t_json_object *obj)
 {
 	t_block_normal	*b;
 	t_json_value	*val;
 
-	if (!(b = (t_block_normal *)malloc(sizeof(t_block_normal))))
+	if (!(b = (t_block_normal*)malloc(sizeof(t_block_normal))))
 		return (NULL);
 	b->super.type = B_NORMAL;
 	if (!ft_json_color(json_object_get(obj, "minimap_color"),
