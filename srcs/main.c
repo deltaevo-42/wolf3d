@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:12:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 17:11:34 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 18:17:38 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		main(int argc, char **argv)
 			.delay = 50
 		},
 		.heads_texture = { 
-			.step_count = { 3, 1 },
+			.step_count = { 3, 7 },
 			.step_size = { 24, 32 },
 			.spacer = { 1, 1 },
 			.delay = 500
