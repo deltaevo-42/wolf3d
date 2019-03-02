@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 15:04:41 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/02 16:27:31 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,23 @@
 
 void			render_debug(t_wolf *wolf)
 {
+	const SDL_Color	color = {255, 255, 255, 0};
 	SDL_Surface		*text;
 
-	text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.fps).str, (SDL_Color){255, 255, 255, 0});
-	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h}, (SDL_Rect){5, 5, text->w + 5, text->h + 5});
+	text = TTF_RenderText_Blended(wolf->fonts.helvetica,
+		ft_int_to_str(wolf->stats.fps).str, color);
+	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h},
+		(SDL_Rect){5, 5, text->w + 5, text->h + 5});
 	SDL_FreeSurface(text);
-	text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str((int)wolf->stats.avg_ms).str, (SDL_Color){255, 255, 255, 0});
-	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h}, (SDL_Rect){5, text->h + 10, text->w + 5, text->h + 5});
+	text = TTF_RenderText_Blended(wolf->fonts.helvetica,
+		ft_int_to_str((int)wolf->stats.avg_ms).str, color);
+	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h},
+		(SDL_Rect){5, text->h + 10, text->w + 5, text->h + 5});
 	SDL_FreeSurface(text);
-	text = TTF_RenderText_Blended(wolf->fonts.helvetica, ft_int_to_str(wolf->stats.num_rays).str, (SDL_Color){255, 255, 255, 0});
-	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h}, (SDL_Rect){5, text->h * 2 + 15, text->w + 5, text->h + 5});
+	text = TTF_RenderText_Blended(wolf->fonts.helvetica,
+		ft_int_to_str(wolf->stats.num_rays).str, color);
+	apply_surface_blended(wolf->img, text, (SDL_Rect){0, 0, text->w, text->h},
+		(SDL_Rect){5, text->h * 2 + 15, text->w + 5, text->h + 5});
 	SDL_FreeSurface(text);
 }
 
@@ -154,23 +161,28 @@ t_bool			double_cast_ray(t_wolf *wolf, int x1, int x2)
 
 void			render_binary(t_wolf *wolf, int x1, int x2)
 {
+	t_ray	ray;
+	int		mid;
+
 	if (x2 < x1)
 		return ;
 	if (x1 == x2)
 	{
-		t_ray ray = create_ray(wolf, x1, (t_vec2) { wolf->player.pos.x, wolf->player.pos.y });
+		ray = create_ray(wolf, x1,
+			(t_vec2) { wolf->player.pos.x, wolf->player.pos.y });
 		cast_ray(wolf, &ray, INT_MAX);
-	} else
+	}
+	else
 	{
 		if (double_cast_ray(wolf, x1, x2))
 			return ;
 		if (x2 - x1 < 2)
 			return ;
-		int mid = (x1 + x2) / 2;
+		mid = (x1 + x2) / 2;
 		render_binary(wolf, x1 + 1, mid - 1);
 		render_binary(wolf, mid, x2 - 1);
 	}
-}	
+}
 
 void			render_main(t_wolf *wolf)
 {

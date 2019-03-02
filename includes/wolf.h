@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 15:08:58 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/02 16:53:17 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,23 @@ struct					s_wolf
 	uint32_t			minimap_padding_y;
 	float				dist_to_plane;
 };
+
+typedef	struct			s_circle {
+	double	p;
+	double	q;
+	double	r;
+}						t_circle;
+
+typedef struct			s_line {
+	double	m;
+	double	c;
+}						t_line;
+
+typedef struct			s_polynom {
+	double	a;
+	double	b;
+	double	c;
+}						t_polynom;
 
 /*
 ** World
