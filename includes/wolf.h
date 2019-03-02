@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 14:02:12 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 15:08:58 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,10 @@ void					render_debug(t_wolf *wolf);
 void					render_minimap(t_wolf *wolf);
 void					render_main(t_wolf *wolf);
 void					render_hud(t_wolf *wolf);
+void					render_floor(t_wolf *wolf,
+	t_ray *from, t_ray *to, int last_floor);
+void					render_ceil(t_wolf *wolf,
+	t_ray *from, t_ray *to);
 
 /*
 ** Ray
