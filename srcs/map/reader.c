@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 19:04:13 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/02 15:15:32 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char			*get_file_content(char *file, int *content_len)
 	return (NULL);
 }
 
-static t_texture	**load_textures(t_world *world, t_json_object *obj)
+static t_texture	**load_textures(t_wolf *wolf, t_json_object *obj)
 {
 	t_json_array	*arr;
 	t_json_element	*e;
@@ -65,11 +65,11 @@ static t_texture	**load_textures(t_world *world, t_json_object *obj)
 		}
 		e = e->next;
 	}
-	world->textures_count = arr->elems_count;
+	wolf->textures_count = arr->elems_count;
 	return (tex);
 }
 
-static t_block		**load_blocks(t_world *world, t_json_object *obj)
+static t_block		**load_blocks(t_wolf *wolf, t_json_object *obj)
 {
 	t_json_array	*arr;
 	t_json_element	*e;
@@ -84,7 +84,7 @@ static t_block		**load_blocks(t_world *world, t_json_object *obj)
 	while (e)
 	{
 		if (e->value->type != JSON_OBJECT
-		|| !(blocks[i++] = load_json_block(world, (t_json_object *)e->value)))
+		|| !(blocks[i++] = load_json_block(wolf, (t_json_object *)e->value)))
 		{
 			ft_putstr("Invalid block at index: ");//TODO: clean previous loaded blocks
 			ft_putnbr(i - 1);
@@ -94,33 +94,22 @@ static t_block		**load_blocks(t_world *world, t_json_object *obj)
 		}
 		e = e->next;
 	}
-	world->blocks_count = arr->elems_count;
+	wolf->blocks_count = arr->elems_count;
 	return (blocks);
 }
 
-static t_bool		load_map(t_world *world, t_json_object *obj)
+t_bool				load_worlds(t_wolf *wolf, t_json_object *val)
 {
-	double	*texture_i;
+	t_json_array	*arr;
+	t_world			*world;
 
-	if (!(obj = json_get_object(obj, "map")))
+	if (!(arr = json_get_array(obj, "maps") 
+		|| !(world = (t_world*)malloc(sizeof(t_world) * arr->elements)))
 		return (FALSE);
-	if (!ft_json_vec3(json_object_get(obj, "size"), &world->size))
-		return (FALSE);
-	printf("Size %f %f\n", world->size.x, world->size.y);
-	if (!(world->data = load_map_data(world, json_object_get(obj, "data"))))
-		return (FALSE);
-	if (!(texture_i = json_get_number(obj, "ceil_texture"))
-		|| *texture_i < 0 || *texture_i >= world->textures_count)
-		return (FALSE);
-	world->ceil = world->textures[(int)*texture_i];
-	if (!(texture_i = json_get_number(obj, "floor_texture"))
-		|| *texture_i < 0 || *texture_i >= world->textures_count)
-		return (FALSE);
-	world->floor = world->textures[(int)*texture_i];
 	return (TRUE);
 }
 
-t_bool				load_world(t_world *world, char *file)
+t_bool				load_config(t_wolf *wolf, char *file)
 {
 	t_json_state	state;
 	t_json_value	*val;
@@ -136,12 +125,14 @@ t_bool				load_world(t_world *world, char *file)
 		return (FALSE);
 	}
 	free((void *)content);
-	if (!(world->textures = load_textures(world, (t_json_object *)val)))
+	if (!(wolf->textures = load_textures(wolf, (t_json_object *)val)))
 		return (FALSE);
-	if (!(world->blocks = load_blocks(world, (t_json_object *)val)))
+	if (!(wolf->blocks = load_blocks(wolf, (t_json_object *)val)))
 		return (FALSE);
+		printf("Blocks loaded\n");
+	/*
 	if (!load_map(world, (t_json_object *)val))
-		return (FALSE);
+		return (FALSE);*/
 	json_free_value(val);
 	return (TRUE);
 }
