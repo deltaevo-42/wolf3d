@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hud.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 23:45:21 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 16:16:45 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/03 16:18:06 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	update_texture(t_wolf *wolf, t_texture_animated *weapons)
 	}
 }
 
-void	render_hud(t_wolf *wolf)
+void		render_hud(t_wolf *wolf)
 {
 	t_texture_animated *const	weapons = &wolf->weapons_texture;
 
