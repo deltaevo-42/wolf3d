@@ -18,3 +18,4 @@ SRC+=sdl.c
 SRC+=textures/texture_animated.c
 SRC+=textures/texture_normal.c
 SRC+=utils.c
+SRC+=utils_apply.c

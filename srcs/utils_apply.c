@@ -3,31 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils_apply.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 18:30:57 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/03 18:40:08 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/03 18:53:28 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
-
-static t_color	alpha_blend(t_color c1, t_color c2)
-{
-	float	a1;
-	float	a2;
-	float	a;
-
-	a1 = c1.a / 255.0;
-	a2 = c2.a / 255.0;
-	a = a2 * (1 - a1);
-	return ((t_color) {
-		.r = c1.r * a1 + c2.r * a,
-		.g = c1.g * a1 + c2.g * a,
-		.b = c1.b * a1 + c2.b * a,
-		.a = (a1 + a) * 0xFF
-	});
-}
 
 void			apply_surface_blended(t_img *img, SDL_Surface *s, SDL_Rect src,
 	SDL_Rect dst)
@@ -47,16 +30,11 @@ void			apply_surface_blended(t_img *img, SDL_Surface *s, SDL_Rect src,
 			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
 			if (index >= img->size)
 				break ;
-			img->pixels[index] = ft_color_i(alpha_blend(ft_i_color(
+			img->pixels[index] = ft_color_i(ft_alpha_blend(ft_i_color(
 				getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y)),
 				ft_i_color(img->pixels[index])));
 		}
 	}
-}
-
-static int		min(int a, int b)
-{
-	return (a < b ? a : b);
 }
 
 void			apply_surface(t_img *img, SDL_Surface *s,
@@ -68,8 +46,8 @@ void			apply_surface(t_img *img, SDL_Surface *s,
 	const t_vec2	s_v = (t_vec2){src.w / (float)dst.w, src.h / (float)dst.h};
 	t_pixel			s_p;
 
-	s_p = (t_pixel){min(img->width - 1, dst.x + dst.w),
-					min(img->height - 1, dst.y + dst.h), 0};
+	s_p = (t_pixel){ft_min(img->width - 1, dst.x + dst.w),
+					ft_min(img->height - 1, dst.y + dst.h), 0};
 	if (dst.y < 0)
 		dst.y = 0;
 	if (dst.x < 0)
