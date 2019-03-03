@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   floor.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 14:37:28 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/02 18:05:33 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/03 15:54:47 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf.h"
 #include "floor.h"
 
 static t_vec2	get_floor_wall(t_ray *ray)
