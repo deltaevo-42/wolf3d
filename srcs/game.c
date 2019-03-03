@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:51:33 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 16:39:39 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/03 16:03:04 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ void			game_loop(t_wolf *wolf)
 	wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
 	wolf->head_overlay = IMG_Load("assets/textures/head_overlay.png");
 	wolf->crosshair = IMG_Load("assets/textures/crosshair.png");
-	wolf->crosshair = SDL_ConvertSurfaceFormat(wolf->crosshair, SDL_PIXELFORMAT_ARGB8888, 0);
+	wolf->crosshair = SDL_ConvertSurfaceFormat(wolf->crosshair,
+				SDL_PIXELFORMAT_ARGB8888, 0);
 	setup_animated_texture(&wolf->weapons_texture, WEAPONS);
 	setup_animated_texture(&wolf->heads_texture, "assets/textures/heads.png");
 	wolf->weapons_texture.index = wolf->player.selected_weapon
