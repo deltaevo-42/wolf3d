@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 17:44:31 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/03 13:46:11 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <stdlib.h>
 
 # define BAR_H (100.0)
-# define S_WIDTH (1280.0)
-# define S_HEIGHT (720.0)
+# define S_WIDTH (1000.0)
+# define S_HEIGHT (562.0)
 # define S_WIDTH_2 (S_WIDTH / 2)
 # define S_HEIGHT_2 (S_HEIGHT / 2)
 # define S_RATIO (S_WIDTH / S_HEIGHT)
@@ -113,7 +113,6 @@ struct					s_wolf
 	int					textures_count;
 	int					blocks_count;
 	int					worlds_count;
-	t_world				*worlds;
 	t_world				world;
 	t_ray				last_rays[(int)S_WIDTH];
 	t_bool				running;

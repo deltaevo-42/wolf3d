@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:29:48 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 17:14:52 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/03 13:45:01 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ t_bool		load_map(t_wolf *wolf, t_world *world, t_json_object *obj)
 {
 	double	*texture_i;
 
+	if (!obj)
+		return (FALSE);
 	if (!ft_json_vec3(json_object_get(obj, "size"), &world->size))
 		return (FALSE);
 	printf("Size %f %f\n", world->size.x, world->size.y);
