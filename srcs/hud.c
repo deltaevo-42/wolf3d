@@ -6,11 +6,28 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 23:45:21 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 14:07:01 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/03 16:16:45 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
+
+static void	update_texture(t_wolf *wolf, t_texture_animated *weapons)
+{
+	if (SDL_GetTicks() - weapons->last_seen > weapons->delay)
+	{
+		if (!wolf->player.shooting)
+			return ;
+		weapons->index++;
+		weapons->last_seen = SDL_GetTicks();
+		if ((weapons->index % (int)weapons->step_count.x) == 0)
+		{
+			weapons->index = wolf->player.selected_weapon
+				* weapons->step_count.x;
+			wolf->player.shooting = FALSE;
+		}
+	}
+}
 
 void	render_hud(t_wolf *wolf)
 {
@@ -30,17 +47,5 @@ void	render_hud(t_wolf *wolf)
 	apply_surface_blended(wolf->img, wolf->crosshair,
 		(SDL_Rect){ 0, 0, wolf->crosshair->w, wolf->crosshair->h},
 		(SDL_Rect){ S_WIDTH_2 - 25, S_HEIGHT_2 - 25, 50, 50 });
-	if (SDL_GetTicks() - weapons->last_seen > weapons->delay)
-	{
-		if (!wolf->player.shooting)
-			return ;
-		weapons->index++;
-		weapons->last_seen = SDL_GetTicks();
-		if ((weapons->index % (int)weapons->step_count.x) == 0)
-		{
-			weapons->index = wolf->player.selected_weapon
-				* weapons->step_count.x;
-			wolf->player.shooting = FALSE;
-		}
-	}
+	update_texture(wolf, weapons);
 }
