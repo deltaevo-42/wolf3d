@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reader.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 13:45:35 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/03 18:56:59 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,28 +97,6 @@ static t_block		**load_blocks(t_wolf *wolf, t_json_object *obj)
 	wolf->blocks_count = arr->elems_count;
 	return (blocks);
 }
-
-// t_bool				load_worlds(t_wolf *wolf, t_json_object *val)
-// {
-// 	t_json_array	*arr;
-// 	t_json_element	*e;
-// 	int				i;
-	
-
-// 	if (!(arr = json_get_array(val, "maps"))
-// 		|| !(wolf->worlds = (t_world*)malloc(sizeof(t_world) * arr->elems_count)))
-// 		return (FALSE);
-// 	e = arr->elements;
-// 	i = 0;
-// 	while (e)
-// 	{
-// 		if (e->value->type != JSON_OBJECT || !load_map(wolf, wolf->worlds + i++, (t_json_object *)e->value))
-// 			return (FALSE);
-// 		e = e->next;
-// 	}
-// 	wolf->worlds_count = arr->elems_count;
-// 	return (TRUE);
-// }
 
 t_bool				load_config(t_wolf *wolf, char *file)
 {
