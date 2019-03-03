@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 16:27:31 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/03 13:53:38 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,30 +54,44 @@ t_bool			render_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p)
 	return (TRUE);
 }
 
-void			cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
+void			try_portal(t_wolf *wolf, t_ray *from, t_ray *to, int last_y)
 {
+	if (from->hit == to->hit && from->hit && from->hit->type == B_PORTAL)
+	{
+		render_floor(wolf, from, to, last_y);
+		render_ceil(wolf, from, to);
+		ray_use_portal(from);
+		if (from != to)
+			ray_use_portal(to);
+	}
+}
+
+static int		get_hit_bottom(t_wolf *wolf, t_ray *ray)
+{
+	const float	h = S_HEIGHT / ray->dist;
+
+	return (S_HEIGHT_2 + h * (wolf->player.pos.z + 1) * 0.5
+						- h * ray->hit->block->height);
+}
+
+static void		cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
+{
+	int				p;
+	t_block_state	*hit;
+
 	while (1)
 	{
-		if (ray->hit && ray->hit->type == B_PORTAL)
+		try_portal(wolf, ray, ray, last_y);
+		if ((hit = ray->hit))
 		{
-			render_floor(wolf, ray, ray, last_y);
-			render_ceil(wolf, ray, ray);
-			ray_use_portal(ray);
-		}
-		if (ray->hit)
-		{
-			t_block_state *hit = ray->hit;
-			float h = S_HEIGHT / ray->dist;
-			int p = S_HEIGHT_2 + h * (wolf->player.pos.z + 1) * 0.5 - h * hit->block->height;
+			p = get_hit_bottom(wolf, ray);
 			render_wall(wolf, ray, ray, last_y);
 			if (p < last_y)
 				render_floor(wolf, ray, ray, last_y);
-			if (p < last_y)
-				last_y = p;
-			if (ray->hit->block->height == wolf->world.size.z)
+			last_y = p < last_y ? p : last_y;
+			if (ray->hit->block->height == wolf->world.size.z
+				|| (p <= 0 && p + (S_HEIGHT / ray->dist) > S_HEIGHT))
 				break ;
-			if (p <= 0 && p + h > S_HEIGHT)
-				break;
 			next_ray(ray);
 			render_top(wolf, ray, hit, p);
 			continue ;
@@ -89,73 +103,58 @@ void			cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 	render_ceil(wolf, ray, ray);
 }
 
-t_bool			double_cast_ray(t_wolf *wolf, int x1, int x2)
+static t_bool	render_double_ray(t_wolf *wolf, t_ray *from,
+	t_ray *to, int *last_y)
 {
-	t_ray	first = create_ray(wolf, x1, (t_vec2) { wolf->player.pos.x, wolf->player.pos.y });
-	t_ray	second = create_ray(wolf, x2, (t_vec2) { wolf->player.pos.x, wolf->player.pos.y });
-	int		last_y = INT_MAX;
+	t_block_state *const	hit = from->hit;
+	const int				pf = get_hit_bottom(wolf, from);
+	const int				pt = get_hit_bottom(wolf, to);
+	const int				p = pf > pt ? pf : pt;
+	const float				h = S_HEIGHT / fmin(from->dist, to->dist);
 
+	render_wall(wolf, from, to, *last_y);
+	if (p < *last_y)
+		render_floor(wolf, from, to, *last_y);
+	if (p < *last_y)
+		*last_y = p;
+	if (from->hit->block->height == wolf->world.size.z)
+		return (TRUE);
+	if (p <= 0 && p + h > S_HEIGHT)
+		return (TRUE);
+	next_ray(from);
+	next_ray(to);
+	render_top(wolf, from, hit, pf);
+	prev_ray(from);
+	prev_ray(to);
+	return (FALSE);
+}
+
+t_bool			double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
+{
+	t_ray			first;
+	t_ray			second;
+	const t_vec2	start = (t_vec2) { wolf->player.pos.x, wolf->player.pos.y };
+
+	first = create_ray(wolf, x1, start);
+	second = create_ray(wolf, x2, start);
 	while (1)
 	{
-		t_bool	next_first = next_ray(&first);
-		t_bool	next_second = next_ray(&second);
-
-		if (!next_first && !next_second)
+		if ((next_ray(&first) ^ next_ray(&second))
+			|| (first.fhit && first.fhit->block->type != B_NORMAL)
+			|| (second.fhit && second.fhit->block->type != B_NORMAL)
+			|| first.hit != second.hit || first.face != second.face)
+		{
+			cast_ray(wolf, &first, last_y);
+			cast_ray(wolf, &second, last_y);
+			return (FALSE);
+		}
+		try_portal(wolf, &first, &second, last_y);
+		if (first.hit && render_double_ray(wolf, &first, &second, &last_y))
 			break ;
-		if (next_first != next_second)
-		{
-			cast_ray(wolf, &first, last_y);
-			cast_ray(wolf, &second, last_y);
-			return (FALSE);
-		}
-		if ((first.fhit && first.fhit->block->type != B_NORMAL)
-			|| (second.fhit && second.fhit->block->type != B_NORMAL))
-		{
-			cast_ray(wolf, &first, last_y);
-			cast_ray(wolf, &second, last_y);
-			return (FALSE);
-		}
-		if (first.fhit == second.fhit && first.fhit && first.fhit->type == B_PORTAL)
-		{
-			render_floor(wolf, &first, &second, last_y);
-			render_ceil(wolf, &first, &second);
-			ray_use_portal(&first);
-			ray_use_portal(&second);
-		}
-		if (first.hit || second.hit)
-		{
-			if (first.hit != second.hit || first.face != second.face)
-			{
-				cast_ray(wolf, &first, last_y);
-				cast_ray(wolf, &second, last_y);
-				return (FALSE);
-			}
-			t_block_state *hit = first.hit;
-			float hf = S_HEIGHT / first.dist;
-			int pf = S_HEIGHT_2 + hf * (wolf->player.pos.z + 1) * 0.5 - hf * hit->block->height;
-			float hs = S_HEIGHT / second.dist;
-			int ps = S_HEIGHT_2 + hs * (wolf->player.pos.z + 1) * 0.5 - hs * hit->block->height;
-			float h = pf > ps ? hf : hs;
-			int p = pf > ps ? pf : ps;
-			render_wall(wolf, &first, &second, last_y);
-			if (p < last_y)
-				render_floor(wolf, &first, &second, last_y);
-			if (p < last_y)
-				last_y = p;
-			if (first.hit->block->height == wolf->world.size.z)
-				break ;
-			if (p <= 0 && p + h > S_HEIGHT)
-				break;
-			next_ray(&first);
-			next_ray(&second);
-			render_top(wolf, &first, hit, pf);
-			prev_ray(&first);
-			prev_ray(&second);
-		}
 	}
-	render_ceil(wolf, &first, &second);
 	wolf->last_rays[wolf->stats.num_rays++] = first;
 	wolf->last_rays[wolf->stats.num_rays++] = second;
+	render_ceil(wolf, &first, &second);
 	return (TRUE);
 }
 
@@ -174,7 +173,7 @@ void			render_binary(t_wolf *wolf, int x1, int x2)
 	}
 	else
 	{
-		if (double_cast_ray(wolf, x1, x2))
+		if (double_cast_ray(wolf, x1, x2, INT_MAX))
 			return ;
 		if (x2 - x1 < 2)
 			return ;
