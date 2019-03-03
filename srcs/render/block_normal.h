@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   block_normal.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 15:54:10 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 16:05:58 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/03 18:55:51 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RENDER_FLOOR_H
-# define RENDER_FLOOR_H
+#ifndef BLOCK_NORMAL_H
+# define BLOCK_NORMAL_H
 
 # include "wolf.h"
 
-typedef struct s_render_info {
+typedef struct	s_render_info {
 	int				tex_x;
 	int				y;
 	float			height;
