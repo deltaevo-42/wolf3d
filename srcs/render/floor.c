@@ -73,7 +73,7 @@ static int		get_wall_screen_pos(t_wolf *wolf, t_ray *ray,
 	const float	offset = height * (wolf->player.pos.z + 1) / 2. - height;
 
 	if (pos == WALL_BOTTOM)
-		return (S_HEIGHT_2 + offset + 1);
+		return (S_HEIGHT_2 + height + offset + 1);
 	else if (pos == WALL_TOP)
 		return (S_HEIGHT_2 - world_height + offset - 1);
 	else
