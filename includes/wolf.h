@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 13:46:11 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 13:41:54 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,8 @@ typedef struct			s_polynom {
 ** World
 */
 
-t_bool					load_map(t_wolf *wolf, t_world *world, t_json_object *obj);
+t_bool					load_map(t_wolf *wolf, t_world *world,
+	t_json_object *obj);
 t_bool					load_config(t_wolf *wolf, char *file);
 void					unload(t_wolf *wolf);
 void					unload_blocks(t_block **blocks, size_t size);
@@ -186,6 +187,13 @@ void					render_floor(t_wolf *wolf,
 	t_ray *from, t_ray *to, int last_floor);
 void					render_ceil(t_wolf *wolf,
 	t_ray *from, t_ray *to);
+void					render_binary(t_wolf *wolf, int x1, int x2);
+void					try_portal(t_wolf *wolf, t_ray *from, t_ray *to,
+	int last_y);
+t_bool					render_top(t_wolf *wolf, t_ray *ray,
+	t_block_state *hit, int p);
+t_bool					render_wall(t_wolf *wolf, t_ray *from,
+	t_ray *to, int last_y);
 
 /*
 ** Ray
