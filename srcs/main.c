@@ -37,6 +37,7 @@ int		main(int argc, char **argv)
 	}
 	sdl_init(&wolf);
 	game_loop(&wolf);
+	unload(&wolf);
 	sdl_quit(&wolf);
 	return (0);
 }

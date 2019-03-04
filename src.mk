@@ -8,6 +8,7 @@ SRC+=map/block.c
 SRC+=map/map.c
 SRC+=map/reader.c
 SRC+=map/texture.c
+SRC+=map/unload.c
 SRC+=minimap.c
 SRC+=ray.c
 SRC+=render/block_normal.c

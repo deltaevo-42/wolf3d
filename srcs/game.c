@@ -59,12 +59,14 @@ void			update_textures(t_wolf *wolf)
 
 void			game_loop(t_wolf *wolf)
 {
+	SDL_Surface	*img;
 	wolf->player.pos = (t_vec3){ 6, 7, 0 };
 	wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
 	wolf->head_overlay = IMG_Load("assets/textures/head_overlay.png");
-	wolf->crosshair = IMG_Load("assets/textures/crosshair.png");
-	wolf->crosshair = SDL_ConvertSurfaceFormat(wolf->crosshair,
+	img = IMG_Load("assets/textures/crosshair.png");
+	wolf->crosshair = SDL_ConvertSurfaceFormat(img,
 				SDL_PIXELFORMAT_ARGB8888, 0);
+	SDL_FreeSurface(img);
 	setup_animated_texture(&wolf->weapons_texture, WEAPONS);
 	setup_animated_texture(&wolf->heads_texture, "assets/textures/heads.png");
 	wolf->weapons_texture.index = wolf->player.selected_weapon

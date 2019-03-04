@@ -14,9 +14,11 @@
 
 t_bool			setup_animated_texture(t_texture_animated *t, char *path)
 {
+	SDL_Surface	*img;
+
 	t->super.type = T_ANIMATED;
 	t->super.size = t->step_size;
-	if (!(t->super.surface = IMG_Load(path)))
+	if (!(img = IMG_Load(path)))
 	{
 		ft_putstr("Unnable to load t: ");
 		ft_putendl(IMG_GetError());
@@ -24,8 +26,9 @@ t_bool			setup_animated_texture(t_texture_animated *t, char *path)
 	}
 	t->index = 0;
 	t->last_seen = 0;
-	t->super.surface = SDL_ConvertSurfaceFormat(t->super.surface,
+	t->super.surface = SDL_ConvertSurfaceFormat(img,
 		SDL_PIXELFORMAT_ARGB8888, 0);
+	SDL_FreeSurface(img);
 	return (TRUE);
 }
 
