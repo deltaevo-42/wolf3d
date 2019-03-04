@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/04 13:32:20 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/04 16:53:42 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:10:23 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ static t_bool	double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
 	second = create_ray(wolf, x2, start);
 	while (ray_in_map(&first) && ray_in_map(&second))
 	{
+		try_portal(wolf, &first, &second, last_y);
+		if (first.hit && render_double_ray(wolf, &first, &second, &last_y))
+			break ;
 		if ((next_ray(&first) ^ next_ray(&second))
 			|| (first.fhit && first.fhit->block->type != B_NORMAL)
 			|| (second.fhit && second.fhit->block->type != B_NORMAL)
@@ -95,9 +98,6 @@ static t_bool	double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
 			cast_ray(wolf, &second, last_y);
 			return (FALSE);
 		}
-		try_portal(wolf, &first, &second, last_y);
-		if (first.hit && render_double_ray(wolf, &first, &second, &last_y))
-			break ;
 	}
 	wolf->last_rays[wolf->stats.num_rays++] = first;
 	wolf->last_rays[wolf->stats.num_rays++] = second;

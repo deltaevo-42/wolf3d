@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 16:47:46 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:08:17 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,25 @@
 #define STAIR_MAX 0.5
 #define BOUND 0.25
 
-static t_bool	is_in_block(t_wolf *wolf, float x, float y)
+static t_bool	is_in_block(t_wolf *wolf, float x, float y, float z)
 {
-	if (wolf->world.data[(int)(wolf->player.pos.y + y + BOUND)]
-			[(int)(wolf->player.pos.x + x - BOUND)])
+	t_block_state	*b_state;
+
+	b_state = wolf->world.data[(int)(wolf->player.pos.y + y - BOUND)]
+			[(int)(wolf->player.pos.x + x + BOUND)];
+	if (b_state && b_state->block->height > z)
 		return (TRUE);
-	if (wolf->world.data[(int)(wolf->player.pos.y + y - BOUND)]
-			[(int)(wolf->player.pos.x + x - BOUND)])
+	b_state = wolf->world.data[(int)(wolf->player.pos.y + y - BOUND)]
+			[(int)(wolf->player.pos.x + x - BOUND)];
+	if (b_state && b_state->block->height > z)
 		return (TRUE);
-	if (wolf->world.data[(int)(wolf->player.pos.y + y + BOUND)]
-			[(int)(wolf->player.pos.x + x + BOUND)])
+	b_state = wolf->world.data[(int)(wolf->player.pos.y + y + BOUND)]
+			[(int)(wolf->player.pos.x + x - BOUND)];
+	if (b_state && b_state->block->height > z)
 		return (TRUE);
-	if (wolf->world.data[(int)(wolf->player.pos.y + y - BOUND)]
-			[(int)(wolf->player.pos.x + x + BOUND)])
+	b_state = wolf->world.data[(int)(wolf->player.pos.y + y + BOUND)]
+			[(int)(wolf->player.pos.x + x + BOUND)];
+	if (b_state && b_state->block->height > z)
 		return (TRUE);
 	return (FALSE);
 }
@@ -67,14 +73,14 @@ static void	events_move(t_wolf *wolf, const Uint8 *state)
 		z = (state[SDL_SCANCODE_LSHIFT] ? -1 : 1) * move_speed;
 		b_state = wolf->world.data[(int)(wolf->player.pos.y)]
 			[(int)(wolf->player.pos.x)];
-		if (!b_state || b_state->block->height < wolf->player.pos.z - 0.5)
+		if (!b_state || b_state->block->height < wolf->player.pos.z + z - 0.5)
 		{
 			wolf->player.pos.z += z;
 		}
 	}
-	if (!is_in_block(wolf, 0, y))
+	if (!is_in_block(wolf, 0, y, wolf->player.pos.z - 0.5))
 		wolf->player.pos.y += y;
-	if (!is_in_block(wolf, x, 0))
+	if (!is_in_block(wolf, x, 0, wolf->player.pos.z - 0.5))
 		wolf->player.pos.x += x;
 	if (wolf->player.pos.x < 0)
 		wolf->player.pos.x = 0;
