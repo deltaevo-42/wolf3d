@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   block_normal.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 13:33:02 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 14:55:02 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 15:10:55 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_bool					render_block_normal_wall(t_wolf *wolf,
 	t_block_normal	*block;
 	t_render_info	from;
 	t_render_info	to;
-	float			progress;
+	double			progress;
 
 	block = (t_block_normal *)from_ray->hit->block;
 	from = get_render_infos(wolf, from_ray, block, last_y);

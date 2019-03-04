@@ -3,21 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:12:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 11:46:01 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 15:08:13 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-int		main(int argc, char **argv)
+static int		start(t_wolf *wolf, char *map)
+{
+	if (!load_config(wolf, map))
+	{
+		unload(wolf);
+		ft_putendl("Unable to load world");
+		return (1);
+	}
+	if (!init_defaults(wolf))
+	{
+		unload(wolf);
+		ft_putendl("Unable to load default settings");
+		return (1);
+	}
+	sdl_init(wolf);
+	game_loop(wolf);
+	unload(wolf);
+	sdl_quit(wolf);
+	return (0);
+}
+
+int				main(int argc, char **argv)
 {
 	t_wolf	wolf;
 
+	if (argc != 2)
+	{
+		ft_putendl("Usage: ./wolf3d [map.json]");
+		return (1);
+	}
 	wolf = (t_wolf) {
-		.player = { .rotation = 0.01, .selected_weapon = 0 },
+		.player = { .selected_weapon = 0 },
 		.dist_to_plane = 1.0,
 		.minimap_size = 100,
 		.minimap_padding_x = 10, .minimap_padding_y = 10,
@@ -28,15 +54,5 @@ int		main(int argc, char **argv)
 			.step_count = { 3, 7 }, .step_size = { 24, 32 },
 			.spacer = { 1, 1 }, .delay = 500}
 	};
-	if (!load_config(&wolf, "assets/maps/map_1.json"))
-	{
-		unload(&wolf);
-		ft_putendl("Unable to load world");
-		return (1);
-	}
-	sdl_init(&wolf);
-	game_loop(&wolf);
-	unload(&wolf);
-	sdl_quit(&wolf);
-	return (0);
+	return (start(&wolf, argv[1]));
 }

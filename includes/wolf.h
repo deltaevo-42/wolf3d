@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 14:40:08 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 15:09:29 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define S_RATIO (S_WIDTH / S_HEIGHT)
 # define IMG_MAX_I (S_WIDTH * S_HEIGHT)
 # define PLANE ((S_WIDTH / 2) / S_WIDTH)
+# define DEG_TO_RAD (M_PI / 180.)
 
 typedef struct s_world	t_world;
 typedef struct s_img	t_img;
@@ -47,6 +48,8 @@ struct					s_world
 	t_texture		*ceil;
 	t_texture		*floor;
 	t_vec3			size;
+	t_vec3			spawn_pos;
+	float			spawn_rotation;
 };
 
 struct					s_stats
@@ -209,6 +212,7 @@ void					ray_use_portal(t_ray *ray);
 */
 
 void					game_loop(t_wolf *wolf);
+t_bool					init_defaults(t_wolf *wolf);
 
 /*
 ** Utils

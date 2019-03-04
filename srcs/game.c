@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:51:33 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 16:03:04 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 14:31:33 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,30 @@ void			update_textures(t_wolf *wolf)
 }
 
 #define WEAPONS "assets/textures/weapons.png"
+#define HEADS "assets/textures/heads.png"
+
+t_bool			init_defaults(t_wolf *wolf)
+{
+	SDL_Surface	*img;
+
+	wolf->player.pos = wolf->world.spawn_pos;
+	wolf->player.rotation = wolf->world.spawn_rotation * DEG_TO_RAD;
+	wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
+	if (!(wolf->head_overlay = IMG_Load("assets/textures/head_overlay.png"))
+		|| !(img = IMG_Load("assets/textures/crosshair.png"))
+		|| !setup_animated_texture(&wolf->weapons_texture, WEAPONS)
+		|| !setup_animated_texture(&wolf->heads_texture, HEADS))
+		return (FALSE);
+	wolf->crosshair = SDL_ConvertSurfaceFormat(img,
+		SDL_PIXELFORMAT_ARGB8888, 0);
+	SDL_FreeSurface(img);
+	wolf->weapons_texture.index = wolf->player.selected_weapon
+		* wolf->weapons_texture.step_count.x;
+	return (TRUE);
+}
 
 void			game_loop(t_wolf *wolf)
 {
-	SDL_Surface	*img;
-	wolf->player.pos = (t_vec3){ 6, 7, 0 };
-	wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
-	wolf->head_overlay = IMG_Load("assets/textures/head_overlay.png");
-	img = IMG_Load("assets/textures/crosshair.png");
-	wolf->crosshair = SDL_ConvertSurfaceFormat(img,
-				SDL_PIXELFORMAT_ARGB8888, 0);
-	SDL_FreeSurface(img);
-	setup_animated_texture(&wolf->weapons_texture, WEAPONS);
-	setup_animated_texture(&wolf->heads_texture, "assets/textures/heads.png");
-	wolf->weapons_texture.index = wolf->player.selected_weapon
-		* wolf->weapons_texture.step_count.x;
 	while (wolf->running)
 	{
 		ft_memset(wolf->img->pixels, 0, wolf->img->size * 4);

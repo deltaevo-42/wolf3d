@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:29:48 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 13:45:01 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 13:46:44 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,24 +87,29 @@ t_block_state		***load_map_data(t_wolf *wolf, t_world *w,
 }
 
 
-t_bool		load_map(t_wolf *wolf, t_world *world, t_json_object *obj)
+t_bool		load_map(t_wolf *wolf, t_world *w, t_json_object *obj)
 {
 	double	*texture_i;
 
-	if (!obj)
+	if (!obj || !ft_json_vec3(json_object_get(obj, "size"), &w->size))
 		return (FALSE);
-	if (!ft_json_vec3(json_object_get(obj, "size"), &world->size))
-		return (FALSE);
-	printf("Size %f %f\n", world->size.x, world->size.y);
-	if (!(world->data = load_map_data(wolf, world, json_object_get(obj, "data"))))
+	if (!(w->data = load_map_data(wolf, w, json_object_get(obj, "data"))))
 		return (FALSE);
 	if (!(texture_i = json_get_number(obj, "ceil_texture"))
 		|| *texture_i < 0 || *texture_i >= wolf->textures_count)
 		return (FALSE);
-	world->ceil = wolf->textures[(int)*texture_i];
+	w->ceil = wolf->textures[(int)*texture_i];
 	if (!(texture_i = json_get_number(obj, "floor_texture"))
 		|| *texture_i < 0 || *texture_i >= wolf->textures_count)
 		return (FALSE);
-	world->floor = wolf->textures[(int)*texture_i];
+	w->floor = wolf->textures[(int)*texture_i];
+	if (!ft_json_vec3(json_object_get(obj, "spawn_pos"), &w->spawn_pos)
+		|| w->spawn_pos.x < 1 || w->spawn_pos.y < 1 || w->spawn_pos.z < 0
+		|| w->spawn_pos.x >= w->size.x - 1 || w->spawn_pos.y >= w->size.y - 1
+		|| w->spawn_pos.z >= w->size.z)
+		return (FALSE);
+	if (!(texture_i = json_get_number(obj, "spawn_rotation")))
+		return (FALSE);
+	w->spawn_rotation = (float)*texture_i;
 	return (TRUE);
 }
