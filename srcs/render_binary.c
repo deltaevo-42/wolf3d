@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/04 13:32:20 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/04 15:01:28 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 16:30:09 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ static t_bool	render_double_ray(t_wolf *wolf, t_ray *from,
 	t_block_state *const	hit = from->hit;
 	const int				pf = get_hit_bottom(wolf, from);
 	const int				pt = get_hit_bottom(wolf, to);
-	const int				p = pf > pt ? pt : pf;
-	const float				h = S_HEIGHT / fmin(from->dist, to->dist);
+	const int				p = pf > pt ? pf : pt;
 
 	render_wall(wolf, from, to, *last_y);
 	if (p < *last_y)
@@ -66,7 +65,8 @@ static t_bool	render_double_ray(t_wolf *wolf, t_ray *from,
 		*last_y = p;
 	if (from->hit->block->height == wolf->world.size.z)
 		return (TRUE);
-	if (p <= 0 && p + h > S_HEIGHT)
+	if (pf <= 0 && pf + S_HEIGHT / from->dist > S_HEIGHT
+		&& pt <= 0 && pt + S_HEIGHT / to->dist > S_HEIGHT)
 		return (TRUE);
 	next_ray(from);
 	next_ray(to);
