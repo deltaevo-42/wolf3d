@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 18:56:59 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 15:55:33 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static t_block		**load_blocks(t_wolf *wolf, t_json_object *obj)
 		if (e->value->type != JSON_OBJECT
 		|| !(blocks[i++] = load_json_block(wolf, (t_json_object *)e->value)))
 		{
-			ft_putstr("Invalid block at index: ");//TODO: clean previous loaded blocks
+			ft_putstr("Invalid block at index: ");
 			ft_putnbr(i - 1);
 			ft_putchar('\n');
 			unload_blocks(blocks, i - 1);
@@ -116,7 +116,8 @@ t_bool				load_config(t_wolf *wolf, char *file)
 	free((void *)content);
 	if (!(wolf->textures = load_textures(wolf, (t_json_object *)val))
 		|| !(wolf->blocks = load_blocks(wolf, (t_json_object *)val))
-		|| !load_map(wolf, &wolf->world, json_get_object((t_json_object *)val, "map")))
+		|| !load_map(wolf, &wolf->world,
+				json_get_object((t_json_object *)val, "map")))
 	{
 		json_free_value(val);
 		return (FALSE);
