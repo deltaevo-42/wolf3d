@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_apply.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 18:30:57 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/03 18:53:28 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:17:39 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,13 @@ void			apply_surface_blended(t_img *img, SDL_Surface *s, SDL_Rect src,
 		while (++j < dst.w)
 		{
 			index = (((dst.y + i) * (int)S_WIDTH) + (dst.x + j));
-			if (index >= img->size)
+			if (index >= img->size
+				|| (uint32_t)(j * s_w) + src.x >= (uint32_t)s->w
+				|| (uint32_t)(i * s_h) + src.y >= (uint32_t)s->h)
 				break ;
 			img->pixels[index] = ft_color_i(ft_alpha_blend(ft_i_color(
-				getpixel(s, (int)(j * s_w) + src.x, (int)(i * s_h) + src.y)),
+				getpixel(s, (uint32_t)(j * s_w) + src.x,
+							(uint32_t)(i * s_h) + src.y)),
 				ft_i_color(img->pixels[index])));
 		}
 	}
