@@ -177,13 +177,14 @@ t_bool			next_ray(t_ray *ray)
 	}
 	ray->hit = NULL;
 	ray->fhit = NULL;
-	if (!ray_in_map(ray))
-		return (FALSE);
-	ray->hit = ray->world->data[ray->hit_pos.y][ray->hit_pos.x];
-	ray->fhit = ray->hit;
+	if (ray_in_map(ray))
+	{
+		ray->hit = ray->world->data[ray->hit_pos.y][ray->hit_pos.x];
+		ray->fhit = ray->hit;
+	}
 	compute_face(ray);
 	compute_dist(ray);
-	return (TRUE);
+	return (ray_in_map(ray));
 }
 
 t_bool			prev_ray(t_ray *ray)

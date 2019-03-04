@@ -48,6 +48,8 @@ static void		cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 	}
 	wolf->last_rays[wolf->stats.num_rays++] = *ray;
 	render_ceil(wolf, ray, ray);
+	if (!ray->hit)
+		render_floor(wolf, ray, ray, last_y);
 }
 
 static t_bool	render_double_ray(t_wolf *wolf, t_ray *from,
@@ -103,6 +105,8 @@ static t_bool	double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
 	wolf->last_rays[wolf->stats.num_rays++] = first;
 	wolf->last_rays[wolf->stats.num_rays++] = second;
 	render_ceil(wolf, &first, &second);
+	if (!first.hit)
+		render_floor(wolf, &first, &second, last_y);
 	return (TRUE);
 }
 
