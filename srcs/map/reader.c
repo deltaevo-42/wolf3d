@@ -13,7 +13,7 @@
 #include "wolf.h"
 #include <fcntl.h>
 #include <unistd.h>
-#define BUFF_SIZE 1
+#define BUFF_SIZE 2048
 
 static char			*get_file_content(char *file, int *content_len)
 {
@@ -57,10 +57,10 @@ static t_texture	**load_textures(t_wolf *wolf, t_json_object *obj)
 		if (e->value->type != JSON_OBJECT
 			|| !(tex[i++] = load_json_texture((t_json_object *)e->value)))
 		{
-			ft_putstr("Invalid texture at index: "); //TODO: clean previous loaded textures
-			ft_putnbr(i);
+			ft_putstr("Invalid texture at index: ");
+			ft_putnbr(i - 1);
 			ft_putchar('\n');
-			free(tex);
+			unload_textures(tex, i - 1);
 			return (NULL);
 		}
 		e = e->next;

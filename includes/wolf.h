@@ -159,6 +159,7 @@ void					unload(t_wolf *wolf);
 void					unload_blocks(t_block **blocks, size_t size);
 int						unload_map_col(t_block_state **col, size_t size);
 int						unload_map(t_block_state ***map, size_t y, size_t x);
+void					unload_textures(t_texture **textures, size_t size);
 
 /*
 ** SDL
