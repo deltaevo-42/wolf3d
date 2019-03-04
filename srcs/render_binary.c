@@ -26,7 +26,7 @@ static void		cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 	int				p;
 	t_block_state	*hit;
 
-	while (1)
+	while (ray_in_map(ray))
 	{
 		try_portal(wolf, ray, ray, last_y);
 		if ((hit = ray->hit))
@@ -43,8 +43,7 @@ static void		cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 			render_top(wolf, (t_ray *[2]){ ray, ray }, hit, (int[2]){ p, p });
 			continue ;
 		}
-		if (!next_ray(ray))
-			break ;
+		next_ray(ray);
 	}
 	wolf->last_rays[wolf->stats.num_rays++] = *ray;
 	render_ceil(wolf, ray, ray);
