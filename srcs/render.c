@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:54:54 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 13:42:00 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 14:41:49 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,13 @@ t_bool			render_wall(t_wolf *wolf, t_ray *from, t_ray *to, int last_y)
 	return (TRUE);
 }
 
-t_bool			render_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p)
+t_bool			render_top(t_wolf *wolf, t_ray *ray[2], t_block_state *hit,
+	int p[2])
 {
 	if (hit->block->type == B_NORMAL)
 		return (render_block_normal_top(wolf, ray, hit, p));
 	if (hit->block->type == B_ROUND)
-		return (render_block_round_top(wolf, ray, hit, p));
+		return (render_block_round_top(wolf, ray[0], hit, p[0]));
 	return (TRUE);
 }
 

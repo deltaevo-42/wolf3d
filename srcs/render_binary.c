@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/04 13:32:20 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/04 13:41:49 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 15:01:28 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void		cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 				|| (p <= 0 && p + (S_HEIGHT / ray->dist) > S_HEIGHT))
 				break ;
 			next_ray(ray);
-			render_top(wolf, ray, hit, p);
+			render_top(wolf, (t_ray *[2]){ ray, ray }, hit, (int[2]){ p, p });
 			continue ;
 		}
 		if (!next_ray(ray))
@@ -56,7 +56,7 @@ static t_bool	render_double_ray(t_wolf *wolf, t_ray *from,
 	t_block_state *const	hit = from->hit;
 	const int				pf = get_hit_bottom(wolf, from);
 	const int				pt = get_hit_bottom(wolf, to);
-	const int				p = pf > pt ? pf : pt;
+	const int				p = pf > pt ? pt : pf;
 	const float				h = S_HEIGHT / fmin(from->dist, to->dist);
 
 	render_wall(wolf, from, to, *last_y);
@@ -70,7 +70,7 @@ static t_bool	render_double_ray(t_wolf *wolf, t_ray *from,
 		return (TRUE);
 	next_ray(from);
 	next_ray(to);
-	render_top(wolf, from, hit, pf);
+	render_top(wolf, (t_ray *[2]){ from, to }, hit, (int[2]){ pf, pt });
 	prev_ray(from);
 	prev_ray(to);
 	return (FALSE);

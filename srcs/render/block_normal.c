@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   block_normal.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 13:33:02 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 16:07:44 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 14:55:02 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ static t_render_info	get_render_infos(t_wolf *wolf, t_ray *ray,
 	return (infos);
 }
 
-t_bool	render_face(t_wolf *wolf, t_render_info from, t_render_info to,
-	float progress)
+static t_bool			render_face(t_wolf *wolf, t_render_info from,
+	t_render_info to, float progress)
 {
 	const int		y = from.y + progress * (to.y - from.y);
 	const double	height = from.height + progress * (to.height - from.height);
@@ -59,8 +59,8 @@ t_bool	render_face(t_wolf *wolf, t_render_info from, t_render_info to,
 	return (TRUE);
 }
 
-t_bool	render_block_normal_wall(t_wolf *wolf, t_ray *from_ray, t_ray *to_ray,
-	int last_y)
+t_bool					render_block_normal_wall(t_wolf *wolf,
+	t_ray *from_ray, t_ray *to_ray, int last_y)
 {
 	t_block_normal	*block;
 	t_render_info	from;
@@ -83,19 +83,32 @@ t_bool	render_block_normal_wall(t_wolf *wolf, t_ray *from_ray, t_ray *to_ray,
 	return (FALSE);
 }
 
-t_bool	render_block_normal_top(t_wolf *wolf, t_ray *ray, t_block_state *hit, int p1)
+t_bool					render_block_normal_top(t_wolf *wolf, t_ray *ray[2],
+	t_block_state *hit, int p[2])
 {
-	float hit_h = hit->block->height;
-	float h0 = S_HEIGHT / ray->dist;
-	int p0 = S_HEIGHT_2 + h0 * (wolf->player.pos.z + 1) / 2. - h0 * hit_h;
+	const int	x_delta = ray[0]->x == ray[1]->x ? 1 : ray[1]->x - ray[0]->x;
+	int			pb[2];
+	int			x;
+	int			y;
+	int			pt;
 
-	for (int y = p0; p0 < p1 && y < p1; y++)
+	pb[0] = S_HEIGHT_2 + (S_HEIGHT / ray[0]->dist) * (wolf->player.pos.z + 1)
+		/ 2. - (S_HEIGHT / ray[0]->dist) * hit->block->height;
+	pb[1] = S_HEIGHT_2 + (S_HEIGHT / ray[1]->dist) * (wolf->player.pos.z + 1)
+		/ 2. - (S_HEIGHT / ray[1]->dist) * hit->block->height;
+	x = ray[0]->x;
+	while (x <= ray[1]->x)
 	{
-		int i = y * S_WIDTH + ray->x;
-		if (i < 0 || (uint32_t)i >= wolf->img->size)
-			break ;
-		if (wolf->img->pixels[i] == 0)
-			wolf->img->pixels[i] = 0xFF0000FF;
+		y = pb[0] + (pb[1] - pb[0]) * (x - ray[0]->x) / x_delta;
+		pt = p[0] + (p[1] - p[0]) * (x - ray[0]->x) / x_delta;
+		while (y < pt
+			&& (uint32_t)(y * (int)S_WIDTH + x) < wolf->img->size)
+		{
+			if (wolf->img->pixels[y * (int)S_WIDTH + x] == 0)
+				wolf->img->pixels[y * (int)S_WIDTH + x] = 0xFF0000FF;
+			y++;
+		}
+		x++;
 	}
 	return (FALSE);
 }

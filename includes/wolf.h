@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 13:41:54 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 14:40:08 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,8 +190,8 @@ void					render_ceil(t_wolf *wolf,
 void					render_binary(t_wolf *wolf, int x1, int x2);
 void					try_portal(t_wolf *wolf, t_ray *from, t_ray *to,
 	int last_y);
-t_bool					render_top(t_wolf *wolf, t_ray *ray,
-	t_block_state *hit, int p);
+t_bool					render_top(t_wolf *wolf, t_ray *ray[2],
+	t_block_state *hit, int p[2]);
 t_bool					render_wall(t_wolf *wolf, t_ray *from,
 	t_ray *to, int last_y);
 

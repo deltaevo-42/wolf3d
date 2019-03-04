@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   block.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:46:04 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 14:55:24 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 14:41:30 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_bool							render_block_normal_wall(t_wolf *wolf,
 t_bool							render_block_round_wall(t_wolf *wolf,
 		t_ray *ray);
 t_bool							render_block_normal_top(t_wolf *wolf,
-		t_ray *ray, t_block_state *hit, int p);
+		t_ray *ray[2], t_block_state *hit, int p[2]);
 t_bool							render_block_round_top(t_wolf *wolf, t_ray *ray,
 		t_block_state *hit, int p);
 t_face							get_face_type(char *string);
