@@ -127,6 +127,8 @@ static void		compute_dist(t_ray *ray)
 	ray->sdist = ray->dist;
 	if (ray->hit && ray->hit->block->type == B_ROUND)
 		dist_round_block(ray);
+	if (ray->dist <= 0.1)
+		ray->dist = 0.1;
 }
 
 t_ray			create_ray(t_wolf *wolf, int x, t_vec2 start)

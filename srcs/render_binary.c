@@ -87,17 +87,18 @@ static t_bool	double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
 	while (ray_in_map(&first) && ray_in_map(&second))
 	{
 		try_portal(wolf, &first, &second, last_y);
-		if (first.hit && render_double_ray(wolf, &first, &second, &last_y))
-			break ;
-		if ((next_ray(&first) ^ next_ray(&second))
-			|| (first.fhit && first.fhit->block->type != B_NORMAL)
-			|| (second.fhit && second.fhit->block->type != B_NORMAL)
-			|| first.hit != second.hit || first.face != second.face)
+		if (!(first.fhit && first.fhit->block->type != B_NORMAL)
+			&& !(second.fhit && second.fhit->block->type != B_NORMAL)
+			&& first.hit == second.hit && first.face == second.face)
 		{
-			cast_ray(wolf, &first, last_y);
-			cast_ray(wolf, &second, last_y);
-			return (FALSE);
+			if (first.hit && render_double_ray(wolf, &first, &second, &last_y))
+				break ;
+			if ((next_ray(&first) ^ next_ray(&second)) == 0)
+				continue ;
 		}
+		cast_ray(wolf, &first, last_y);
+		cast_ray(wolf, &second, last_y);
+		return (FALSE);
 	}
 	wolf->last_rays[wolf->stats.num_rays++] = first;
 	wolf->last_rays[wolf->stats.num_rays++] = second;
