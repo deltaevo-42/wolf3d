@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:46:04 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 14:41:30 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 16:43:53 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,6 @@ struct							s_block_round
 
 t_block							*load_json_block(t_wolf *wolf,
 		t_json_object *obj);
-t_block_state					***load_map_data(t_wolf *wolf, t_world *w,
-		t_json_value *val);
 
 t_block							*load_normal_block(t_wolf *w,
 		t_json_object *obj);

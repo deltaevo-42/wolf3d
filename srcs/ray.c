@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/02 17:44:14 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 16:52:50 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,12 @@ t_ray			create_ray(t_wolf *wolf, int x, t_vec2 start)
 	return (ray);
 }
 
+t_bool			ray_in_map(t_ray *ray)
+{
+	return (ray->hit_pos.x >= 0 && ray->hit_pos.x < ray->world->size.x
+		&& ray->hit_pos.y >= 0 && ray->hit_pos.y < ray->world->size.y);
+}
+
 t_bool			next_ray(t_ray *ray)
 {
 	compute_dir(ray);
@@ -169,8 +175,7 @@ t_bool			next_ray(t_ray *ray)
 	}
 	ray->hit = NULL;
 	ray->fhit = NULL;
-	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= ray->world->size.x
-		|| ray->hit_pos.y < 0 || ray->hit_pos.y >= ray->world->size.y)
+	if (!ray_in_map(ray))
 		return (FALSE);
 	ray->hit = ray->world->data[ray->hit_pos.y][ray->hit_pos.x];
 	ray->fhit = ray->hit;
@@ -195,8 +200,7 @@ t_bool			prev_ray(t_ray *ray)
 	}
 	ray->hit = NULL;
 	ray->fhit = NULL;
-	if (ray->hit_pos.x < 0 || ray->hit_pos.x >= ray->world->size.x
-		|| ray->hit_pos.y < 0 || ray->hit_pos.y >= ray->world->size.y)
+	if (!ray_in_map(ray))
 		return (FALSE);
 	ray->hit = ray->world->data[ray->hit_pos.y][ray->hit_pos.x];
 	ray->fhit = ray->hit;

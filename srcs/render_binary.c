@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/04 13:32:20 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/04 16:30:09 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 16:53:42 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static t_bool	double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
 
 	first = create_ray(wolf, x1, start);
 	second = create_ray(wolf, x2, start);
-	while (1)
+	while (ray_in_map(&first) && ray_in_map(&second))
 	{
 		if ((next_ray(&first) ^ next_ray(&second))
 			|| (first.fhit && first.fhit->block->type != B_NORMAL)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 15:25:10 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 16:53:11 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,7 @@ t_bool					next_ray(t_ray *ray);
 t_bool					prev_ray(t_ray *ray);
 t_ray					create_ray(t_wolf *wolf, int x, t_vec2 start);
 void					ray_use_portal(t_ray *ray);
+t_bool					ray_in_map(t_ray *ray);
 
 /*
 ** Game
