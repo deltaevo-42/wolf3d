@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 15:09:29 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 15:25:10 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,8 +169,8 @@ void					unload_textures(t_texture **textures, size_t size);
 ** SDL
 */
 
-void					sdl_init(t_wolf *wolf);
-void					sdl_quit(t_wolf *wolf);
+t_bool					sdl_init(t_wolf *wolf);
+t_bool					sdl_quit(t_wolf *wolf);
 
 /*
 ** Events

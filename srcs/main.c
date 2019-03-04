@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 17:12:55 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 15:08:13 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 15:50:31 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,12 @@ static int		start(t_wolf *wolf, char *map)
 		ft_putendl("Unable to load default settings");
 		return (1);
 	}
-	sdl_init(wolf);
+	if (!sdl_init(wolf))
+	{
+		unload(wolf);
+		ft_putendl("Unable to load SDL");
+		return (1);
+	}
 	game_loop(wolf);
 	unload(wolf);
 	sdl_quit(wolf);
