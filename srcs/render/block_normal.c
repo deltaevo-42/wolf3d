@@ -38,7 +38,7 @@ static t_render_info	get_render_infos(t_wolf *wolf, t_ray *ray,
 }
 
 static t_bool			render_face(t_wolf *wolf, t_render_info from,
-	t_render_info to, float progress)
+	t_render_info to, t_ray *from_ray, t_ray *to_ray, float progress)
 {
 	const int		y = from.y + progress * (to.y - from.y);
 	const double	height = from.height + progress * (to.height - from.height);
@@ -51,8 +51,10 @@ static t_bool			render_face(t_wolf *wolf, t_render_info from,
 	ratio = y < 0 ? 1 : (to.last_y - y) / (height * to.block->super.height);
 	if (ratio > 1)
 		ratio = 1;
+	int tex_x = (float)((1 - progress) * from.tex_x / from_ray->dist + progress * to.tex_x / to_ray->dist)
+				/ (float)((1 - progress) * 1 / from_ray->dist + progress * 1 / to_ray->dist);
 	apply_texture(wolf->img, texture,
-		(SDL_Rect){ from.tex_x + progress * (float)(to.tex_x - from.tex_x), 0,
+		(SDL_Rect){ tex_x, 0,
 			1, texture->size.y - texture->size.y * (1 - ratio) },
 		(SDL_Rect){ to.x, y, 1, y < 0 ? height * to.block->super.height
 			: fmin(height * to.block->super.height, to.last_y - y) });
@@ -77,7 +79,7 @@ t_bool					render_block_normal_wall(t_wolf *wolf,
 	{
 		progress = (float)(to.x - from_ray->x) /
 			(float)(to_ray->x == from_ray->x ? 1 : to_ray->x - from_ray->x);
-		if (!render_face(wolf, from, to, progress))
+		if (!render_face(wolf, from, to, from_ray, to_ray, progress))
 			continue;
 	}
 	return (FALSE);

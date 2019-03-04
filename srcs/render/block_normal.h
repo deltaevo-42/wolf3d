@@ -16,7 +16,7 @@
 # include "wolf.h"
 
 typedef struct	s_render_info {
-	int				tex_x;
+	float			tex_x;
 	int				y;
 	float			height;
 	int				last_y;
