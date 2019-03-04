@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:29:48 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 16:35:45 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 16:54:35 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,8 @@ t_bool					load_map(t_wolf *wolf, t_world *w, t_json_object *obj)
 		return (FALSE);
 	w->floor = wolf->textures[(int)*texture_i];
 	if (!ft_json_vec3(json_object_get(obj, "spawn_pos"), &w->spawn_pos)
-		|| w->spawn_pos.x < 1 || w->spawn_pos.y < 1 || w->spawn_pos.z < 0
-		|| w->spawn_pos.x >= w->size.x - 1 || w->spawn_pos.y >= w->size.y - 1
+		|| w->spawn_pos.x < 0 || w->spawn_pos.y < 0 || w->spawn_pos.z < 0
+		|| w->spawn_pos.x >= w->size.x || w->spawn_pos.y >= w->size.y
 		|| w->spawn_pos.z >= w->size.z)
 		return (FALSE);
 	if (!(texture_i = json_get_number(obj, "spawn_rotation")))
