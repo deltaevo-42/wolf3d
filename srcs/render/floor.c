@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 14:37:28 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/03 15:54:47 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/04 18:21:53 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ static int		get_wall_screen_pos(t_wolf *wolf, t_ray *ray,
 		enum e_wall_pos pos)
 {
 	const float	height = S_HEIGHT / ray->dist;
-	const int	world_height = height * wolf->world.size.z;
-	const int	offset = height * (wolf->player.pos.z + 1) / 2. - height;
+	const float	world_height = height * (wolf->world.size.z - 1);
+	const float	offset = height * (wolf->player.pos.z + 1) / 2. - height;
 
 	if (pos == WALL_BOTTOM)
-		return (S_HEIGHT_2 + world_height / 2 + offset + 1);
+		return (S_HEIGHT_2 + offset + 1);
 	else if (pos == WALL_TOP)
-		return (S_HEIGHT_2 - world_height / 2 + offset - 1);
+		return (S_HEIGHT_2 - world_height + offset - 1);
 	else
 		return (S_HEIGHT_2);
 }
@@ -126,9 +126,9 @@ void			render_ceil(t_wolf *wolf, t_ray *from_ray, t_ray *to_ray)
 		.y = get_wall_screen_pos(wolf, to_ray, WALL_TOP)
 	};
 	from_dist_z = (from_ray->sdist - from_ray->extra_dist)
-			/ -(wolf->world.size.z - wolf->player.pos.z + 1);
+		/ -(wolf->world.size.z - wolf->player.pos.z + (wolf->world.size.z - 1));
 	to_dist_z = (to_ray->sdist - to_ray->extra_dist)
-			/ -(wolf->world.size.z - wolf->player.pos.z + 1);
+		/ -(wolf->world.size.z - wolf->player.pos.z + (wolf->world.size.z - 1));
 	while (from.y > 0 || to.y > 0)
 	{
 		from.weight = S_HEIGHT / ((2 * from.y - S_HEIGHT) * from_dist_z);

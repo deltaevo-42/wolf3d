@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2019/03/04 17:08:17 by dde-jesu         ###   ########.fr       */
+=======
+/*   Updated: 2019/03/04 18:20:43 by llelievr         ###   ########.fr       */
+>>>>>>> Fix floor/ceiling
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +94,8 @@ static void	events_move(t_wolf *wolf, const Uint8 *state)
 		wolf->player.pos.x = wolf->world.size.x;
 	if (wolf->player.pos.y >= wolf->world.size.y)
 		wolf->player.pos.y = wolf->world.size.y;
-	if (wolf->player.pos.z > wolf->world.size.z + 0.5)
-		wolf->player.pos.z = wolf->world.size.z + 0.5;
+	if (wolf->player.pos.z > wolf->world.size.z - 0.25)
+		wolf->player.pos.z = wolf->world.size.z - 0.25;
 	if (wolf->player.pos.z < -0.5)
 		wolf->player.pos.z = -0.5;
 }
