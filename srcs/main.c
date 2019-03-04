@@ -32,6 +32,7 @@ int		main(int argc, char **argv)
 	};
 	if (!load_config(&wolf, "assets/maps/map_1.json"))
 	{
+		unload(&wolf);
 		ft_putendl("Unable to load world");
 		return (1);//FREE
 	}

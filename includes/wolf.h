@@ -156,6 +156,9 @@ typedef struct			s_polynom {
 t_bool					load_map(t_wolf *wolf, t_world *world, t_json_object *obj);
 t_bool					load_config(t_wolf *wolf, char *file);
 void					unload(t_wolf *wolf);
+void					unload_blocks(t_block **blocks, size_t size);
+int						unload_map_col(t_block_state **col, size_t size);
+int						unload_map(t_block_state ***map, size_t y, size_t x);
 
 /*
 ** SDL

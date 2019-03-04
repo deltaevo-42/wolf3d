@@ -89,7 +89,7 @@ static t_block		**load_blocks(t_wolf *wolf, t_json_object *obj)
 			ft_putstr("Invalid block at index: ");//TODO: clean previous loaded blocks
 			ft_putnbr(i - 1);
 			ft_putchar('\n');
-			free(blocks);
+			unload_blocks(blocks, i - 1);
 			return (NULL);
 		}
 		e = e->next;
@@ -114,12 +114,13 @@ t_bool				load_config(t_wolf *wolf, char *file)
 		return (FALSE);
 	}
 	free((void *)content);
-	if (!(wolf->textures = load_textures(wolf, (t_json_object *)val)))
+	if (!(wolf->textures = load_textures(wolf, (t_json_object *)val))
+		|| !(wolf->blocks = load_blocks(wolf, (t_json_object *)val))
+		|| !load_map(wolf, &wolf->world, json_get_object((t_json_object *)val, "map")))
+	{
+		json_free_value(val);
 		return (FALSE);
-	if (!(wolf->blocks = load_blocks(wolf, (t_json_object *)val)))
-		return (FALSE);
-	if (!load_map(wolf, &wolf->world, json_get_object((t_json_object *)val, "map")))
-		return (FALSE);
+	}
 	printf("Worlds loaded\n");
 	json_free_value(val);
 	return (TRUE);

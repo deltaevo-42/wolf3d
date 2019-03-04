@@ -48,12 +48,12 @@ t_bool				load_map_cols(t_wolf *wolf, t_world *w, int i,
 	while (col_elem)
 	{
 		if (col_elem->value->type != JSON_NUMBER)
-			return (FALSE);
+			return (unload_map_col(s[i], j));
 		block_id = (int)((t_json_number *)col_elem->value)->value - 1;
 		if (block_id == -1)
 			s[i][j++] = NULL;
 		else if (!(s[i][j++] = create_block_state(wolf, block_id)))
-			return (FALSE);
+			return (unload_map_col(s[i], j - 1));
 		col_elem = col_elem->next;
 	}
 	return (TRUE);
@@ -77,10 +77,10 @@ t_block_state		***load_map_data(t_wolf *wolf, t_world *w,
 	{
 		if (row_elem->value->type != JSON_ARRAY ||
 			((t_json_array *)row_elem->value)->elems_count != w->size.x)
-			return (NULL);
+			return ((void *)unload_map(states, i, w->size.x));
 		col_elem = ((t_json_array *)row_elem->value)->elements;
 		if (!load_map_cols(wolf, w, i++, col_elem, states))
-			return (NULL);
+			return ((void *)unload_map(states, i - 1, w->size.x));
 		row_elem = row_elem->next;
 	}
 	return (states);
