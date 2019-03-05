@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/05 14:06:08 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:18:44 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@
 # include <SDL_image.h>
 # include <SDL_ttf.h>
 # include <math.h>
-# include "libft.h"
 # include <stdlib.h>
+# include "libft.h"
+# include "texture.h"
+# include "block.h"
 
 # define BAR_H (100.0)
 # define S_WIDTH (1000.0)
@@ -38,9 +40,6 @@ typedef struct s_stats	t_stats;
 typedef struct s_fonts	t_fonts;
 typedef struct s_ray	t_ray;
 typedef struct s_player	t_player;
-
-# include "texture.h"
-# include "block.h"
 
 struct					s_world
 {
@@ -208,7 +207,7 @@ t_bool					prev_ray(t_ray *ray);
 t_ray					create_ray(t_wolf *wolf, int x, t_vec2 start);
 void					ray_use_portal(t_ray *ray);
 t_bool					ray_in_map(t_ray *ray);
-void		    		ray_compute_dist(t_ray *ray);
+void					ray_compute_dist(t_ray *ray);
 
 /*
 ** Game
@@ -233,5 +232,28 @@ void					apply_texture(t_img *img, t_texture *t, SDL_Rect src,
 		SDL_Rect dst);
 void					apply_texture_blended(t_img *img, t_texture *t,
 		SDL_Rect src, SDL_Rect dst);
+
+/*
+** Blocks
+*/
+t_block					*load_json_block(t_wolf *wolf,
+		t_json_object *obj);
+
+t_block					*load_normal_block(t_wolf *w,
+		t_json_object *obj);
+t_block					*load_round_block(t_wolf *w,
+		t_json_object *obj);
+int						normal_block_minimap(t_wolf *wolf,
+		t_block_state *state);
+int						round_block_minimap(t_wolf *wolf,
+		t_block_state *state, t_vec2 map);
+t_bool					render_block_normal_wall(t_wolf *wolf,
+		t_ray *from, t_ray *to, int last_y);
+t_bool					render_block_round_wall(t_wolf *wolf,
+		t_ray *ray);
+t_bool					render_block_normal_top(t_wolf *wolf,
+		t_ray *ray[2], t_block_state *hit, int p[2]);
+t_bool					render_block_round_top(t_wolf *wolf, t_ray *ray,
+		t_block_state *hit, int p);
 
 #endif
