@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_binary.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/04 13:32:20 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/04 18:56:22 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/05 11:57:39 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static void		cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 	}
 	wolf->last_rays[wolf->stats.num_rays++] = *ray;
 	render_ceil(wolf, ray, ray);
-	if (!ray->hit)
 		render_floor(wolf, ray, ray, last_y);
 }
 
@@ -94,7 +93,7 @@ static t_bool	double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
 		{
 			if (first.hit && render_double_ray(wolf, &first, &second, &last_y))
 				break ;
-			if ((next_ray(&first) ^ next_ray(&second)) == 0)
+			if (next_ray(&first) == next_ray(&second))
 				continue ;
 		}
 		cast_ray(wolf, &first, last_y);
@@ -104,7 +103,6 @@ static t_bool	double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
 	wolf->last_rays[wolf->stats.num_rays++] = first;
 	wolf->last_rays[wolf->stats.num_rays++] = second;
 	render_ceil(wolf, &first, &second);
-	if (!first.hit)
 		render_floor(wolf, &first, &second, last_y);
 	return (TRUE);
 }

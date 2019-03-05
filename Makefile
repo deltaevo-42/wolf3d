@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+         #
+#    By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/07 14:49:27 by llelievr          #+#    #+#              #
-#    Updated: 2019/03/04 20:38:58 by llelievr         ###   ########.fr        #
+#    Updated: 2019/03/05 12:02:28 by dde-jesu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME=wolf3d
 SDL=${HOME}/.brew/Cellar/sdl2/2.0.9
 SDL_IMG=${HOME}/.brew/Cellar/sdl2_image/2.0.4
 SDL_TTF=${HOME}/.brew/Cellar/sdl2_ttf/2.0.14
-CFLAGS=-Wall -Wextra -O3 -flto -ffast-math
+CFLAGS=-Wall -Wextra -g
 LIBS=-lSDL2_image -lSDL2_ttf -lSDL2
 CC=clang
 

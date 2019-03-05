@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 12:04:24 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 16:52:50 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/05 12:04:53 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,8 @@ t_ray			create_ray(t_wolf *wolf, int x, t_vec2 start)
 	ray.side_dist = (t_vec2){0, 0};
 	ray.delta_dist = (t_vec2){fabs(1.0f / ray.dir.x), fabs(1.0f / ray.dir.y)};
 	ray.hit_pos = (t_pixel){.x = start.x, .y = start.y};
-	ray.hit = ray.world->data[ray.hit_pos.y][ray.hit_pos.x];
+	ray.hit = ray_in_map(&ray)
+		? ray.world->data[ray.hit_pos.y][ray.hit_pos.x] : NULL;
 	ray.fhit = ray.hit;
 	ray.side = ray.side_dist.x < ray.side_dist.y;
 	ray.extra_dist = 0;
@@ -176,12 +177,9 @@ t_bool			next_ray(t_ray *ray)
 		ray->side = 1;
 	}
 	ray->hit = NULL;
-	ray->fhit = NULL;
 	if (ray_in_map(ray))
-	{
 		ray->hit = ray->world->data[ray->hit_pos.y][ray->hit_pos.x];
-		ray->fhit = ray->hit;
-	}
+	ray->fhit = ray->hit;
 	compute_face(ray);
 	compute_dist(ray);
 	return (ray_in_map(ray));
@@ -202,12 +200,10 @@ t_bool			prev_ray(t_ray *ray)
 		ray->side = 0;
 	}
 	ray->hit = NULL;
-	ray->fhit = NULL;
-	if (!ray_in_map(ray))
-		return (FALSE);
-	ray->hit = ray->world->data[ray->hit_pos.y][ray->hit_pos.x];
+	if (ray_in_map(ray))
+		ray->hit = ray->world->data[ray->hit_pos.y][ray->hit_pos.x];
 	ray->fhit = ray->hit;
 	compute_face(ray);
 	compute_dist(ray);
-	return (TRUE);
+	return (ray_in_map(ray));
 }

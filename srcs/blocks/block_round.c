@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:00:00 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 16:02:42 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:19:07 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int			round_block_minimap(t_wolf *wolf, t_block_state *state, t_vec2 map)
 	const float		x = map.x - (int)map.x - 0.5;
 	const float		y = map.y - (int)map.y - 0.5;
 
+	(void)wolf;
 	b = (t_block_round *)state->block;
 	if (x * x + y * y < b->radius * b->radius)
 		return (ft_color_i(b->minimap_color));

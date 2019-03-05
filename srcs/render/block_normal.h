@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 15:54:10 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 18:55:51 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/05 10:45:57 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct	s_render_info {
 	t_block_normal	*block;
 	int				x;
 	t_face			face;
+	float			dist;
 }				t_render_info;
 
 #endif

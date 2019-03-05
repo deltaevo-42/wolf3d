@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   block_normal.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 13:33:02 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 15:10:55 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/05 10:59:18 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static t_render_info	get_render_infos(t_wolf *wolf, t_ray *ray,
 	infos.block = block;
 	infos.last_y = last_y;
 	infos.face = ray->face;
+	infos.dist = ray->dist;
 	if (ray->side == 0)
 		wall_x = ray->start.y + (ray->dist - ray->extra_dist) * ray->dir.y;
 	else
@@ -38,21 +39,22 @@ static t_render_info	get_render_infos(t_wolf *wolf, t_ray *ray,
 }
 
 static t_bool			render_face(t_wolf *wolf, t_render_info from,
-	t_render_info to, t_ray *from_ray, t_ray *to_ray, float progress)
+	t_render_info to, float a)
 {
-	const int		y = from.y + progress * (to.y - from.y);
-	const double	height = from.height + progress * (to.height - from.height);
+	const int		y = from.y + a * (to.y - from.y);
+	const double	height = from.height + a * (to.height - from.height);
 	t_texture		*texture;
 	float			ratio;
+	int				tex_x;
 
+	tex_x = (float)((1 - a) * from.tex_x / from.dist + a * to.tex_x / to.dist)
+				/ (float)((1 - a) * 1 / from.dist + a * 1 / to.dist);
 	texture = ((t_block_normal *)to.block)->faces[from.face].texture;
 	if (y >= to.last_y)
 		return (FALSE);
 	ratio = y < 0 ? 1 : (to.last_y - y) / (height * to.block->super.height);
 	if (ratio > 1)
 		ratio = 1;
-	int tex_x = (float)((1 - progress) * from.tex_x / from_ray->dist + progress * to.tex_x / to_ray->dist)
-				/ (float)((1 - progress) * 1 / from_ray->dist + progress * 1 / to_ray->dist);
 	apply_texture(wolf->img, texture,
 		(SDL_Rect){ tex_x, 0,
 			1, texture->size.y - texture->size.y * (1 - ratio) },
@@ -79,7 +81,7 @@ t_bool					render_block_normal_wall(t_wolf *wolf,
 	{
 		progress = (float)(to.x - from_ray->x) /
 			(float)(to_ray->x == from_ray->x ? 1 : to_ray->x - from_ray->x);
-		if (!render_face(wolf, from, to, from_ray, to_ray, progress))
+		if (!render_face(wolf, from, to, progress))
 			continue;
 	}
 	return (FALSE);
