@@ -6,7 +6,7 @@
 /*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 18:33:21 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/01 18:08:00 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:12:28 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ static int			compute_block_minimap(t_wolf *wolf, t_vec2 map)
 	if (!state)
 		return (-1);
 	if (state->block->type == B_NORMAL)
-		return (normal_block_minimap(wolf, state));
+		return (normal_block_minimap(wolf, state) & 0xFFFFFF);
 	if (state->block->type == B_ROUND)
-		return (round_block_minimap(wolf, state, map));
+		return (round_block_minimap(wolf, state, map) & 0xFFFFFF);
 	return (-1);
 }
 
