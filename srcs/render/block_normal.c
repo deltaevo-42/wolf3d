@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 13:33:02 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/05 10:59:18 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/05 13:30:58 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ static t_bool			render_face(t_wolf *wolf, t_render_info from,
 	float			ratio;
 	int				tex_x;
 
-	tex_x = (float)((1 - a) * from.tex_x / from.dist + a * to.tex_x / to.dist)
-				/ (float)((1 - a) * 1 / from.dist + a * 1 / to.dist);
+	tex_x = ((1 - a) * from.tex_x / from.dist + a * to.tex_x / to.dist)
+				/ ((1 - a) * 1 / from.dist + a * 1 / to.dist);
 	texture = ((t_block_normal *)to.block)->faces[from.face].texture;
 	if (y >= to.last_y)
 		return (FALSE);

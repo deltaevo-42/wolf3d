@@ -6,7 +6,7 @@
 /*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/04 13:32:20 by dde-jesu          #+#    #+#             */
-/*   Updated: 2019/03/05 11:57:39 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/05 13:24:56 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void		cast_ray(t_wolf *wolf, t_ray *ray, int last_y)
 	}
 	wolf->last_rays[wolf->stats.num_rays++] = *ray;
 	render_ceil(wolf, ray, ray);
-		render_floor(wolf, ray, ray, last_y);
+	render_floor(wolf, ray, ray, last_y);
 }
 
 static t_bool	render_double_ray(t_wolf *wolf, t_ray *from,
@@ -76,14 +76,13 @@ static t_bool	render_double_ray(t_wolf *wolf, t_ray *from,
 	return (FALSE);
 }
 
-static t_bool	double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
+static t_bool	double_cast_ray(t_wolf *wolf, t_ray first,
+	t_ray second, int last_y)
 {
-	t_ray			first;
-	t_ray			second;
 	const t_vec2	start = (t_vec2) { wolf->player.pos.x, wolf->player.pos.y };
 
-	first = create_ray(wolf, x1, start);
-	second = create_ray(wolf, x2, start);
+	first = create_ray(wolf, first.x, start);
+	second = create_ray(wolf, second.x, start);
 	while (ray_in_map(&first) && ray_in_map(&second))
 	{
 		try_portal(wolf, &first, &second, last_y);
@@ -103,7 +102,7 @@ static t_bool	double_cast_ray(t_wolf *wolf, int x1, int x2, int last_y)
 	wolf->last_rays[wolf->stats.num_rays++] = first;
 	wolf->last_rays[wolf->stats.num_rays++] = second;
 	render_ceil(wolf, &first, &second);
-		render_floor(wolf, &first, &second, last_y);
+	render_floor(wolf, &first, &second, last_y);
 	return (TRUE);
 }
 
@@ -122,7 +121,7 @@ void			render_binary(t_wolf *wolf, int x1, int x2)
 	}
 	else
 	{
-		if (double_cast_ray(wolf, x1, x2, INT_MAX))
+		if (double_cast_ray(wolf, (t_ray){.x = x1}, (t_ray){.x = x2}, INT_MAX))
 			return ;
 		if (x2 - x1 < 2)
 			return ;
