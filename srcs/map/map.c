@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:29:48 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 16:54:35 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:21:43 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,7 @@ static t_block_state	*create_block_state(t_wolf *wolf, int block_id)
 	}
 	if (!(state = (t_block_state *)malloc(sizeof(t_block_state))))
 		return (NULL);
-	if (block_id == 6)
-	{
-		state->type = B_PORTAL;
-		state->portal_to = (t_pixel) { 3, 3, 0 };
-	}
-	else
-		state->type = B_NORMAL;
+	state->type = B_NORMAL;
 	state->block = wolf->blocks[block_id];
 	return (state);
 }

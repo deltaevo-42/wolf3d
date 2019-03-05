@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hud.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 23:45:21 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/03 18:53:41 by llelievr         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:22:27 by dde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ void		render_hud(t_wolf *wolf)
 {
 	t_texture_animated *const	weapons = &wolf->weapons_texture;
 
-	apply_texture_blended(wolf->img, weapons,
+	apply_texture_blended(wolf->img, (t_texture *)weapons,
 		(SDL_Rect){ 0, 0, weapons->super.size.x, weapons->super.size.y },
 		(SDL_Rect){ S_WIDTH_2 - (S_WIDTH / 3) / 2, S_HEIGHT - (S_WIDTH / 3) + 1,
 					(S_WIDTH / 3), (S_WIDTH / 3) });
-	apply_texture_blended(wolf->img, &wolf->heads_texture,
+	apply_texture_blended(wolf->img, (t_texture *)&wolf->heads_texture,
 		(SDL_Rect){ 0, 0, wolf->heads_texture.super.size.x,
 						wolf->heads_texture.super.size.y },
 		(SDL_Rect){ S_WIDTH - 100 - 10, S_HEIGHT - 120 - 10, 100, 120 });
