@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reader.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 22:46:01 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 15:55:33 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:00:49 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,14 @@ t_bool				load_config(t_wolf *wolf, char *file)
 	state = (t_json_state){(char *)content, 0, content_len};
 	if (!content || !(val = parse_value(&state)))
 	{
-		printf("Invalid file\n");
+		ft_putendl("Invalid file");
 		if (content)
 			free((void *)content);
 		return (FALSE);
 	}
 	free((void *)content);
-	if (!(wolf->textures = load_textures(wolf, (t_json_object *)val))
+	if (val->type != JSON_OBJECT
+		|| !(wolf->textures = load_textures(wolf, (t_json_object *)val))
 		|| !(wolf->blocks = load_blocks(wolf, (t_json_object *)val))
 		|| !load_map(wolf, &wolf->world,
 				json_get_object((t_json_object *)val, "map")))
@@ -122,7 +123,6 @@ t_bool				load_config(t_wolf *wolf, char *file)
 		json_free_value(val);
 		return (FALSE);
 	}
-	printf("Worlds loaded\n");
 	json_free_value(val);
 	return (TRUE);
 }
