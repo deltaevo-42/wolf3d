@@ -12,6 +12,7 @@ SRC+=map/texture.c
 SRC+=map/unload.c
 SRC+=minimap.c
 SRC+=ray.c
+SRC+=ray_dist.c
 SRC+=render/block_normal.c
 SRC+=render/block_round.c
 SRC+=render/floor.c
