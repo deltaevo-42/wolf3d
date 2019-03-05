@@ -3,102 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 19:48:57 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/05 12:07:37 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/05 13:26:42 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
 #define STAIR_MAX 0.5
-#define BOUND 0.25
-
-static t_bool	is_in_block(t_wolf *wolf, float x, float y, float z)
-{
-	t_block_state	*b_state;
-
-	if (wolf->player.pos.x + x < 0
-		|| wolf->player.pos.x + x >= (int)wolf->world.size.x
-		|| wolf->player.pos.y + y < 0
-		|| wolf->player.pos.y + y >= (int)wolf->world.size.y)
-		return (TRUE);
-	b_state = wolf->world.data[(int)(wolf->player.pos.y + y)]
-			[(int)(wolf->player.pos.x + x)];
-	if (b_state && b_state->block->height > z)
-		return (TRUE);
-	else
-		return (FALSE);
-}
-
-static t_bool	colide(t_wolf *wolf, float x, float y, float z)
-{
-	return (
-		is_in_block(wolf, x + BOUND, y - BOUND, z)
-		|| is_in_block(wolf, x + BOUND, y + BOUND, z)
-		|| is_in_block(wolf, x - BOUND, y - BOUND, z)
-		|| is_in_block(wolf, x - BOUND, y + BOUND, z));
-}
-
-static void	events_move(t_wolf *wolf, const Uint8 *state)
-{
-	const double	move_speed = wolf->stats.delta * 3.;
-	float			x;
-	float			y;
-	float			z;
-	t_block_state	*b_state;
-
-	x = 0;
-	y = 0;
-	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_L])
-	{
-		wolf->player.rotation += 0.3 * (state[SDL_SCANCODE_J] ? 1 : -1)
-			* move_speed;
-		wolf->player.matrix = ft_mat2_rotation(wolf->player.rotation - M_PI_2);
-	}
-	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_S])
-	{
-		y += sinf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1)
-			* move_speed;
-		x += cosf(wolf->player.rotation) * (state[SDL_SCANCODE_W] ? 1 : -1)
-			* move_speed;
-	}
-	if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_D])
-	{
-		y += -cosf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ? 1 : -1)
-			* move_speed;
-		x += sinf(wolf->player.rotation) * (state[SDL_SCANCODE_D] ? 1 : -1)
-			* move_speed;
-	}
-	if (state[SDL_SCANCODE_SPACE] || state[SDL_SCANCODE_LSHIFT])
-	{
-		z = (state[SDL_SCANCODE_LSHIFT] ? -1 : 1) * move_speed;
-		b_state = wolf->world.data[(int)(wolf->player.pos.y)]
-			[(int)(wolf->player.pos.x)];
-		if (!colide(wolf, 0, 0, wolf->player.pos.z - 0.5 + z)
-			&& (!b_state || b_state->block->height < wolf->player.pos.z + z - 0.5))
-		{
-			wolf->player.pos.z += z;
-		}
-	}
-	if (!colide(wolf, 0, y, wolf->player.pos.z - 0.5))
-		wolf->player.pos.y += y;
-	if (!colide(wolf, x, 0, wolf->player.pos.z - 0.5))
-		wolf->player.pos.x += x;
-	if (wolf->player.pos.x < 0)
-		wolf->player.pos.x = 0;
-	if (wolf->player.pos.y < 0)
-		wolf->player.pos.y = 0;
-	if (wolf->player.pos.x >= wolf->world.size.x)
-		wolf->player.pos.x = wolf->world.size.x;
-	if (wolf->player.pos.y >= wolf->world.size.y)
-		wolf->player.pos.y = wolf->world.size.y;
-	if (wolf->player.pos.z > wolf->world.size.z - 0.25)
-		wolf->player.pos.z = wolf->world.size.z - 0.25;
-	if (wolf->player.pos.z < -0.5)
-		wolf->player.pos.z = -0.5;
-}
 
 static void	events_minimap(t_wolf *wolf, const Uint8 *state)
 {
@@ -129,7 +43,6 @@ static void	events_fov(t_wolf *wolf, const Uint8 *state)
 static void	events_window(t_wolf *wolf, SDL_Event *event)
 {
 	const SDL_Scancode	key = event->key.keysym.scancode;
-
 
 	if (event->type == SDL_QUIT)
 		wolf->running = FALSE;

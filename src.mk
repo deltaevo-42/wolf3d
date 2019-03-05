@@ -1,6 +1,7 @@
 SRC+=blocks/block_normal.c
 SRC+=blocks/block_round.c
-SRC+=events.c
+SRC+=events/events.c
+SRC+=events/events_move.c
 SRC+=game.c
 SRC+=hud.c
 SRC+=main.c

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dde-jesu <dde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llelievr <llelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 11:58:09 by llelievr          #+#    #+#             */
-/*   Updated: 2019/03/04 16:53:11 by dde-jesu         ###   ########.fr       */
+/*   Updated: 2019/03/05 13:25:15 by llelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ t_bool					sdl_quit(t_wolf *wolf);
 */
 
 void					hook_events(t_wolf *wolf);
+void					events_move(t_wolf *wolf, const Uint8 *state);
 
 /*
 ** Render
